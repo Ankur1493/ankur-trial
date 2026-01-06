@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
@@ -723,8 +724,9 @@ export default function Home() {
       const profiles = Array.isArray(result.data) ? result.data : [result.data];
       setProfileData(profiles);
       console.log('LinkedIn Data:', profiles);
-    } catch (err: any) {
-      setError(err.message || 'An error occurred');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
       console.error('Error:', err);
     } finally {
       setLoading(false);
@@ -756,7 +758,7 @@ export default function Home() {
         </div>
 
         {/* Search Bar */}
-        <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm p-4 mb-8">
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm p-4 mb-4">
           <div className="flex gap-3">
             <Input
               type="text"
@@ -789,6 +791,29 @@ export default function Home() {
               )}
             </Button>
           </div>
+        </div>
+
+        {/* Link to Posts Page */}
+        <div className="mb-8">
+          <Link 
+            href="/posts"
+            className="flex items-center justify-between p-4 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-2xl border border-emerald-200 dark:border-emerald-800 hover:shadow-md transition-all group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-semibold text-zinc-900 dark:text-white">LinkedIn Posts Scraper</h3>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">Fetch up to 100 posts from any profile</p>
+              </div>
+            </div>
+            <svg className="w-5 h-5 text-zinc-400 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </Link>
         </div>
 
         {/* Error */}
