@@ -1,0 +1,192 @@
+import Link from 'next/link';
+import { StatsClient } from './stats-client';
+
+interface TotalsData {
+  success?: boolean;
+  username?: string;
+  postCount?: number;
+  totals?: {
+    totalLikes: number;
+    totalComments: number;
+    totalReposts: number;
+    totalEngagement: number;
+  };
+  averages?: {
+    avgLikes: number;
+    avgComments: number;
+    avgReposts: number;
+    avgEngagement: number;
+  };
+  userNotFound?: boolean;
+  message?: string;
+  error?: string;
+}
+
+interface ByDateData {
+  success?: boolean;
+  data?: Array<{
+    date: string;
+    likes: number;
+    comments: number;
+    reposts: number;
+    posts: number;
+    engagement: number;
+  }>;
+  userNotFound?: boolean;
+  error?: string;
+}
+
+interface HistoryData {
+  success?: boolean;
+  data?: Array<{
+    month: string;
+    monthName: string;
+    likes: number;
+    comments: number;
+    reposts: number;
+    posts: number;
+    engagement: number;
+    cumulativeEngagement: number;
+  }>;
+  userNotFound?: boolean;
+  error?: string;
+}
+
+async function fetchStats(username: string): Promise<{
+  totals: TotalsData;
+  byDate: ByDateData;
+  history: HistoryData;
+}> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  
+  // Fetch all 3 routes in parallel using Promise.all
+  const [totalsRes, byDateRes, historyRes] = await Promise.all([
+    fetch(`${baseUrl}/api/stats/totals?username=${username}`, { cache: 'no-store' }),
+    fetch(`${baseUrl}/api/stats/by-date?username=${username}`, { cache: 'no-store' }),
+    fetch(`${baseUrl}/api/stats/history?username=${username}`, { cache: 'no-store' }),
+  ]);
+
+  const [totals, byDate, history] = await Promise.all([
+    totalsRes.json(),
+    byDateRes.json(),
+    historyRes.json(),
+  ]);
+
+  return { totals, byDate, history };
+}
+
+export default async function StatsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ username?: string }>;
+}) {
+  const params = await searchParams;
+  const username = params.username;
+
+  if (!username) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
+        <div className="container mx-auto px-6 py-12">
+          <Link 
+            href="/" 
+            className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-8"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Home
+          </Link>
+          <div className="max-w-2xl mx-auto text-center py-24">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center mx-auto mb-6 border border-amber-500/30">
+              <svg className="w-10 h-10 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+              Analytics & Aggregations
+            </h1>
+            <p className="text-slate-400 text-lg mb-8">
+              Enter a LinkedIn username to view their engagement analytics
+            </p>
+            <form className="flex gap-3 max-w-md mx-auto">
+              <input
+                type="text"
+                name="username"
+                placeholder="e.g. jakezward"
+                className="flex-1 px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-white placeholder:text-slate-500 transition-all"
+              />
+              <button
+                type="submit"
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-semibold transition-all shadow-lg shadow-amber-500/25"
+              >
+                View Stats
+              </button>
+            </form>
+            <p className="text-sm text-slate-500 mt-6">
+              Available users: <span className="text-slate-400">jakezward</span>, <span className="text-slate-400">ankursharma14</span>, <span className="text-slate-400">rob-hoffman-ceo</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const { totals, byDate, history } = await fetchStats(username);
+
+  // Check if user not found
+  if (totals.userNotFound) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
+        <div className="container mx-auto px-6 py-12">
+          <Link 
+            href="/stats" 
+            className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-8"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Stats
+          </Link>
+          <div className="max-w-2xl mx-auto text-center py-24">
+            <div className="w-20 h-20 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-6 border border-red-500/30">
+              <svg className="w-10 h-10 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <h1 className="text-3xl font-bold mb-4">User Not Found</h1>
+            <p className="text-slate-400 text-lg mb-6">
+              No data found for user <span className="text-white font-semibold">&quot;{username}&quot;</span>
+            </p>
+            <p className="text-slate-500 mb-8">
+              You need to generate posts for this user first using the Posts page.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Link
+                href="/posts"
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-semibold transition-all shadow-lg shadow-amber-500/25"
+              >
+                Generate Posts
+              </Link>
+              <Link
+                href="/stats"
+                className="px-6 py-3 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-semibold transition-colors"
+              >
+                Try Another User
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <StatsClient
+      username={username}
+      totals={totals}
+      byDate={byDate}
+      history={history}
+    />
+  );
+}
+
