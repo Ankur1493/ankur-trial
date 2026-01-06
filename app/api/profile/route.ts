@@ -23,16 +23,16 @@ export async function GET(request: NextRequest) {
 
     // Prepare Actor input
     const input = {
-      "username": urls[0],
+      includeEmail: false,
+      usernames: urls,
     };
 
-    // Run the Actor and wait for it to finish
-    const run = await client.actor("VhxlqQXRwhW8H5hNV").call(input);
+    // Run the Actor and wait for it to finish, can look at this
+    const run = await client.actor("5fajYOBUfeb6fgKlB").call(input);
 
     // Fetch and print Actor results from the run's dataset (if any)
     const { items } = await client.dataset(run.defaultDatasetId).listItems();
 
-    console.log({items: JSON.stringify(items, null, 2)});
     // Return the results
     return NextResponse.json({ success: true, data: items });
   } catch (error: any) {
