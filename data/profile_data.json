@@ -1,0 +1,1196 @@
+[
+  {
+    "profileUrl": "https://linkedin.com/in/ankursharma14",
+    "basic_info": {
+      "fullname": "Ankur  Sharma",
+      "first_name": "Ankur ",
+      "last_name": "Sharma",
+      "headline": "Building shyftwork.com | Contractor outrank.so",
+      "public_identifier": "ankursharma14",
+      "profile_url": "https://linkedin.com/in/ankursharma14",
+      "profile_picture_url": "https://media.licdn.com/dms/image/v2/D4D03AQHbKLNo346wYA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1701008270772?e=1769040000&v=beta&t=7p1vNGgLZmIwev6ZAbASf1-MnZ3Z7HwPMjCJ8a6_P6A",
+      "about": "Software Engineer passionate about building full-stack JavaScript/TypeScript applications with React, NextJs14,  Node/Express, GraphQl /Trpc and SQL/NoSQL databases. \nI am an active contributor in open source projects like uninbox, algrothemic_arena etc..\n\nI recently gave a hands on session on Git /GitHub for the 100xDevs cohort members which received 10+ pull requests from attendees. I recently cleared my GitHub Foundation exam which was launched by GitHub in 2023, scored more than 75%, you can find the badge here - https://www.credly.com/badges/ef19e1f9-1a28-4050-86ff-8bce9c99b801\n\nI am currently learning about devops concepts like docker, CI/CD and AWS to understand how things work at a scale in real world by creating battle code\n\nFind me on GitHub:- https://github.com/Ankur1493",
+      "location": {
+        "country": "India",
+        "city": "Delhi",
+        "full": "Delhi, India",
+        "country_code": "IN"
+      },
+      "creator_hashtags": [
+        "entrepreneur",
+        "entrepreneurship",
+        "reactjs",
+        "startup",
+        "webdevelopment"
+      ],
+      "is_creator": true,
+      "is_influencer": false,
+      "is_premium": false,
+      "open_to_work": false,
+      "created_timestamp": 1580383184333,
+      "show_follower_count": true,
+      "background_picture_url": "https://media.licdn.com/dms/image/v2/D5616AQHKPWHwseyQtg/profile-displaybackgroundimage-shrink_350_1400/B56ZuGzrn6GsAc-/0/1767493254097?e=1769040000&v=beta&t=lo3cHLE7iMlVbydC59CATRDni9ew71mB7xkAbBNS1TE",
+      "urn": "ACoAAC8dqzEBhBVXbvP5ZHdMnr-WeVKSfY2taQ0",
+      "follower_count": 2188,
+      "connection_count": 1406,
+      "current_company": "Shyftwork",
+      "current_company_urn": "",
+      "top_skills": [],
+      "email": null
+    },
+    "experience": [
+      {
+        "title": "Co-Founder",
+        "company": "Shyftwork",
+        "company_logo_url": "",
+        "duration": "Dec 2025 - Present · 2 mos",
+        "location": "India",
+        "employment_type": "Full-time",
+        "company_linkedin_url": "https://www.linkedin.com/search/results/all/?keywords=Shyftwork",
+        "description": "Find your next opportunity\n\nJoin Shyft to discover quality cleaning, painting, and service jobs that match your skills. Get matched with verified employers, complete quick AI interviews, and start earning faster.",
+        "start_date": {
+          "month": "Dec",
+          "year": 2025
+        },
+        "end_date": {
+          "year": null,
+          "month": null
+        },
+        "is_current": true,
+        "skills": []
+      },
+      {
+        "title": "Software Contractor",
+        "company": "Outrank",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/D4D0BAQGFUdzSG4xJ2A/company-logo_400_400/B4DZeHXV8NGsAY-/0/1750322733268/outrankso_logo?e=1769040000&v=beta&t=inAHcNVgkDs7L0AObPC9d-GD11fBItEhTXsgT_eAqzE",
+        "duration": "Nov 2025 - Present · 3 mos",
+        "location": "France",
+        "employment_type": "Freelance",
+        "company_linkedin_url": "https://www.linkedin.com/company/106335094/",
+        "description": "",
+        "start_date": {
+          "month": "Nov",
+          "year": 2025
+        },
+        "end_date": {
+          "year": null,
+          "month": null
+        },
+        "is_current": true,
+        "skills": []
+      },
+      {
+        "title": "Software Developer",
+        "company": "Buildmvpfast",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/D4E0BAQHQfYEqWXNDzw/company-logo_400_400/B4EZUqL.qtG0AY-/0/1740169539258?e=1769040000&v=beta&t=PuvGdWGqlxQEnyQ8LHMUwPCEJymy-wM1sFw87LpBJs0",
+        "duration": "Jul 2025 - Oct 2025 · 4 mos",
+        "location": "United Arab Emirates",
+        "employment_type": "Freelance",
+        "company_linkedin_url": "https://www.linkedin.com/company/106246728/",
+        "description": "Worked on two complete MVPs over a three-month sprint, taking both from rough concepts to functional, testable products.\n\nDelivered a full mobile app using Expo, implementing authentication, onboarding, habit logic, reminders, and smooth cross-platform UI. Built out the backend, handled data modelling, and shipped the entire flow end-to-end.\n\nContributed to a second MVP focused on digital networking and smart profile sharing. Implemented profile creation, visibility tiers, contextual sharing, swipe-style discovery, connection workflows, analytics, and subtle in-app interactions. Designed backend architecture, handled API development, and ensured the product behaved reliably on mobile.",
+        "start_date": {
+          "month": "Jul",
+          "year": 2025
+        },
+        "end_date": {
+          "month": "Oct",
+          "year": 2025
+        },
+        "is_current": false,
+        "skills": []
+      },
+      {
+        "title": "Frontend Developer",
+        "company": "OpenFunnel (YC F24)",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/D560BAQHGKhJFuOi2SA/company-logo_400_400/B56Zmcyh1LI4AY-/0/1759272115796/openfunnel_logo?e=1769040000&v=beta&t=ghopoYVKORJkH4JP8rcfbXK60wsskMzZV6lQbUqaV6M",
+        "duration": "Mar 2025 - Mar 2025 · 1 mo",
+        "location": "San Francisco, California, United States",
+        "employment_type": "Freelance",
+        "company_linkedin_url": "https://www.linkedin.com/company/104133070/",
+        "description": "- Solely responsible for updating and maintaining the entire frontend of the product.\n- Optimized database calls and promisified key methods, reducing account rendering time by 40-50%; integrated React Query for improved caching and faster load times.\n- Revamped the entire UI, significantly enhancing user experience and interface consistency.\n- Designed and developed four new pages, while collaborating closely with the CTO to manage the database and backend.\n- Implemented Supabase authentication and role-based access policies, improving security and row-level security (RLS).",
+        "start_date": {
+          "month": "Mar",
+          "year": 2025
+        },
+        "end_date": {
+          "month": "Mar",
+          "year": 2025
+        },
+        "is_current": false,
+        "skills": [
+          "Next Js",
+          "supabase",
+          "mantine ui",
+          "Typescript",
+          "HubSpot"
+        ]
+      },
+      {
+        "title": "Full Stack Developer",
+        "company": "DevtoolsAcademy.com",
+        "company_logo_url": "",
+        "duration": "Dec 2024 - Jan 2025 · 2 mos",
+        "location": "Sweden",
+        "employment_type": "Freelance",
+        "company_linkedin_url": "https://www.linkedin.com/search/results/all/?keywords=DevtoolsAcademy%2Ecom",
+        "description": "- Worked on the creation of /tools page\n- Added the search functionality using debouncing methods for a smooth search experience\n- Added dynamic filtering and sorting functionality\n- Created the entire layout for the page",
+        "start_date": {
+          "month": "Dec",
+          "year": 2024
+        },
+        "end_date": {
+          "month": "Jan",
+          "year": 2025
+        },
+        "is_current": false,
+        "skills": [
+          "Next Js",
+          "Tailwind CSS"
+        ]
+      },
+      {
+        "title": "Intern",
+        "company": "AutoCRUD",
+        "company_logo_url": "",
+        "duration": "Dec 2024 - Dec 2024 · 1 mo",
+        "location": "United States",
+        "employment_type": "Internship",
+        "company_linkedin_url": "https://www.linkedin.com/company/105968060/",
+        "description": "Upgraded the tables section of the product\nResolved bugs in the details view and added attachments workflow in it\nGuided another junior intern for a small period of time",
+        "start_date": {
+          "month": "Dec",
+          "year": 2024
+        },
+        "end_date": {
+          "month": "Dec",
+          "year": 2024
+        },
+        "is_current": false,
+        "skills": []
+      },
+      {
+        "title": "Software Engineer Intern",
+        "company": "thinkit.club",
+        "company_logo_url": "",
+        "duration": "Oct 2024 - Nov 2024 · 2 mos",
+        "location": "Bengaluru, Karnataka, India",
+        "employment_type": "Internship",
+        "company_linkedin_url": "https://www.linkedin.com/company/105228294/",
+        "description": "Worked on a community platform for enhancement in student learnings",
+        "start_date": {
+          "month": "Oct",
+          "year": 2024
+        },
+        "end_date": {
+          "month": "Nov",
+          "year": 2024
+        },
+        "is_current": false,
+        "skills": []
+      },
+      {
+        "title": "Software Engineer Intern",
+        "company": "DevKit",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/C4D0BAQGtmlNENtYllg/company-logo_400_400/company-logo_400_400/0/1643264209043?e=1769040000&v=beta&t=Zs178xyEIc_T7YJz-XEBCrseRQ21e6zI6teIAEJwIkw",
+        "duration": "Aug 2024 - Sep 2024 · 2 mos",
+        "location": "Faridabad, Haryana, India",
+        "employment_type": "Internship",
+        "company_linkedin_url": "https://www.linkedin.com/company/78760593/",
+        "description": "> Worked on a event platform using next js to showcase all events listed on different platforms \n> Created a web scraper using puppeteer for scraping platforms like luma, meet-up, and eventsBrite\n> Created a modern website using CSS libraries like (Tailwind, ShadCn and Aceternity UI) to showcase events",
+        "start_date": {
+          "month": "Aug",
+          "year": 2024
+        },
+        "end_date": {
+          "month": "Sep",
+          "year": 2024
+        },
+        "is_current": false,
+        "skills": [
+          "Next Js",
+          "TypeScript",
+          "Puppeteer",
+          "PostgreSQL",
+          "Web Scraping"
+        ]
+      },
+      {
+        "title": "Engineering Fellow",
+        "company": "0x.Day",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/D4D0BAQHgu_N0xl290g/company-logo_400_400/company-logo_400_400/0/1709907862057/0xday_logo?e=1769040000&v=beta&t=vLYqcev3jj-dPYTyQeSA0RjF_cIDJ_eN1YKo1unX29A",
+        "duration": "Jul 2024 - Aug 2024 · 2 mos",
+        "location": "Bengaluru, Karnataka, India",
+        "employment_type": "Internship",
+        "company_linkedin_url": "https://www.linkedin.com/company/82602194/",
+        "description": "> Pitched system design for the notification and OTP engine ( bird engine )\n> Used Msg91 and Fast2sms for Indian and    twilio for international messages\n> Worked on the UI of 0xProfile.com",
+        "start_date": {
+          "month": "Jul",
+          "year": 2024
+        },
+        "end_date": {
+          "month": "Aug",
+          "year": 2024
+        },
+        "is_current": false,
+        "skills": [
+          "Next.js",
+          "TypeScript",
+          "PostgreSQL",
+          "Redis",
+          "Express.js",
+          "React.js"
+        ]
+      }
+    ],
+    "education": [
+      {
+        "school": "ABESIT",
+        "degree": "Bachelor of Technology - BTech, Computer Science",
+        "degree_name": "Bachelor of Technology - BTech",
+        "field_of_study": "Computer Science",
+        "duration": "Sep 2021 - Sep 2025",
+        "school_linkedin_url": "https://www.linkedin.com/company/14515157/",
+        "description": "",
+        "activities": "",
+        "skills": [],
+        "school_logo_url": "https://media.licdn.com/dms/image/v2/C560BAQHHc8_ZXqlECg/company-logo_400_400/company-logo_400_400/0/1630658022811?e=1769040000&v=beta&t=-y6Ph_UH_vGslcQV9wlyYbIiBfqPixoxg4evV0ecoGg",
+        "start_date": {
+          "year": 2021,
+          "month": "Sep"
+        },
+        "end_date": {
+          "year": 2025,
+          "month": "Sep"
+        }
+      }
+    ],
+    "projects": [
+      {
+        "name": "Viewus",
+        "start_date": "Sep 2024",
+        "end_date": "Mar 2025",
+        "description": "ViewUs is a powerful platform that helps businesses seamlessly collect, manage, and showcase customer testimonials. With ViewUs, you can create beautiful testimonial walls, collect video and text testimonials, and import reviews from popular social platforms - all without complex setup or developer assistance",
+        "associated_company": "",
+        "company_urn": "",
+        "skills": [
+          "TypeScript",
+          "Next Js",
+          "React.js",
+          "Amazon Web Services (AWS)",
+          "Express.js",
+          "Amazon SQS",
+          "Ffmpeg",
+          "Amazon CloudFront",
+          "Amazon S3",
+          "Amazon EC2"
+        ],
+        "contributors": [],
+        "project_urls": [],
+        "media_items": []
+      },
+      {
+        "name": "clan-chat",
+        "start_date": "Jul 2024",
+        "end_date": "Aug 2024",
+        "description": "Clan Chat is a web application which group interaction via chats, audio and video calls.\nCreated a multiple servers architecture using next js for managing main application handling servers, channels and members along with user authentication using PostgreSQL for handling this data.\nCreated a seperate web socket server for handling chats using Redis or pub/sub architecture and MongoDB for persistent storage.",
+        "associated_company": "",
+        "company_urn": "",
+        "skills": [
+          "TypeScript",
+          "Next.js",
+          "PostgreSQL",
+          "MongoDB",
+          "Redis",
+          "WebSocket",
+          "Next Auth",
+          "Role-Based Access Control (RBAC)"
+        ],
+        "contributors": [],
+        "project_urls": [],
+        "media_items": [
+          {
+            "title": "356911754-5909c41b-c6b5-40ae-b07d-02623a7552b8.png",
+            "url": "https://www.linkedin.com/in/ankursharma14/details/projects/1265813924/multiple-media-viewer?profileId=ACoAAC8dqzEBhBVXbvP5ZHdMnr-WeVKSfY2taQ0&treasuryMediaId=1723547699939&type=IMAGE",
+            "accessibility_text": "Thumbnail for 356911754-5909c41b-c6b5-40ae-b07d-02623a7552b8.png"
+          },
+          {
+            "title": "356911852-b677f44b-b3f8-498f-aad7-3983048a9ffc.png",
+            "url": "https://www.linkedin.com/in/ankursharma14/details/projects/1265813924/multiple-media-viewer?profileId=ACoAAC8dqzEBhBVXbvP5ZHdMnr-WeVKSfY2taQ0&treasuryMediaId=1723547699940&type=IMAGE",
+            "accessibility_text": "Thumbnail for 356911852-b677f44b-b3f8-498f-aad7-3983048a9ffc.png"
+          },
+          {
+            "title": "356912245-b18edaa8-42b3-4836-863e-47e6d2bc6dce.png",
+            "url": "https://www.linkedin.com/in/ankursharma14/details/projects/1265813924/multiple-media-viewer?profileId=ACoAAC8dqzEBhBVXbvP5ZHdMnr-WeVKSfY2taQ0&treasuryMediaId=1723547699941&type=IMAGE",
+            "accessibility_text": "Thumbnail for 356912245-b18edaa8-42b3-4836-863e-47e6d2bc6dce.png"
+          }
+        ]
+      }
+    ],
+    "certifications": [
+      {
+        "name": "GitHub Foundations",
+        "organization": "GitHub",
+        "organization_urn": "1418841",
+        "credential_id": "",
+        "issue_date": "Jul 2024 · Expires Jul 2027",
+        "expiration_date": "Jul 2027",
+        "skills": [],
+        "credential_url": "https://www.credly.com/badges/ef19e1f9-1a28-4050-86ff-8bce9c99b801/linked_in_profile"
+      }
+    ],
+    "featured": [
+      {
+        "type": "post",
+        "description": "Completed my project with DevKit , It was a great month working with Harsh A. \n\nThanks for the opportunity bhai🥳, a little sneak peak from our upcoming product.",
+        "url": "https://www.linkedin.com/feed/update/urn:li:activity:7236786130493317120?updateEntityUrn=urn%3Ali%3Afs_feedUpdate%3A%28V2%2Curn%3Ali%3Aactivity%3A7236786130493317120%29",
+        "image_url": "https://media.licdn.com/dms/image/v2/D5622AQGsqc8KlI5N4Q/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1725384265282?e=1769040000&v=beta&t=zwCbMb1qaqipKPHfcbdVxF3KjE3Y5vbby3ufJ8jaK6Q",
+        "social_counts": {
+          "likes": 23,
+          "reaction_counts": [
+            {
+              "type": "like",
+              "count": 21
+            },
+            {
+              "type": "empathy",
+              "count": 2
+            }
+          ]
+        }
+      },
+      {
+        "type": "post",
+        "description": "🎉 It happened! I won a bounty from the @100xDevs cohort! Contributed to the Algorithmic Arena project and implemented rate limiting on submissions. 🚀 Also thrilled that my local Docker setup got merged. Big thanks to Harkirat Singh for the bounty! \n#DevCommunity #OpenSource",
+        "url": "https://www.linkedin.com/feed/update/urn:li:activity:7206060102401818624?updateEntityUrn=urn%3Ali%3Afs_feedUpdate%3A%28V2%2Curn%3Ali%3Aactivity%3A7206060102401818624%29",
+        "image_url": "https://media.licdn.com/dms/image/v2/D5622AQGpUpHrDICypg/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1719209289663?e=1769040000&v=beta&t=qTDdngAvn3e-DI1SNVQS1-GcS47_GjkR4_sB_hlIdXg",
+        "social_counts": {
+          "likes": 358,
+          "comments": 5,
+          "reaction_counts": [
+            {
+              "type": "like",
+              "count": 330
+            },
+            {
+              "type": "praise",
+              "count": 20
+            },
+            {
+              "type": "empathy",
+              "count": 6
+            },
+            {
+              "type": "appreciation",
+              "count": 2
+            }
+          ]
+        }
+      },
+      {
+        "type": "post",
+        "description": "Hey everyone created calenso a product like cal.com, which can be used to setup your availability according to your schedule, and let other book some time with you, We let you customize the whole experience of choosing any day or time as of now we connect user to have a google meet, and create an invite in there google calendars.\nThanks Udit Kapoor for helping me on the front-end side, and creating this beautiful ui.\nThanks Harkirat Singh for his constant motivation and introducing me to typescript and zod validation, tbh it was tough to settle all those type errors.\nThanks to everyone else who guided me TA Rushikesh, TA Lokeshwar,  hsingh from 100xdevs cohort, Ashutosh Bhadauriya, Udit Takkar",
+        "url": "https://www.linkedin.com/feed/update/urn:li:activity:7187937756868677632?updateEntityUrn=urn%3Ali%3Afs_feedUpdate%3A%28V2%2Curn%3Ali%3Aactivity%3A7187937756868677632%29",
+        "image_url": "https://media.licdn.com/dms/image/v2/D5605AQGXE1eC_ftEnA/videocover-high/videocover-high/0/1713737873767?e=1768341600&v=beta&t=lTtXqOZ83M90IXvroeKsgOUB7s_abZUJ5bdXJ6fo1C0",
+        "social_counts": {
+          "likes": 192,
+          "comments": 11,
+          "reaction_counts": [
+            {
+              "type": "like",
+              "count": 179
+            },
+            {
+              "type": "empathy",
+              "count": 7
+            },
+            {
+              "type": "praise",
+              "count": 5
+            },
+            {
+              "type": "interest",
+              "count": 1
+            }
+          ]
+        }
+      },
+      {
+        "type": "post",
+        "description": "I took my first session ever on git and github for the beginners of the 100xdev community and received a great response got 25+ people attending and 9+ pr's on the repo. Thanks, Harkirat Singh for the community and discord mods ",
+        "url": "https://www.linkedin.com/feed/update/urn:li:activity:7068634173057437696?updateEntityUrn=urn%3Ali%3Afs_feedUpdate%3A%28V2%2Curn%3Ali%3Aactivity%3A7068634173057437696%29",
+        "image_url": "https://media.licdn.com/dms/image/v2/D4D22AQHQC7KFEleQoQ/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1685293714794?e=1769040000&v=beta&t=VAW6eujAb_NzeEcRxxwvfngqijiAlDEs5Q31hNAcBg4",
+        "social_counts": {
+          "likes": 97,
+          "comments": 4,
+          "reaction_counts": [
+            {
+              "type": "like",
+              "count": 92
+            },
+            {
+              "type": "empathy",
+              "count": 3
+            },
+            {
+              "type": "interest",
+              "count": 2
+            }
+          ]
+        }
+      }
+    ],
+    "skills": [
+      {
+        "name": "Amazon SQS",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Ffmpeg",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Amazon CloudFront",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Amazon S3",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Amazon EC2",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Typescript ",
+        "endorsement_count": 0,
+        "related_experiences": [
+          "Frontend Developer at OpenFunnel (YC F24)"
+        ]
+      },
+      {
+        "name": "HubSpot",
+        "endorsement_count": 0,
+        "related_experiences": [
+          "Frontend Developer at OpenFunnel (YC F24)"
+        ]
+      },
+      {
+        "name": "supabase",
+        "endorsement_count": 0,
+        "related_experiences": [
+          "Frontend Developer at OpenFunnel (YC F24)"
+        ]
+      },
+      {
+        "name": "mantine ui",
+        "endorsement_count": 0,
+        "related_experiences": [
+          "Frontend Developer at OpenFunnel (YC F24)"
+        ]
+      },
+      {
+        "name": "Puppeteer ",
+        "endorsement_count": 0,
+        "related_experiences": [
+          "Software Engineer Intern at DevKit"
+        ]
+      },
+      {
+        "name": "Kubernetes",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "system design",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Apache Kafka",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Next Js",
+        "endorsement_count": 0,
+        "related_experiences": [
+          "3 experiences across OpenFunnel (YC F24) and 2 other companies"
+        ]
+      },
+      {
+        "name": "WebSocket",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Next Auth",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Role-Based Access Control (RBAC)",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "nextjs",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Web Scraping",
+        "endorsement_count": 0,
+        "related_experiences": [
+          "Software Engineer Intern at DevKit"
+        ]
+      },
+      {
+        "name": "Redis",
+        "endorsement_count": 0,
+        "related_experiences": [
+          "Engineering Fellow at 0x.Day"
+        ]
+      },
+      {
+        "name": "Blockchain",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "PostgreSQL",
+        "endorsement_count": 0,
+        "related_experiences": [
+          "2 experiences across DevKit and 1 other company"
+        ]
+      },
+      {
+        "name": "MERN Stack",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Next.js",
+        "endorsement_count": 0,
+        "related_experiences": [
+          "Engineering Fellow at 0x.Day"
+        ]
+      },
+      {
+        "name": "Amazon Web Services (AWS)",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Docker",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Continuous Integration and Continuous Delivery (CI/CD)",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "MySQL",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Trpc",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "GraphQL",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "TypeScript",
+        "endorsement_count": 0,
+        "related_experiences": [
+          "2 experiences across DevKit and 1 other company"
+        ]
+      },
+      {
+        "name": "Full-Stack Development",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Back-End Development",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Front-end Development",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Firebase",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "GitHub",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Git",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Prisma ORM",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Mongoose ODM",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "MongoDB",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "React Hooks",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Tailwind CSS",
+        "endorsement_count": 0,
+        "related_experiences": [
+          "Full Stack Developer at DevtoolsAcademy.com"
+        ]
+      },
+      {
+        "name": "Redux.js",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Express.js",
+        "endorsement_count": 0,
+        "related_experiences": [
+          "Engineering Fellow at 0x.Day"
+        ]
+      },
+      {
+        "name": "Node.js",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Web Development",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "React.js",
+        "endorsement_count": 0,
+        "related_experiences": [
+          "Engineering Fellow at 0x.Day"
+        ]
+      },
+      {
+        "name": "JavaScript",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "Cascading Style Sheets (CSS)",
+        "endorsement_count": 0,
+        "related_experiences": []
+      },
+      {
+        "name": "HTML5",
+        "endorsement_count": 0,
+        "related_experiences": []
+      }
+    ],
+    "recommendations": {
+      "received_recommendations": [],
+      "given_recommendations": []
+    }
+  },
+  {
+    "profileUrl": "https://linkedin.com/in/rob-hoffman-ceo",
+    "basic_info": {
+      "fullname": "Rob Hoffman",
+      "first_name": "Rob",
+      "last_name": "Hoffman",
+      "headline": "Helping brands get rankings and revenue from Google, LLMs, AI Overviews | CEO of Contact.so | Mentions.so | Kleo.so",
+      "public_identifier": "rob-hoffman-ceo",
+      "profile_url": "https://linkedin.com/in/rob-hoffman-ceo",
+      "profile_picture_url": "https://media.licdn.com/dms/image/v2/D4E03AQFYaSx2wPfAWw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1721131822845?e=1769040000&v=beta&t=cJcIMkIX9pybtKLAeEWq09xSIO6oxv6P7R_hdORdtOw",
+      "about": "There’s a rumour that we’re the world’s most controversial SEO Agency. But I’d just describe us as innovators. \n\nWe stay on the cutting edge of SEO to help clients get traffic from Google and LLMs that turns into revenue. That doesn't go over well with the dinosaurs who are stuck in the past and too lazy to adapt. \n\nOur product is simple: work with us and we will make you more money than what you spend with us. \n\n☎️GETTING IN TOUCH IS EASY:\n📞 Schedule a 30-minute free demo with me here: https://contactstudios.co/book-a-call?utm_campaign=Rob%20Hoffman&utm_source=linkedin&utm_medium=social \n(Zero pressure, and if you need to reschedule, go right ahead.)\n\nRob@contactstudios.com \n\nContact Co-Founder & CEO",
+      "location": {
+        "country": "United States",
+        "city": "Austin, Texas",
+        "full": "Austin, Texas, United States",
+        "country_code": "US"
+      },
+      "creator_hashtags": [
+        "contentmarketing",
+        "entrepreneurship",
+        "marketing",
+        "seo",
+        "videomarketing"
+      ],
+      "is_creator": true,
+      "is_influencer": false,
+      "is_premium": true,
+      "open_to_work": false,
+      "created_timestamp": 1395675218048,
+      "show_follower_count": true,
+      "background_picture_url": "https://media.licdn.com/dms/image/v2/D4E16AQEDVemQqwjXmQ/profile-displaybackgroundimage-shrink_350_1400/profile-displaybackgroundimage-shrink_350_1400/0/1714416195472?e=1769040000&v=beta&t=kmDKH3lYQpiu-4QxIbkg9SaLCFB9UH4Vukc0DUqPAbI",
+      "urn": "ACoAABPZY2sBGXTQUDT-BLARcHmlAGNBhuXfi54",
+      "follower_count": 78721,
+      "connection_count": 3423,
+      "current_company": "Mentions",
+      "current_company_urn": "107997182",
+      "current_company_url": "https://www.linkedin.com/company/mentions-so",
+      "top_skills": [],
+      "email": "Rob@contactstudios.com"
+    },
+    "experience": [
+      {
+        "title": "Co-Founder",
+        "company": "Mentions",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/D4E0BAQEQC1aEmfiK3Q/company-logo_400_400/B4EZgImGkmGcAY-/0/1752490863713/mentions_so_logo?e=1769040000&v=beta&t=ou3JTF0kAszVoFetTxNbGcKcNDMG91BnV4oxqoQH98I",
+        "duration": "Jul 2025 - Present · 7 mos",
+        "location": "",
+        "employment_type": "",
+        "company_linkedin_url": "https://www.linkedin.com/company/107997182/",
+        "description": "Get your brand mentioned on LLMs like ChatGPT. Track, analyze, and improve how you're mentioned in AI-generated responses with actionable insights.",
+        "start_date": {
+          "month": "Jul",
+          "year": 2025
+        },
+        "end_date": {
+          "year": null,
+          "month": null
+        },
+        "is_current": true,
+        "skills": []
+      },
+      {
+        "title": "Co-Founder & CEO",
+        "company": "Contact",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/D4E0BAQHh_VYXTIgJtg/company-logo_400_400/company-logo_400_400/0/1706209166009/contact_studios_logo?e=1769040000&v=beta&t=3UaPdhJDS_6s3xOjJjVh_hLQ094nwReFAquHbw7hNOg",
+        "duration": "Jun 2022 - Present · 3 yrs 8 mos",
+        "location": "",
+        "employment_type": "",
+        "company_linkedin_url": "https://www.linkedin.com/company/19131937/",
+        "description": "",
+        "start_date": {
+          "month": "Jun",
+          "year": 2022
+        },
+        "end_date": {
+          "year": null,
+          "month": null
+        },
+        "is_current": true,
+        "skills": []
+      },
+      {
+        "title": "Co-Founder & Chief Operating Officer (COO)",
+        "company": "Contact",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/D4E0BAQHh_VYXTIgJtg/company-logo_400_400/company-logo_400_400/0/1706209166009/contact_studios_logo?e=1769040000&v=beta&t=3UaPdhJDS_6s3xOjJjVh_hLQ094nwReFAquHbw7hNOg",
+        "duration": "Jun 2019 - Jun 2022 · 3 yrs 1 mo",
+        "location": "",
+        "employment_type": "",
+        "company_linkedin_url": "https://www.linkedin.com/company/19131937/",
+        "description": "We make creating content stress-free. Timely turnarounds. Frictionless collaboration. Quality you can bet on. \n\nCreating content customers love is hard. For most brands, scaling content is a nightmare. Agencies and production companies are slow and expensive. Freelance marketplaces put the burden on you with endless notes and revisions. Between hiring editors, writers, videographers, producers, photographers, motion designers, and SEO experts…building an internal team just isn’t feasible for most organizations.\n\nContact helps brands increase their content production without increasing their headcount. With content plans that can easily scale up or down with your business needs, Contact makes it easy for  teams to supercharge their marketing.\n\nSchedule a 30-minute free demo with me here: https://calendly.com/contactrob \n(Zero pressure, and if you need to reschedule, go right ahead.)\n\nwww.contactstudios.com",
+        "start_date": {
+          "month": "Jun",
+          "year": 2019
+        },
+        "end_date": {
+          "month": "Jun",
+          "year": 2022
+        },
+        "is_current": false,
+        "skills": []
+      },
+      {
+        "title": "Co-Founder",
+        "company": "Kleo",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/D4E0BAQHq0fm8ZCPB8Q/company-logo_400_400/company-logo_400_400/0/1698907830473/kleoso_logo?e=1769040000&v=beta&t=YKrMhbQMpWEBYnJG6ADJ5u3p4jvFRxnx_yIb0ZEjtBo",
+        "duration": "Jun 2025 - Present · 8 mos",
+        "location": "",
+        "employment_type": "",
+        "company_linkedin_url": "https://www.linkedin.com/company/100115698/",
+        "description": "⁠ ⁠The world's #1 Personal Branding tool - ideate, create and post in seconds",
+        "start_date": {
+          "month": "Jun",
+          "year": 2025
+        },
+        "end_date": {
+          "year": null,
+          "month": null
+        },
+        "is_current": true,
+        "skills": []
+      },
+      {
+        "title": "Official Member",
+        "company": "YEC",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/C4E0BAQGN_dtcwt3R_g/company-logo_400_400/company-logo_400_400/0/1650662991498/yec_logo?e=1769040000&v=beta&t=p8uLQvkdm8rOC_vYq7o2q5VB43Mfh9p62qnjVjVj_o0",
+        "duration": "Sep 2022 - Present · 3 yrs 5 mos",
+        "location": "",
+        "employment_type": "",
+        "company_linkedin_url": "https://www.linkedin.com/company/2418207/",
+        "description": "",
+        "start_date": {
+          "month": "Sep",
+          "year": 2022
+        },
+        "end_date": {
+          "year": null,
+          "month": null
+        },
+        "is_current": true,
+        "skills": []
+      },
+      {
+        "title": "Chief Operating Officer (COO)",
+        "company": "Herb",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/D560BAQEhAE0rLibfvQ/company-logo_400_400/B56Zb42fm2HwAY-/0/1747931758172/herb_logo?e=1769040000&v=beta&t=RH63hQ0pu3zzInQJ1Jh8dft9doqyWS02_nGgJGFQINw",
+        "duration": "Dec 2019 - Nov 2021 · 2 yrs",
+        "location": "",
+        "employment_type": "",
+        "company_linkedin_url": "https://www.linkedin.com/company/10586607/",
+        "description": "- 2-years of consecutive 100% year-over-year revenue growth \n- Operations, revenue, and content for the world's largest cannabis community (14+ million conscious cannabis consumers across web and social)\n\n\nwww.Herb.co \n@Herb (IG)",
+        "start_date": {
+          "month": "Dec",
+          "year": 2019
+        },
+        "end_date": {
+          "month": "Nov",
+          "year": 2021
+        },
+        "is_current": false,
+        "skills": []
+      },
+      {
+        "title": "Head Of Content",
+        "company": "Herb",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/D560BAQEhAE0rLibfvQ/company-logo_400_400/B56Zb42fm2HwAY-/0/1747931758172/herb_logo?e=1769040000&v=beta&t=RH63hQ0pu3zzInQJ1Jh8dft9doqyWS02_nGgJGFQINw",
+        "duration": "Aug 2019 - Dec 2019 · 5 mos",
+        "location": "Toronto, Ontario, Canada",
+        "employment_type": "",
+        "company_linkedin_url": "https://www.linkedin.com/company/10586607/",
+        "description": "",
+        "start_date": {
+          "month": "Aug",
+          "year": 2019
+        },
+        "end_date": {
+          "month": "Dec",
+          "year": 2019
+        },
+        "is_current": false,
+        "skills": []
+      },
+      {
+        "title": "Senior Writer",
+        "company": "Herb",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/D560BAQEhAE0rLibfvQ/company-logo_400_400/B56Zb42fm2HwAY-/0/1747931758172/herb_logo?e=1769040000&v=beta&t=RH63hQ0pu3zzInQJ1Jh8dft9doqyWS02_nGgJGFQINw",
+        "duration": "Aug 2018 - Aug 2019 · 1 yr 1 mo",
+        "location": "Greater Toronto Area, Canada",
+        "employment_type": "",
+        "company_linkedin_url": "https://www.linkedin.com/company/10586607/",
+        "description": "At Herb, Rob wore a wide variety of hats, exceeding his responsibilities as a Senior Writer to help the publication expand into video content, target SEO keywords to boost organic views, and generally increase the quality of Herb's content. Rob's responsibilities included writing investigative reports, SEO content writing, general content writing, guide-writing, script writing, video production, documentary production, editing, social-media writing and strategic planning, camera operating, and more. Rob played a significant role in Herb's SEO content migration process, in which he helped write new SEO-driven content while re-structuring old content to boost organic traffic and get Herb to the top of SERP results. He helped produce, film, and script a number of successful series that have accumulated millions of views and generated hundreds of thousands of dollars in revenue. Rob also filmed and produced Herb's feature documentary about the opioid crisis in Canada.",
+        "start_date": {
+          "month": "Aug",
+          "year": 2018
+        },
+        "end_date": {
+          "month": "Aug",
+          "year": 2019
+        },
+        "is_current": false,
+        "skills": []
+      },
+      {
+        "title": "Journalist",
+        "company": "Freelance Journalist",
+        "company_logo_url": "",
+        "duration": "Apr 2012 - Nov 2019 · 7 yrs 8 mos",
+        "location": "",
+        "employment_type": "",
+        "company_linkedin_url": "https://www.linkedin.com/search/results/all/?keywords=Freelance+Journalist",
+        "description": "Freelance journalist, covering politics and the environment; Bylines in Politico, Fusion, ThinkProgress, DoubleBlind and Climate Desk.\n\nRead a few assorted clips below",
+        "start_date": {
+          "month": "Apr",
+          "year": 2012
+        },
+        "end_date": {
+          "month": "Nov",
+          "year": 2019
+        },
+        "is_current": false,
+        "skills": []
+      },
+      {
+        "title": "Executive Editor",
+        "company": "The Plaid Zebra",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/C4E0BAQGo7SxGuYWxVQ/company-logo_400_400/company-logo_400_400/0/1631350328064?e=1769040000&v=beta&t=s5txOQlKaNfQ3Go73me7eYYnX5ac-LZAIg50P7uyPVc",
+        "duration": "Apr 2014 - Apr 2016 · 2 yrs 1 mo",
+        "location": "Greater Toronto Area, Canada",
+        "employment_type": "",
+        "company_linkedin_url": "https://www.linkedin.com/company/9454905/",
+        "description": "- Most-viewed writer on www.theplaidzebra.com, yielding up to 1.5 million page-views monthly, producing 10 articles weekly.\n- Oversaw an internship program in conjunction with the Ryerson School of Journalism by managing, editing and publishing the work of up to 5 interns per semester.\n- Conceptualized, implemented and managed the primary social-media marketing strategy for www.theplaidzebra.com, vaulting the company’s social-media presence and significantly increasing monthly page-views.\n- Headlined, wrote captions and crafted meta tags for most articles.\n- Under my editorial supervision www.theplaidzebra.com had its content shared by the BBC, CBC’s George Stroumboulopoulos, Joe Rogan, The Daily Mail, Indie88, Matador Network, Grind TV, The Peak, and Graham Hancock. \n\n",
+        "start_date": {
+          "month": "Apr",
+          "year": 2014
+        },
+        "end_date": {
+          "month": "Apr",
+          "year": 2016
+        },
+        "is_current": false,
+        "skills": []
+      }
+    ],
+    "education": [
+      {
+        "school": "Western University",
+        "degree": "",
+        "degree_name": "",
+        "field_of_study": "",
+        "duration": "",
+        "school_linkedin_url": "https://www.linkedin.com/company/166689/",
+        "description": "",
+        "activities": "",
+        "skills": [],
+        "school_logo_url": "https://media.licdn.com/dms/image/v2/C560BAQExbN4XpVuocQ/company-logo_400_400/company-logo_400_400/0/1630635886891/westernuniversity_logo?e=1769040000&v=beta&t=A6WjUD49cLDA6vfkQMrixlJOZNodwHENTKyuyYlIKOI",
+        "start_date": {},
+        "end_date": {}
+      }
+    ],
+    "certifications": [
+      {
+        "name": "Finance For Founders",
+        "organization": "Foundr",
+        "organization_urn": "3088407",
+        "credential_id": "",
+        "issue_date": "Mar 2021",
+        "expiration_date": null,
+        "skills": [],
+        "credential_url": "https://courses.foundr.com/view-cert/?view=cert&id=92576&u=cm9iQGNvbnRhY3RzdHVkaW9zLmNvbQ==&course_id=91380"
+      },
+      {
+        "name": "Duolingo Spanish Fluency: Intermediate (Estimated)",
+        "organization": "Duolingo",
+        "organization_urn": "2973736",
+        "credential_id": "",
+        "issue_date": "Nov 2016",
+        "expiration_date": null,
+        "skills": [],
+        "credential_url": "https://www.duolingo.com/Rob.Hoffman"
+      },
+      {
+        "name": "Duolingo Spanish Fluency: Intermediate (Estimated)",
+        "organization": "Duolingo",
+        "organization_urn": "2973736",
+        "credential_id": "",
+        "issue_date": "Sep 2016",
+        "expiration_date": null,
+        "skills": [],
+        "credential_url": "https://www.duolingo.com/Rob.Hoffman"
+      },
+      {
+        "name": "Duolingo Spanish Fluency: Elementary (Estimated)",
+        "organization": "Duolingo",
+        "organization_urn": "2973736",
+        "credential_id": "",
+        "issue_date": "Aug 2016",
+        "expiration_date": null,
+        "skills": [],
+        "credential_url": "https://www.duolingo.com/Rob.Hoffman"
+      }
+    ],
+    "featured": [
+      {
+        "type": "link",
+        "title": "Book SEO Strategy Call",
+        "description": "contact.so",
+        "url": "https://www.contact.so/",
+        "image_url": "https://media.licdn.com/dms/image/v2/D4E2DAQG6s2eI139XwA/profile-treasury-image-shrink_1280_1280/B4EZe4Fi..HwAQ-/0/1751140151578?e=1768341600&v=beta&t=aKd-1C2VIiguiLxL97ksBTGeNrY2qIdzyLWQOadCcUc"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Journalism",
+        "endorsement_count": 15,
+        "related_experiences": []
+      },
+      {
+        "name": "Editorial",
+        "endorsement_count": 16,
+        "related_experiences": []
+      },
+      {
+        "name": "Creative Writing",
+        "endorsement_count": 14,
+        "related_experiences": []
+      },
+      {
+        "name": "Social Media",
+        "endorsement_count": 7,
+        "related_experiences": []
+      },
+      {
+        "name": "Social Media Marketing",
+        "endorsement_count": 6,
+        "related_experiences": []
+      },
+      {
+        "name": "Research",
+        "endorsement_count": 5,
+        "related_experiences": []
+      },
+      {
+        "name": "Copy Editing",
+        "endorsement_count": 5,
+        "related_experiences": []
+      },
+      {
+        "name": "Publishing",
+        "endorsement_count": 4,
+        "related_experiences": []
+      },
+      {
+        "name": "Public Speaking",
+        "endorsement_count": 5,
+        "related_experiences": []
+      },
+      {
+        "name": "Public Relations",
+        "endorsement_count": 4,
+        "related_experiences": []
+      },
+      {
+        "name": "Copywriting",
+        "endorsement_count": 4,
+        "related_experiences": []
+      },
+      {
+        "name": "Proofreading",
+        "endorsement_count": 4,
+        "related_experiences": []
+      },
+      {
+        "name": "Magazines",
+        "endorsement_count": 4,
+        "related_experiences": []
+      },
+      {
+        "name": "Blogging",
+        "endorsement_count": 6,
+        "related_experiences": []
+      },
+      {
+        "name": "Microsoft Office",
+        "endorsement_count": 6,
+        "related_experiences": []
+      },
+      {
+        "name": "Search Engine Optimization (SEO)",
+        "endorsement_count": 2,
+        "related_experiences": []
+      },
+      {
+        "name": "SEO Copywriting",
+        "endorsement_count": 1,
+        "related_experiences": []
+      },
+      {
+        "name": "E-commerce SEO",
+        "endorsement_count": 1,
+        "related_experiences": []
+      },
+      {
+        "name": "SEO Audits",
+        "endorsement_count": 1,
+        "related_experiences": []
+      },
+      {
+        "name": "SEO",
+        "endorsement_count": 1,
+        "related_experiences": []
+      },
+      {
+        "name": "Video Production",
+        "endorsement_count": 1,
+        "related_experiences": []
+      },
+      {
+        "name": "Video Editing",
+        "endorsement_count": 1,
+        "related_experiences": []
+      },
+      {
+        "name": "Video",
+        "endorsement_count": 1,
+        "related_experiences": []
+      },
+      {
+        "name": "Content Strategy",
+        "endorsement_count": 1,
+        "related_experiences": []
+      },
+      {
+        "name": "Content Marketing",
+        "endorsement_count": 1,
+        "related_experiences": []
+      },
+      {
+        "name": "Enterprise Content Management",
+        "endorsement_count": 1,
+        "related_experiences": []
+      },
+      {
+        "name": "Content Development",
+        "endorsement_count": 1,
+        "related_experiences": []
+      }
+    ],
+    "recommendations": {
+      "received_recommendations": [
+        {
+          "recommender_name": "Tyler Fyfe",
+          "recommender_title": "Co-Founder @ Contact Studios | SEO, Content Marketing and Video Production",
+          "recommender_profile_id": "ACoAABY0rU0BUD3vKxZp55EN5lVostGlqU5VG9o",
+          "recommendation_date": "April 4, 2020",
+          "relationship": "Tyler worked with Rob on the same team",
+          "recommendation_text": "I have worked with Rob for several years on various projects and his writing, work-ethic and strategy for creating content that drives performance are second to none. Rob is highly effective at creating SEO content and implementing content-strategies that drive long-term value. "
+        }
+      ],
+      "given_recommendations": [
+        {
+          "recommender_name": "Sophia Julio",
+          "recommender_title": "Recruiting, Marketing, and Advocacy Professional.",
+          "recommender_profile_id": "ACoAACJ2BCYBH03UIr9vf-_5kA4DevzyZwKutcA",
+          "recommendation_date": "June 29, 2021",
+          "relationship": "Rob managed Sophia directly",
+          "recommendation_text": "Sophia was an incredible teammate, a quick learner, popular with our clients and internal-team alike. \nShe picked up the role quickly and made it her own. She's super passionate and hard working, and made a big impact in a small amount of time. Also extremely knowledgable about the cannabis industry, and in general was a huge asset to the team! Would highly recommend Sophia as a strong addition to any company, whether it's within the cannabis industry or in any other industry. 🙌💪"
+        }
+      ]
+    }
+  }
+]
