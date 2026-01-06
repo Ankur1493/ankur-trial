@@ -416,6 +416,18 @@ export default function PostsPage() {
   const [error, setError] = useState<string | null>(null);
   const [scrapeUntil, setScrapeUntil] = useState<Date | undefined>(undefined);
   const [activePost, setActivePost] = useState<LinkedInPost | null>(null);
+  const [sortBy, setSortBy] = useState<'likes' | 'comments' | 'shares' | null>(null);
+
+  // Sorted posts based on selected criteria
+  const sortedPosts = postsData ? [...postsData].sort((a, b) => {
+    if (!sortBy) return 0;
+    const aData = getPostData(a);
+    const bData = getPostData(b);
+    if (sortBy === 'likes') return bData.likes - aData.likes;
+    if (sortBy === 'comments') return bData.comments - aData.comments;
+    if (sortBy === 'shares') return bData.shares - aData.shares;
+    return 0;
+  }) : null;
 
   // Handle escape key and body scroll
   useEffect(() => {
@@ -632,21 +644,76 @@ export default function PostsPage() {
         {/* Posts Results - 3 Column Grid */}
         {postsData && postsData.length > 0 && (
           <div>
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
-                <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                </svg>
-                Posts
-              </h2>
-              <span className="text-sm text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-3 py-1 rounded-full">
-                {postsData.length} posts
-              </span>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div className="flex items-center gap-3">
+                <h2 className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                  <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                  </svg>
+                  Posts
+                </h2>
+                <span className="text-sm text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-3 py-1 rounded-full">
+                  {postsData.length} posts
+                </span>
+              </div>
+              
+              {/* Sorting Buttons */}
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-zinc-500 dark:text-zinc-400 mr-1">Sort by:</span>
+                <Button
+                  variant={sortBy === 'likes' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSortBy(sortBy === 'likes' ? null : 'likes')}
+                  className={cn(
+                    "h-8 px-3 text-xs font-medium transition-all",
+                    sortBy === 'likes' 
+                      ? "bg-emerald-600 hover:bg-emerald-700 text-white" 
+                      : "hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400"
+                  )}
+                >
+                  <svg className="w-3.5 h-3.5 mr-1.5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M7.493 18.75c-.425 0-.82-.236-.975-.632A7.48 7.48 0 016 15.375c0-1.75.599-3.358 1.602-4.634.151-.192.373-.309.6-.397.473-.183.89-.514 1.212-.924a9.042 9.042 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75 2.25 2.25 0 012.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H14.23c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23h-.777zM2.331 10.977a11.969 11.969 0 00-.831 4.398 12 12 0 00.52 3.507c.26.85 1.084 1.368 1.973 1.368H4.9c.445 0 .72-.498.523-.898a8.963 8.963 0 01-.924-3.977c0-1.708.476-3.305 1.302-4.666.245-.403-.028-.959-.5-.959H4.25c-.832 0-1.612.453-1.918 1.227z" />
+                  </svg>
+                  Likes
+                </Button>
+                <Button
+                  variant={sortBy === 'comments' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSortBy(sortBy === 'comments' ? null : 'comments')}
+                  className={cn(
+                    "h-8 px-3 text-xs font-medium transition-all",
+                    sortBy === 'comments' 
+                      ? "bg-emerald-600 hover:bg-emerald-700 text-white" 
+                      : "hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400"
+                  )}
+                >
+                  <svg className="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
+                  </svg>
+                  Comments
+                </Button>
+                <Button
+                  variant={sortBy === 'shares' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSortBy(sortBy === 'shares' ? null : 'shares')}
+                  className={cn(
+                    "h-8 px-3 text-xs font-medium transition-all",
+                    sortBy === 'shares' 
+                      ? "bg-emerald-600 hover:bg-emerald-700 text-white" 
+                      : "hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400"
+                  )}
+                >
+                  <svg className="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
+                  </svg>
+                  Shares
+                </Button>
+              </div>
             </div>
             
             {/* 3 Column Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {postsData.map((post, index) => (
+              {sortedPosts?.map((post, index) => (
                 <PostCardCompact
                   key={post.urn || post.shareUrn || index}
                   post={post}
