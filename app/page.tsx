@@ -81,27 +81,50 @@ interface Certification {
   issued_date: string;
 }
 
+interface RecommendationSubComponent {
+  fixedListComponent: {
+    type: string;
+    text: string;
+  }[];
+}
+
+interface Recommendation {
+  titleV2: string;
+  caption: string;
+  subtitle: string;
+  size: string;
+  textActionTarget: string;
+  image: string;
+  subComponents: RecommendationSubComponent[];
+}
+
 interface LinkedInProfile {
   basic_info: BasicInfo;
   experience: Experience[];
   education: Education[];
   projects: Project[];
   certifications: Certification[];
+  recommendationsReceived?: Recommendation[];
+  recommendations?: Recommendation[];
 }
 
-type TabType = 'about' | 'experience' | 'education' | 'projects' | 'certifications';
+type TabType = 'about' | 'experience' | 'education' | 'projects' | 'certifications' | 'recommendations';
 
 function ProfileCard({ profile }: { profile: LinkedInProfile }) {
   const [activeTab, setActiveTab] = useState<TabType>('about');
   const [expandedExp, setExpandedExp] = useState<number | null>(null);
-  const { basic_info, experience, education, projects, certifications } = profile;
+  const [expandedRec, setExpandedRec] = useState<string | null>(null);
+  const { basic_info, experience, education, projects, certifications, recommendationsReceived, recommendations } = profile;
+
+  const totalRecs = (recommendationsReceived?.length || 0) + (recommendations?.length || 0);
 
   const tabs: { id: TabType; label: string; count?: number }[] = [
     { id: 'about', label: 'About' },
-    { id: 'experience', label: 'Experience', count: experience?.length },
-    { id: 'education', label: 'Education', count: education?.length },
-    { id: 'projects', label: 'Projects', count: projects?.length },
-    { id: 'certifications', label: 'Certs', count: certifications?.length },
+    ...(experience && experience.length > 0 ? [{ id: 'experience' as TabType, label: 'Experience', count: experience.length }] : []),
+    ...(education && education.length > 0 ? [{ id: 'education' as TabType, label: 'Education', count: education.length }] : []),
+    ...(projects && projects.length > 0 ? [{ id: 'projects' as TabType, label: 'Projects', count: projects.length }] : []),
+    ...(certifications && certifications.length > 0 ? [{ id: 'certifications' as TabType, label: 'Certs', count: certifications.length }] : []),
+    ...(totalRecs > 0 ? [{ id: 'recommendations' as TabType, label: 'Recs', count: totalRecs }] : []),
   ];
 
   return (
@@ -119,7 +142,7 @@ function ProfileCard({ profile }: { profile: LinkedInProfile }) {
       </div>
 
       {/* Avatar & Basic Info */}
-      <div className="relative px-6 pb-6">
+      <div className="relative px-6 pb-6 mt-10">
         <div className="flex flex-col sm:flex-row sm:items-end gap-4 -mt-16 sm:-mt-12">
           <img
             src={basic_info.profile_picture_url}
@@ -491,6 +514,177 @@ function ProfileCard({ profile }: { profile: LinkedInProfile }) {
               ) : (
                 <div className="text-center py-8 text-zinc-500 dark:text-zinc-400">
                   No certifications found
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Recommendations Tab */}
+          {activeTab === 'recommendations' && (
+            <div className="space-y-8">
+              {/* Recommendations Received */}
+              {recommendationsReceived && recommendationsReceived.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                    </svg>
+                    Received ({recommendationsReceived.length})
+                  </h3>
+                  <div className="space-y-4">
+                    {recommendationsReceived.map((rec, idx) => {
+                      const recText = rec.subComponents?.[0]?.fixedListComponent?.[0]?.text || '';
+                      const recKey = `received-${idx}`;
+                      const isExpanded = expandedRec === recKey;
+                      const shouldTruncate = recText.length > 200;
+                      
+                      return (
+                        <div 
+                          key={idx}
+                          className="p-4 rounded-xl bg-gradient-to-r from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/20 border border-rose-200 dark:border-rose-800"
+                        >
+                          <div className="flex gap-3">
+                            {rec.image ? (
+                              <img
+                                src={rec.image}
+                                alt={rec.titleV2}
+                                className="w-12 h-12 rounded-full object-cover bg-white dark:bg-zinc-700 flex-shrink-0 border-2 border-rose-200 dark:border-rose-700"
+                              />
+                            ) : (
+                              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center flex-shrink-0">
+                                <span className="text-white font-semibold text-lg">
+                                  {rec.titleV2?.charAt(0) || '?'}
+                                </span>
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <a
+                                  href={rec.textActionTarget}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="font-semibold text-zinc-900 dark:text-white hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
+                                >
+                                  {rec.titleV2}
+                                </a>
+                              </div>
+                              <p className="text-zinc-600 dark:text-zinc-300 text-sm">
+                                {rec.subtitle}
+                              </p>
+                              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+                                {rec.caption}
+                              </p>
+                              {recText && (
+                                <div className="mt-3 pt-3 border-t border-rose-200 dark:border-rose-700">
+                                  <p className="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed whitespace-pre-line">
+                                    {shouldTruncate && !isExpanded 
+                                      ? `${recText.substring(0, 200)}...` 
+                                      : recText
+                                    }
+                                  </p>
+                                  {shouldTruncate && (
+                                    <button 
+                                      className="text-xs text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 mt-2 font-medium"
+                                      onClick={() => setExpandedRec(isExpanded ? null : recKey)}
+                                    >
+                                      {isExpanded ? 'Show less' : 'Read more'}
+                                    </button>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Recommendations Given */}
+              {recommendations && recommendations.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                    </svg>
+                    Given ({recommendations.length})
+                  </h3>
+                  <div className="space-y-4">
+                    {recommendations.map((rec, idx) => {
+                      const recText = rec.subComponents?.[0]?.fixedListComponent?.[0]?.text || '';
+                      const recKey = `given-${idx}`;
+                      const isExpanded = expandedRec === recKey;
+                      const shouldTruncate = recText.length > 200;
+                      
+                      return (
+                        <div 
+                          key={idx}
+                          className="p-4 rounded-xl bg-gradient-to-r from-cyan-50 to-sky-50 dark:from-cyan-900/20 dark:to-sky-900/20 border border-cyan-200 dark:border-cyan-800"
+                        >
+                          <div className="flex gap-3">
+                            {rec.image ? (
+                              <img
+                                src={rec.image}
+                                alt={rec.titleV2}
+                                className="w-12 h-12 rounded-full object-cover bg-white dark:bg-zinc-700 flex-shrink-0 border-2 border-cyan-200 dark:border-cyan-700"
+                              />
+                            ) : (
+                              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-sky-600 flex items-center justify-center flex-shrink-0">
+                                <span className="text-white font-semibold text-lg">
+                                  {rec.titleV2?.charAt(0) || '?'}
+                                </span>
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <a
+                                  href={rec.textActionTarget}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="font-semibold text-zinc-900 dark:text-white hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+                                >
+                                  {rec.titleV2}
+                                </a>
+                              </div>
+                              <p className="text-zinc-600 dark:text-zinc-300 text-sm">
+                                {rec.subtitle}
+                              </p>
+                              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+                                {rec.caption}
+                              </p>
+                              {recText && (
+                                <div className="mt-3 pt-3 border-t border-cyan-200 dark:border-cyan-700">
+                                  <p className="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed whitespace-pre-line">
+                                    {shouldTruncate && !isExpanded 
+                                      ? `${recText.substring(0, 200)}...` 
+                                      : recText
+                                    }
+                                  </p>
+                                  {shouldTruncate && (
+                                    <button 
+                                      className="text-xs text-cyan-500 hover:text-cyan-600 dark:text-cyan-400 dark:hover:text-cyan-300 mt-2 font-medium"
+                                      onClick={() => setExpandedRec(isExpanded ? null : recKey)}
+                                    >
+                                      {isExpanded ? 'Show less' : 'Read more'}
+                                    </button>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Empty State */}
+              {(!recommendationsReceived || recommendationsReceived.length === 0) && 
+               (!recommendations || recommendations.length === 0) && (
+                <div className="text-center py-8 text-zinc-500 dark:text-zinc-400">
+                  No recommendations found
                 </div>
               )}
             </div>
