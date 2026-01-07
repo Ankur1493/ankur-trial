@@ -40,23 +40,34 @@ interface IdentityResponse {
   };
 }
 
+// Helper function to sanitize text and remove invalid Unicode characters
+function sanitizeText(text: string): string {
+  if (!text) return '';
+  // Remove invalid UTF-16 surrogate pairs and other problematic characters
+  return text
+    .replace(/[\uD800-\uDFFF]/g, '') // Remove unpaired surrogates
+    .replace(/\u0000/g, '') // Remove null characters
+    .replace(/[\u200B-\u200D\uFEFF]/g, '') // Remove zero-width characters
+    .trim();
+}
+
 // Build the prompt for Claude
 function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
   let context = '';
 
-  // Add profile information
-  if (profile) {
-    context += '=== LINKEDIN PROFILE ===\n';
-    context += `[Evidence ID: PROFILE]\n`;
-    if (profile.basic_info?.fullname) {
-      context += `Name: ${profile.basic_info.fullname}\n`;
-    }
-    if (profile.basic_info?.headline) {
-      context += `Headline: ${profile.basic_info.headline}\n`;
-    }
-    if (profile.basic_info?.about) {
-      context += `About: ${profile.basic_info.about}\n`;
-    }
+    // Add profile information
+    if (profile) {
+      context += '=== LINKEDIN PROFILE ===\n';
+      context += `[Evidence ID: PROFILE]\n`;
+      if (profile.basic_info?.fullname) {
+        context += `Name: ${sanitizeText(profile.basic_info.fullname)}\n`;
+      }
+      if (profile.basic_info?.headline) {
+        context += `Headline: ${sanitizeText(profile.basic_info.headline)}\n`;
+      }
+      if (profile.basic_info?.about) {
+        context += `About: ${sanitizeText(profile.basic_info.about)}\n`;
+      }
     if (profile.basic_info?.location?.full) {
       context += `Location: ${profile.basic_info.location.full}\n`;
     }
@@ -75,7 +86,8 @@ function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
         if (exp.duration) context += ` (${exp.duration})`;
         context += '\n';
         if (exp.description) {
-          context += `  ${exp.description.substring(0, 300)}${exp.description.length > 300 ? '...' : ''}\n`;
+          const desc = sanitizeText(exp.description);
+          context += `  ${desc.substring(0, 300)}${desc.length > 300 ? '...' : ''}\n`;
         }
       }
     }
@@ -84,7 +96,9 @@ function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
     if (profile.projects?.length) {
       context += '\n--- Projects ---\n';
       for (const proj of profile.projects.slice(0, 3)) {
-        context += `• ${proj.name}: ${proj.description?.substring(0, 200) || 'No description'}\n`;
+        const projName = sanitizeText(proj.name || '');
+        const projDesc = proj.description ? sanitizeText(proj.description).substring(0, 200) : 'No description';
+        context += `• ${projName}: ${projDesc}\n`;
       }
     }
 
@@ -105,18 +119,25 @@ function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
       return engagementB - engagementA;
     });
 
-    // Take top 30 posts to stay within context limits
-    const topPosts = sortedPosts.slice(0, 30);
+    // Take top 60 posts to provide more context (increased from 30 for users with many posts)
+    const topPosts = sortedPosts.slice(0, 60);
     
     for (let i = 0; i < topPosts.length; i++) {
       const post = topPosts[i];
       if (post.text) {
-        const postUrl = post.url || `POST_${i + 1}`;
+        // Get post URL - check both new and legacy formats
+        const postUrl = post.url || post.postUrl || `POST_${i + 1}`;
+        // Sanitize post text to remove invalid Unicode characters
+        const sanitizedText = sanitizeText(post.text);
+        if (!sanitizedText) continue; // Skip if text becomes empty after sanitization
+        
         context += `\n--- Post ${i + 1} ---\n`;
         context += `[Evidence ID: ${postUrl}]\n`;
+        context += `Post URL: ${postUrl}\n`;
         context += `Engagement: ${getPostLikes(post)} likes, ${getPostComments(post)} comments\n`;
-        context += post.text.substring(0, 1500);
-        if (post.text.length > 1500) context += '...';
+        // Include full post text (or up to 2000 chars for very long posts)
+        const postText = sanitizedText.length > 2000 ? sanitizedText.substring(0, 2000) + '...' : sanitizedText;
+        context += postText;
         context += '\n';
       }
     }
@@ -146,9 +167,11 @@ IMPORTANT RULES (FOLLOW STRICTLY):
 8. Limit each answer to a maximum of 1–2 short sentences.
 9. Avoid marketing language, hype, or sales copy.
 10. For EVERY non-null answer, you MUST attach supporting evidence.
-11. Evidence must be 1–3 specific LinkedIn post URLs or "PROFILE" that directly support the answer.
+11. Evidence must be 2–3 specific LinkedIn post URLs or "PROFILE" that directly support the answer.
+    - Provide 2–3 pieces of evidence for each answer to ensure accuracy and credibility.
+    - If you can only find 1 piece of evidence, still include it, but prefer 2–3 when available.
 12. If you cannot attach at least one specific piece of evidence, return null for that answer.
-13. Do NOT invent URLs. Use only the [Evidence ID: ...] values from the provided content.
+13. Do NOT invent URLs. Use only the [Evidence ID: ...] values from the provided content (these are the Post URL values).
 14. Do NOT reuse the same post as evidence for more than 3 answers unless it clearly supports multiple distinct claims.
 
 You must respond with a valid JSON object matching this EXACT structure:
@@ -304,29 +327,59 @@ export async function GET(request: NextRequest) {
     // Parse Claude's response
     let identity: IdentityResponse;
     try {
+      // Sanitize response text before parsing
+      const sanitizedResponse = sanitizeText(responseText);
+      
       // Try to extract JSON from the response
-      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+      const jsonMatch = sanitizedResponse.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
-        identity = JSON.parse(jsonMatch[0]);
+        // Parse with better error handling
+        const jsonString = jsonMatch[0];
+        // Try to fix common JSON issues
+        const cleanedJson = jsonString
+          .replace(/[\u0000-\u001F]/g, '') // Remove control characters
+          .replace(/[\uD800-\uDFFF]/g, ''); // Remove unpaired surrogates
+        
+        identity = JSON.parse(cleanedJson);
       } else {
         throw new Error('No JSON found in response');
       }
     } catch (parseError) {
-      console.error('Failed to parse Claude response:', responseText);
+      console.error('Failed to parse Claude response:', parseError);
+      console.error('Response text length:', responseText?.length);
+      console.error('Response text preview:', responseText?.substring(0, 500));
       return NextResponse.json({
         success: false,
         error: 'Failed to parse AI response',
-        message: 'The AI response was not in the expected format'
+        message: parseError instanceof Error ? parseError.message : 'The AI response was not in the expected format',
+        details: 'The response may contain invalid Unicode characters or malformed JSON'
       }, { status: 500 });
     }
+
+    // Sanitize identity object before returning (recursively clean strings)
+    const sanitizeObject = (obj: any): any => {
+      if (obj === null || obj === undefined) return obj;
+      if (typeof obj === 'string') return sanitizeText(obj);
+      if (Array.isArray(obj)) return obj.map(sanitizeObject);
+      if (typeof obj === 'object') {
+        const sanitized: any = {};
+        for (const key in obj) {
+          sanitized[key] = sanitizeObject(obj[key]);
+        }
+        return sanitized;
+      }
+      return obj;
+    };
+
+    const sanitizedIdentity = sanitizeObject(identity);
 
     return NextResponse.json({
       success: true,
       username,
       postCount,
       hasProfile,
-      profileName: userProfile?.basic_info?.fullname || null,
-      identity,
+      profileName: userProfile?.basic_info?.fullname ? sanitizeText(userProfile.basic_info.fullname) : null,
+      identity: sanitizedIdentity,
       generatedAt: new Date().toISOString()
     });
 
