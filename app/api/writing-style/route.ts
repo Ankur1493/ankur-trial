@@ -17,6 +17,17 @@ interface WritingStyleResponse {
   samplePosts: string[]; // 3-5 sample posts written in the identified style
 }
 
+// Helper function to sanitize text and remove invalid Unicode characters
+function sanitizeText(text: string): string {
+  if (!text) return '';
+  // Remove invalid UTF-16 surrogate pairs and other problematic characters
+  return text
+    .replace(/[\uD800-\uDFFF]/g, '') // Remove unpaired surrogates
+    .replace(/\u0000/g, '') // Remove null characters
+    .replace(/[\u200B-\u200D\uFEFF]/g, '') // Remove zero-width characters
+    .trim();
+}
+
 // Build the prompt for Claude
 function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
   let context = '';
@@ -25,13 +36,13 @@ function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
   if (profile) {
     context += '=== LINKEDIN PROFILE ===\n';
     if (profile.basic_info?.fullname) {
-      context += `Name: ${profile.basic_info.fullname}\n`;
+      context += `Name: ${sanitizeText(profile.basic_info.fullname)}\n`;
     }
     if (profile.basic_info?.headline) {
-      context += `Headline: ${profile.basic_info.headline}\n`;
+      context += `Headline: ${sanitizeText(profile.basic_info.headline)}\n`;
     }
     if (profile.basic_info?.about) {
-      context += `About: ${profile.basic_info.about}\n`;
+      context += `About: ${sanitizeText(profile.basic_info.about)}\n`;
     }
   }
 
@@ -51,10 +62,14 @@ function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
     for (let i = 0; i < topPosts.length; i++) {
       const post = topPosts[i];
       if (post.text) {
+        // Sanitize post text to remove invalid Unicode characters
+        const sanitizedText = sanitizeText(post.text);
+        if (!sanitizedText) continue; // Skip if text becomes empty after sanitization
+        
         context += `\n--- Post ${i + 1} ---\n`;
         context += `Engagement: ${getPostLikes(post)} likes, ${getPostComments(post)} comments\n`;
-        context += `Length: ${post.text.length} characters\n`;
-        context += post.text;
+        context += `Length: ${sanitizedText.length} characters\n`;
+        context += sanitizedText;
         context += '\n';
       }
     }
@@ -228,10 +243,21 @@ export async function GET(request: NextRequest) {
     // Parse Claude's response
     let writingStyle: WritingStyleResponse;
     try {
+      // Sanitize response text before parsing
+      const sanitizedResponse = sanitizeText(responseText);
+      
       // Try to extract JSON from the response
-      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+      const jsonMatch = sanitizedResponse.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
-        writingStyle = JSON.parse(jsonMatch[0]);
+        // Parse with better error handling
+        const jsonString = jsonMatch[0];
+        // Try to fix common JSON issues
+        const cleanedJson = jsonString
+          .replace(/[\u0000-\u001F]/g, '') // Remove control characters
+          .replace(/[\uD800-\uDFFF]/g, ''); // Remove unpaired surrogates
+        
+        writingStyle = JSON.parse(cleanedJson);
+        
         // Ensure samplePosts is an array with 3-5 items
         if (!Array.isArray(writingStyle.samplePosts)) {
           writingStyle.samplePosts = [];
@@ -249,21 +275,41 @@ export async function GET(request: NextRequest) {
         throw new Error('No JSON found in response');
       }
     } catch (parseError) {
-      console.error('Failed to parse Claude response:', responseText);
+      console.error('Failed to parse Claude response:', parseError);
+      console.error('Response text length:', responseText?.length);
+      console.error('Response text preview:', responseText?.substring(0, 500));
       return NextResponse.json({
         success: false,
         error: 'Failed to parse AI response',
-        message: 'The AI response was not in the expected format'
+        message: parseError instanceof Error ? parseError.message : 'The AI response was not in the expected format',
+        details: 'The response may contain invalid Unicode characters or malformed JSON'
       }, { status: 500 });
     }
+
+    // Sanitize writing style object before returning (recursively clean strings)
+    const sanitizeObject = (obj: any): any => {
+      if (obj === null || obj === undefined) return obj;
+      if (typeof obj === 'string') return sanitizeText(obj);
+      if (Array.isArray(obj)) return obj.map(sanitizeObject);
+      if (typeof obj === 'object') {
+        const sanitized: any = {};
+        for (const key in obj) {
+          sanitized[key] = sanitizeObject(obj[key]);
+        }
+        return sanitized;
+      }
+      return obj;
+    };
+
+    const sanitizedWritingStyle = sanitizeObject(writingStyle);
 
     return NextResponse.json({
       success: true,
       username,
       postCount,
       hasProfile,
-      profileName: userProfile?.basic_info?.fullname || null,
-      writingStyle,
+      profileName: userProfile?.basic_info?.fullname ? sanitizeText(userProfile.basic_info.fullname) : null,
+      writingStyle: sanitizedWritingStyle,
       generatedAt: new Date().toISOString()
     });
 

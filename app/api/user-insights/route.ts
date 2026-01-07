@@ -16,6 +16,17 @@ interface UserInsightsResponse {
   values: string[] | null;
 }
 
+// Helper function to sanitize text and remove invalid Unicode characters
+function sanitizeText(text: string): string {
+  if (!text) return '';
+  // Remove invalid UTF-16 surrogate pairs and other problematic characters
+  return text
+    .replace(/[\uD800-\uDFFF]/g, '') // Remove unpaired surrogates
+    .replace(/\u0000/g, '') // Remove null characters
+    .replace(/[\u200B-\u200D\uFEFF]/g, '') // Remove zero-width characters
+    .trim();
+}
+
 // Build the prompt for Claude
 function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
   let context = '';
@@ -24,22 +35,22 @@ function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
   if (profile) {
     context += '=== LINKEDIN PROFILE ===\n';
     if (profile.basic_info?.fullname) {
-      context += `Name: ${profile.basic_info.fullname}\n`;
+      context += `Name: ${sanitizeText(profile.basic_info.fullname)}\n`;
     }
     if (profile.basic_info?.headline) {
-      context += `Headline: ${profile.basic_info.headline}\n`;
+      context += `Headline: ${sanitizeText(profile.basic_info.headline)}\n`;
     }
     if (profile.basic_info?.about) {
-      context += `About: ${profile.basic_info.about}\n`;
+      context += `About: ${sanitizeText(profile.basic_info.about)}\n`;
     }
     if (profile.basic_info?.location?.full) {
-      context += `Location: ${profile.basic_info.location.full}\n`;
+      context += `Location: ${sanitizeText(profile.basic_info.location.full)}\n`;
     }
     if (profile.basic_info?.current_company) {
-      context += `Current Company: ${profile.basic_info.current_company}\n`;
+      context += `Current Company: ${sanitizeText(profile.basic_info.current_company)}\n`;
     }
     if (profile.basic_info?.creator_hashtags?.length) {
-      context += `Topics: ${profile.basic_info.creator_hashtags.join(', ')}\n`;
+      context += `Topics: ${profile.basic_info.creator_hashtags.map(t => sanitizeText(t)).join(', ')}\n`;
     }
 
     // Experience
@@ -50,7 +61,8 @@ function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
         if (exp.duration) context += ` (${exp.duration})`;
         context += '\n';
         if (exp.description) {
-          context += `  ${exp.description.substring(0, 300)}${exp.description.length > 300 ? '...' : ''}\n`;
+          const desc = sanitizeText(exp.description);
+          context += `  ${desc.substring(0, 300)}${desc.length > 300 ? '...' : ''}\n`;
         }
       }
     }
@@ -67,13 +79,15 @@ function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
     if (profile.projects?.length) {
       context += '\n--- Projects ---\n';
       for (const proj of profile.projects.slice(0, 5)) {
-        context += `• ${proj.name}: ${proj.description?.substring(0, 200) || 'No description'}\n`;
+        const projName = sanitizeText(proj.name || '');
+        const projDesc = proj.description ? sanitizeText(proj.description).substring(0, 200) : 'No description';
+        context += `• ${projName}: ${projDesc}\n`;
       }
     }
 
     // Skills
     if (profile.skills?.length) {
-      const skills = profile.skills.slice(0, 20).map(s => s.name).join(', ');
+      const skills = profile.skills.slice(0, 20).map(s => sanitizeText(s.name || '')).join(', ');
       context += `\nSkills: ${skills}\n`;
     }
   }
@@ -94,10 +108,14 @@ function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
     for (let i = 0; i < topPosts.length; i++) {
       const post = topPosts[i];
       if (post.text) {
+        // Sanitize post text to remove invalid Unicode characters
+        const sanitizedText = sanitizeText(post.text);
+        if (!sanitizedText) continue; // Skip if text becomes empty after sanitization
+        
         context += `\n--- Post ${i + 1} ---\n`;
         context += `Engagement: ${getPostLikes(post)} likes, ${getPostComments(post)} comments\n`;
-        context += post.text.substring(0, 1500);
-        if (post.text.length > 1500) context += '...';
+        const postText = sanitizedText.length > 1500 ? sanitizedText.substring(0, 1500) + '...' : sanitizedText;
+        context += postText;
         context += '\n';
       }
     }
@@ -269,29 +287,59 @@ export async function GET(request: NextRequest) {
     // Parse Claude's response
     let userInsights: UserInsightsResponse;
     try {
+      // Sanitize response text before parsing
+      const sanitizedResponse = sanitizeText(responseText);
+      
       // Try to extract JSON from the response
-      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+      const jsonMatch = sanitizedResponse.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
-        userInsights = JSON.parse(jsonMatch[0]);
+        // Parse with better error handling
+        const jsonString = jsonMatch[0];
+        // Try to fix common JSON issues
+        const cleanedJson = jsonString
+          .replace(/[\u0000-\u001F]/g, '') // Remove control characters
+          .replace(/[\uD800-\uDFFF]/g, ''); // Remove unpaired surrogates
+        
+        userInsights = JSON.parse(cleanedJson);
       } else {
         throw new Error('No JSON found in response');
       }
     } catch (parseError) {
-      console.error('Failed to parse Claude response:', responseText);
+      console.error('Failed to parse Claude response:', parseError);
+      console.error('Response text length:', responseText?.length);
+      console.error('Response text preview:', responseText?.substring(0, 500));
       return NextResponse.json({
         success: false,
         error: 'Failed to parse AI response',
-        message: 'The AI response was not in the expected format'
+        message: parseError instanceof Error ? parseError.message : 'The AI response was not in the expected format',
+        details: 'The response may contain invalid Unicode characters or malformed JSON'
       }, { status: 500 });
     }
+
+    // Sanitize user insights object before returning (recursively clean strings)
+    const sanitizeObject = (obj: any): any => {
+      if (obj === null || obj === undefined) return obj;
+      if (typeof obj === 'string') return sanitizeText(obj);
+      if (Array.isArray(obj)) return obj.map(sanitizeObject);
+      if (typeof obj === 'object') {
+        const sanitized: any = {};
+        for (const key in obj) {
+          sanitized[key] = sanitizeObject(obj[key]);
+        }
+        return sanitized;
+      }
+      return obj;
+    };
+
+    const sanitizedUserInsights = sanitizeObject(userInsights);
 
     return NextResponse.json({
       success: true,
       username,
       postCount,
       hasProfile,
-      profileName: userProfile?.basic_info?.fullname || null,
-      userInsights,
+      profileName: userProfile?.basic_info?.fullname ? sanitizeText(userProfile.basic_info.fullname) : null,
+      userInsights: sanitizedUserInsights,
       generatedAt: new Date().toISOString()
     });
 
