@@ -57,7 +57,8 @@ async function fetchStats(username: string): Promise<{
   byDate: ByDateData;
   history: HistoryData;
 }> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
   
   // Fetch all 3 routes in parallel using Promise.all
   const [totalsRes, byDateRes, historyRes] = await Promise.all([
