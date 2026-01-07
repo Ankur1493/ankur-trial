@@ -2,54 +2,11 @@ import { ApifyClient } from 'apify-client';
 import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, mkdir, readFile } from 'fs/promises';
 import path from 'path';
-
-// Post interface for type safety
-interface Post {
-  postUrl?: string;
-  urn?: string;
-  authorProfileUrl?: string;
-  authorUsername?: string;
-  postedAtTimestamp?: number;
-  postedAt?: string;
-  [key: string]: unknown;
-}
-
-// Metadata per user to track fetch history
-interface UserMetadata {
-  lastFetchDate: string; // ISO date string of when we last called the API
-  oldestPostDate: string | null; // ISO date of oldest post we have
-  newestPostDate: string | null; // ISO date of newest post we have
-  postCount: number;
-}
-
-// File structure with metadata
-interface PostsDataFile {
-  metadata: Record<string, UserMetadata>;
-  posts: Post[];
-}
-
-// Helper to extract username from LinkedIn URL
-function extractUsername(url: string): string {
-  const match = url.match(/linkedin\.com\/in\/([^/?]+)/);
-  return match ? match[1].toLowerCase() : url.toLowerCase();
-}
-
-// Helper to get post date as timestamp
-function getPostTimestamp(post: Post): number {
-  if (post.postedAtTimestamp) return post.postedAtTimestamp;
-  if (post.postedAt) return new Date(post.postedAt).getTime();
-  return 0;
-}
+import { Post, PostsDataFile, UserMetadata, extractUsername, getPostAuthor, getPostTimestamp } from '@/lib/types';
 
 // Helper to get unique post identifier
 function getPostId(post: Post): string {
-  return post.urn || post.postUrl || JSON.stringify(post);
-}
-
-// Helper to get post's author username
-function getPostAuthor(post: Post): string {
-  return post.authorUsername?.toLowerCase() || 
-    (post.authorProfileUrl ? extractUsername(post.authorProfileUrl) : '');
+  return post.urn || post.postUrl || post.url || JSON.stringify(post);
 }
 
 export async function GET(request: NextRequest) {

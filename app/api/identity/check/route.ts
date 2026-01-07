@@ -1,39 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
 import path from 'path';
-
-interface Post {
-  text?: string;
-  authorUsername?: string;
-  authorProfileUrl?: string;
-  [key: string]: unknown;
-}
-
-interface PostsDataFile {
-  metadata: Record<string, { postCount: number }>;
-  posts: Post[];
-}
-
-interface ProfileData {
-  profileUrl?: string;
-  basic_info?: {
-    fullname?: string;
-    public_identifier?: string;
-    profile_url?: string;
-  };
-}
-
-// Extract username from LinkedIn URL
-function extractUsername(url: string): string {
-  const match = url.match(/linkedin\.com\/in\/([^/?]+)/);
-  return match ? match[1].toLowerCase() : url.toLowerCase();
-}
-
-// Get post author username
-function getPostAuthor(post: Post): string {
-  return post.authorUsername?.toLowerCase() || 
-    (post.authorProfileUrl ? extractUsername(post.authorProfileUrl) : '');
-}
+import { Post, PostsDataFile, ProfileData, extractUsername, getPostAuthor } from '@/lib/types';
 
 export async function GET(request: NextRequest) {
   try {

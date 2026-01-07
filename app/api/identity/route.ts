@@ -3,59 +3,7 @@ import { readFile } from 'fs/promises';
 import path from 'path';
 import { generateText } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
-
-interface Post {
-  text?: string;
-  url?: string;
-  authorUsername?: string;
-  authorProfileUrl?: string;
-  numLikes?: number;
-  numComments?: number;
-  postedAtISO?: string;
-  [key: string]: unknown;
-}
-
-interface PostsDataFile {
-  metadata: Record<string, { postCount: number }>;
-  posts: Post[];
-}
-
-interface ProfileData {
-  profileUrl?: string;
-  basic_info?: {
-    fullname?: string;
-    first_name?: string;
-    last_name?: string;
-    headline?: string;
-    public_identifier?: string;
-    profile_url?: string;
-    about?: string;
-    location?: {
-      full?: string;
-    };
-    current_company?: string;
-    creator_hashtags?: string[];
-  };
-  experience?: Array<{
-    title?: string;
-    company?: string;
-    description?: string;
-    duration?: string;
-    is_current?: boolean;
-  }>;
-  education?: Array<{
-    school?: string;
-    degree?: string;
-    field_of_study?: string;
-  }>;
-  projects?: Array<{
-    name?: string;
-    description?: string;
-  }>;
-  skills?: Array<{
-    name?: string;
-  }>;
-}
+import { Post, PostsDataFile, ProfileData, extractUsername, getPostAuthor } from '@/lib/types';
 
 // Answer with evidence structure
 interface AnswerWithEvidence {
@@ -90,18 +38,6 @@ interface IdentityResponse {
     clientExperience: AnswerWithEvidence;
     websiteUrl: AnswerWithEvidence;
   };
-}
-
-// Extract username from LinkedIn URL
-function extractUsername(url: string): string {
-  const match = url.match(/linkedin\.com\/in\/([^/?]+)/);
-  return match ? match[1].toLowerCase() : url.toLowerCase();
-}
-
-// Get post author username
-function getPostAuthor(post: Post): string {
-  return post.authorUsername?.toLowerCase() || 
-    (post.authorProfileUrl ? extractUsername(post.authorProfileUrl) : '');
 }
 
 // Build the prompt for Claude

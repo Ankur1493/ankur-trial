@@ -2,31 +2,7 @@ import { ApifyClient } from 'apify-client';
 import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, mkdir, readFile } from 'fs/promises';
 import path from 'path';
-
-interface ProfileData {
-  profileUrl?: string;
-  basic_info?: {
-    public_identifier?: string;
-    profile_url?: string;
-  };
-}
-
-// Extract username from LinkedIn URL or return as-is if already a username
-function extractUsername(input: string): string {
-  const trimmed = input.trim();
-  
-  // Handle full LinkedIn URLs
-  // Matches: https://linkedin.com/in/username, https://www.linkedin.com/in/username, linkedin.com/in/username
-  const linkedinPattern = /(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/([^\/\?\s]+)/i;
-  const match = trimmed.match(linkedinPattern);
-  
-  if (match) {
-    return match[1].toLowerCase();
-  }
-  
-  // Already a username, return lowercase for consistent comparison
-  return trimmed.toLowerCase();
-}
+import { ProfileData, extractUsername } from '@/lib/types';
 
 // Get all existing usernames from profile data
 function getExistingUsernames(profiles: ProfileData[]): Set<string> {

@@ -1,37 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
 import path from 'path';
-
-interface Post {
-  numLikes?: number;
-  numComments?: number;
-  numShares?: number;
-  authorProfileId?: string;
-  authorProfileUrl?: string;
-  postedAtTimestamp?: number;
-  postedAtISO?: string;
-}
-
-interface PostsDataFile {
-  metadata: Record<string, { postCount: number }>;
-  posts: Post[];
-}
-
-function extractUsername(url: string): string {
-  const match = url.match(/linkedin\.com\/in\/([^/?]+)/);
-  return match ? match[1].toLowerCase() : url.toLowerCase();
-}
-
-function getPostAuthor(post: Post): string {
-  return post.authorProfileId?.toLowerCase() || 
-    (post.authorProfileUrl ? extractUsername(post.authorProfileUrl) : '');
-}
-
-function getPostTimestamp(post: Post): number {
-  if (post.postedAtTimestamp) return post.postedAtTimestamp;
-  if (post.postedAtISO) return new Date(post.postedAtISO).getTime();
-  return 0;
-}
+import { Post, PostsDataFile, extractUsername, getPostAuthor, getPostTimestamp } from '@/lib/types';
 
 function getMonthKey(timestamp: number): string {
   const date = new Date(timestamp);

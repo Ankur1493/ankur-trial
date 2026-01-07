@@ -1,61 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
 import path from 'path';
-
-// Post interface for type safety
-interface Post {
-  postUrl?: string;
-  url?: string;
-  urn?: string;
-  authorProfileUrl?: string;
-  authorUsername?: string;
-  authorProfileId?: string;
-  authorName?: string;
-  postedAtTimestamp?: number;
-  postedAt?: string;
-  postedAtISO?: string;
-  numLikes?: number;
-  numComments?: number;
-  numShares?: number;
-  text?: string;
-  images?: string[];
-  type?: string;
-  author?: {
-    firstName?: string;
-    lastName?: string;
-    occupation?: string;
-    publicId?: string;
-    picture?: string;
-  };
-  [key: string]: unknown;
-}
-
-// Metadata per user to track fetch history
-interface UserMetadata {
-  lastFetchDate: string;
-  oldestPostDate: string | null;
-  newestPostDate: string | null;
-  postCount: number;
-}
-
-// File structure with metadata
-interface PostsDataFile {
-  metadata: Record<string, UserMetadata>;
-  posts: Post[];
-}
-
-// Helper to extract username from LinkedIn URL
-function extractUsername(url: string): string {
-  const match = url.match(/linkedin\.com\/in\/([^/?]+)/);
-  return match ? match[1].toLowerCase() : url.toLowerCase();
-}
-
-// Helper to get post's author username
-function getPostAuthor(post: Post): string {
-  return post.authorProfileId?.toLowerCase() || 
-    post.authorUsername?.toLowerCase() || 
-    (post.authorProfileUrl ? extractUsername(post.authorProfileUrl) : '');
-}
+import { Post, PostsDataFile, UserMetadata, extractUsername, getPostAuthor } from '@/lib/types';
 
 // Get engagement score for ranking
 function getEngagementScore(post: Post): number {
