@@ -292,7 +292,8 @@ export default function IdentityPage() {
     Object.values(identity).forEach((section) => {
       Object.values(section).forEach((item) => {
         total++;
-        if (item.answer !== null && item.answer.trim() !== '') {
+        const typedItem = item as AnswerWithEvidence;
+        if (typedItem.answer !== null && typedItem.answer.trim() !== '') {
           answered++;
         }
       });
