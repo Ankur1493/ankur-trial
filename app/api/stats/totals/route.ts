@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
     const userPosts = postsData.posts.filter(post => getPostAuthor(post) === normalizedUsername);
 
     // Calculate totals
-    const totals = userPosts.reduce((acc, post) => ({
+    const totals = userPosts.reduce((acc: { totalLikes: number; totalComments: number; totalReposts: number }, post) => ({
       totalLikes: acc.totalLikes + (post.numLikes || 0),
       totalComments: acc.totalComments + (post.numComments || 0),
       totalReposts: acc.totalReposts + (post.numShares || 0),
