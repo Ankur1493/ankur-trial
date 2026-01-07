@@ -106,9 +106,22 @@ export default async function StatsPage({
             <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
               Analytics & Aggregations
             </h1>
-            <p className="text-slate-400 text-lg mb-8">
+            <p className="text-slate-400 text-lg mb-4">
               Enter a LinkedIn username to view their engagement analytics
             </p>
+            <div className="max-w-md mx-auto mb-8 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+              <p className="text-sm text-blue-300 font-medium mb-1">
+                📝 Note: This feature works from stored data
+              </p>
+              <p className="text-xs text-blue-400">
+                These analytics use posts data that have already been fetched and stored. 
+                If you haven't fetched posts yet, please do so first using the{' '}
+                <Link href="/posts" className="underline font-medium hover:text-blue-200">
+                  Posts
+                </Link>{' '}
+                page.
+              </p>
+            </div>
             <form className="flex gap-3 max-w-md mx-auto">
               <input
                 type="text"
@@ -155,12 +168,19 @@ export default async function StatsPage({
               </svg>
             </div>
             <h1 className="text-3xl font-bold mb-4">User Not Found</h1>
-            <p className="text-slate-400 text-lg mb-6">
+            <p className="text-slate-400 text-lg mb-4">
               No data found for user <span className="text-white font-semibold">&quot;{username}&quot;</span>
             </p>
-            <p className="text-slate-500 mb-8">
-              You need to generate posts for this user first using the Posts page.
+            <p className="text-slate-500 mb-4">
+              This endpoint works from stored data. You need to fetch posts for this user first.
             </p>
+            <div className="max-w-md mx-auto mb-8 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg text-left">
+              <p className="text-sm text-blue-300 font-medium mb-2">Guidelines:</p>
+              <ol className="text-xs text-blue-400 space-y-1 list-decimal list-inside">
+                <li>Fetch posts: Use the <Link href="/posts" className="underline font-medium hover:text-blue-200">Posts page</Link> or API endpoint <code className="bg-slate-800 px-1 rounded">GET /api/posts?urls=linkedin.com/in/{username}</code></li>
+                <li>Then retry: Return to this stats page with the username</li>
+              </ol>
+            </div>
             <div className="flex gap-4 justify-center">
               <Link
                 href="/posts"

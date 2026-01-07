@@ -71,7 +71,6 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const urlParam = searchParams.get('url');
     const limitParam = searchParams.get('limit');
-    const forceRefresh = searchParams.get('force') === 'true';
     const limit = limitParam ? parseInt(limitParam, 10) : 5; // Default to top 5 per category
 
     if (!urlParam) {
@@ -90,7 +89,6 @@ export async function GET(request: NextRequest) {
     // Read existing data from file
     let postsData: PostsDataFile = { metadata: {}, posts: [] };
     let userPosts: Post[] = [];
-    let userExistsInMetadata = false;
 
     try {
       const fileContent = await readFile(postsFilePath, 'utf-8');
@@ -103,9 +101,6 @@ export async function GET(request: NextRequest) {
         postsData = parsed;
       }
 
-      // Check if user exists in metadata (means we've already fetched for this user)
-      userExistsInMetadata = username in postsData.metadata;
-
       // Filter posts for the requested user
       userPosts = postsData.posts.filter(post => {
         const postUsername = getPostAuthor(post);
@@ -116,81 +111,19 @@ export async function GET(request: NextRequest) {
       postsData = { metadata: {}, posts: [] };
     }
 
-    // Only fetch if:
-    // 1. User doesn't exist in metadata AND has no posts, OR
-    // 2. Force refresh is requested AND user has no posts
-    const shouldFetch = userPosts.length === 0 && (!userExistsInMetadata || forceRefresh);
-    
-    if (shouldFetch) {
-      console.log(`${forceRefresh ? 'Force refreshing' : 'No cached posts for'} ${username}, fetching from posts API...`);
-      
-      // Build the internal URL to call our existing posts route
-      const baseUrl = request.nextUrl.origin;
-      const postsUrl = `${baseUrl}/api/posts?urls=${encodeURIComponent(urlParam)}`;
-      
-      try {
-        const response = await fetch(postsUrl);
-        const result = await response.json();
-
-        if (!response.ok) {
-          return NextResponse.json(
-            { 
-              error: 'Failed to fetch posts for user', 
-              message: result.error || result.message 
-            },
-            { status: response.status }
-          );
-        }
-
-        // Get the posts from the response
-        userPosts = result.data || [];
-        console.log(`Fetched ${userPosts.length} posts for ${username}`);
-      } catch (fetchError) {
-        console.error('Error calling posts API:', fetchError);
-        return NextResponse.json(
-          { 
-            error: 'Failed to fetch posts', 
-            message: fetchError instanceof Error ? fetchError.message : 'Unknown error' 
-          },
-          { status: 500 }
-        );
-      }
-    } else if (userExistsInMetadata && userPosts.length === 0 && !forceRefresh) {
-      // User exists in metadata but has no posts - we've already tried fetching
-      // Skip if force refresh is requested
-      console.log(`User ${username} exists in metadata but has no posts (previously fetched). Use ?force=true to re-fetch.`);
-      return NextResponse.json({
-        success: true,
-        data: {
-          username,
-          totalPosts: 0,
-          topByLikes: [],
-          topByComments: [],
-          topByShares: [],
-          topByEngagement: [],
-        },
-        cached: true,
-        userMetadata: postsData.metadata[username] || null,
-        message: 'No posts found for this user (previously checked). Add ?force=true to re-fetch.'
-      });
-    } else {
-      console.log(`Found ${userPosts.length} cached posts for ${username}`);
-    }
-
-    // If still no posts, return empty result
+    // If no posts found, return error with guidelines
     if (userPosts.length === 0) {
       return NextResponse.json({
-        success: true,
-        data: {
-          username,
-          totalPosts: 0,
-          topByLikes: [],
-          topByComments: [],
-          topByShares: [],
-          topByEngagement: [],
-        },
-        message: 'No posts found for this user'
-      });
+        success: false,
+        error: 'No posts found for this user',
+        username,
+        message: `No posts data found for "${username}". Please fetch posts first using the /api/posts endpoint before getting top posts.`,
+        guidelines: {
+          note: 'This endpoint works from stored data. You need to fetch posts first:',
+          fetchPosts: 'GET /api/posts?urls=linkedin.com/in/username',
+          thenRetry: 'Then retry this endpoint: GET /api/top-posts?url=linkedin.com/in/username'
+        }
+      }, { status: 404 });
     }
 
     // Sort and get top posts by different metrics

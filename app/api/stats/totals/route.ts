@@ -49,8 +49,13 @@ export async function GET(request: NextRequest) {
     if (!postsData.metadata[normalizedUsername]) {
       return NextResponse.json({
         error: 'User not found',
-        message: `No data found for user "${username}". Please generate posts for this user first.`,
-        userNotFound: true
+        message: `No data found for user "${username}". Please fetch posts for this user first.`,
+        userNotFound: true,
+        guidelines: {
+          note: 'This endpoint works from stored data. You need to fetch posts first:',
+          fetchPosts: 'GET /api/posts?urls=linkedin.com/in/username',
+          thenRetry: 'Then retry this endpoint: GET /api/stats/totals?username=username'
+        }
       }, { status: 404 });
     }
 

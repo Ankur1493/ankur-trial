@@ -57,39 +57,16 @@ interface ProfileData {
   }>;
 }
 
-// Answer with evidence structure
-interface AnswerWithEvidence {
-  answer: string | null;
-  evidence: string[];
-}
-
-// Identity response structure with evidence
-interface IdentityResponse {
-  aboutYou: {
-    whatYouDo: AnswerWithEvidence;
-    topicsYouTalkAbout: AnswerWithEvidence;
-    whatMakesYouStandOut: AnswerWithEvidence;
-  };
-  myStory: {
-    howYouStarted: AnswerWithEvidence;
-    pivotalMoment: AnswerWithEvidence;
-    earlyLessons: AnswerWithEvidence;
-    whatKeepsYouExcited: AnswerWithEvidence;
-  };
-  targetAudience: {
-    audienceName: AnswerWithEvidence;
-    idealPerson: AnswerWithEvidence;
-    theirSituation: AnswerWithEvidence;
-    theirProblems: AnswerWithEvidence;
-    desiredOutcome: AnswerWithEvidence;
-    howYouHelp: AnswerWithEvidence;
-  };
-  myOffer: {
-    offerName: AnswerWithEvidence;
-    whatYouOffer: AnswerWithEvidence;
-    clientExperience: AnswerWithEvidence;
-    websiteUrl: AnswerWithEvidence;
-  };
+interface WritingStyleResponse {
+  tone: string | null;
+  format: string | null;
+  averageLength: string | null;
+  hooks: string | null;
+  ctas: string | null;
+  emojiUsage: string | null;
+  structure: string | null;
+  commonPatterns: string | null;
+  samplePosts: string[]; // 3-5 sample posts written in the identified style
 }
 
 // Extract username from LinkedIn URL
@@ -108,10 +85,9 @@ function getPostAuthor(post: Post): string {
 function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
   let context = '';
 
-  // Add profile information
+  // Add profile information (brief)
   if (profile) {
     context += '=== LINKEDIN PROFILE ===\n';
-    context += `[Evidence ID: PROFILE]\n`;
     if (profile.basic_info?.fullname) {
       context += `Name: ${profile.basic_info.fullname}\n`;
     }
@@ -121,66 +97,28 @@ function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
     if (profile.basic_info?.about) {
       context += `About: ${profile.basic_info.about}\n`;
     }
-    if (profile.basic_info?.location?.full) {
-      context += `Location: ${profile.basic_info.location.full}\n`;
-    }
-    if (profile.basic_info?.current_company) {
-      context += `Current Company: ${profile.basic_info.current_company}\n`;
-    }
-    if (profile.basic_info?.creator_hashtags?.length) {
-      context += `Topics: ${profile.basic_info.creator_hashtags.join(', ')}\n`;
-    }
-
-    // Experience
-    if (profile.experience?.length) {
-      context += '\n--- Experience ---\n';
-      for (const exp of profile.experience.slice(0, 5)) {
-        context += `• ${exp.title} at ${exp.company}`;
-        if (exp.duration) context += ` (${exp.duration})`;
-        context += '\n';
-        if (exp.description) {
-          context += `  ${exp.description.substring(0, 300)}${exp.description.length > 300 ? '...' : ''}\n`;
-        }
-      }
-    }
-
-    // Projects
-    if (profile.projects?.length) {
-      context += '\n--- Projects ---\n';
-      for (const proj of profile.projects.slice(0, 3)) {
-        context += `• ${proj.name}: ${proj.description?.substring(0, 200) || 'No description'}\n`;
-      }
-    }
-
-    // Top Skills
-    if (profile.skills?.length) {
-      const topSkills = profile.skills.slice(0, 10).map(s => s.name).join(', ');
-      context += `\nTop Skills: ${topSkills}\n`;
-    }
   }
 
-  // Add posts with URLs as evidence IDs
+  // Add posts - focus on writing style analysis
   if (posts.length > 0) {
     context += '\n\n=== LINKEDIN POSTS ===\n';
-    // Sort by engagement and take most relevant posts
+    // Sort by engagement and take most relevant posts for style analysis
     const sortedPosts = [...posts].sort((a, b) => {
       const engagementA = (a.numLikes || 0) + (a.numComments || 0) * 2;
       const engagementB = (b.numLikes || 0) + (b.numComments || 0) * 2;
       return engagementB - engagementA;
     });
 
-    // Take top 30 posts to stay within context limits
+    // Take top 30 posts to analyze writing patterns
     const topPosts = sortedPosts.slice(0, 30);
     
     for (let i = 0; i < topPosts.length; i++) {
       const post = topPosts[i];
       if (post.text) {
-        const postUrl = post.url || `POST_${i + 1}`;
         context += `\n--- Post ${i + 1} ---\n`;
-        context += `[Evidence ID: ${postUrl}]\n`;
         context += `Engagement: ${post.numLikes || 0} likes, ${post.numComments || 0} comments\n`;
-        context += post.text.substring(0, 1500);
-        if (post.text.length > 1500) context += '...';
+        context += `Length: ${post.text.length} characters\n`;
+        context += post.text;
         context += '\n';
       }
     }
@@ -189,60 +127,46 @@ function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
   return context;
 }
 
-const SYSTEM_PROMPT = `You are an expert at analyzing LinkedIn profiles and posts to extract identity insights about a person.
+const SYSTEM_PROMPT = `You are an expert at analyzing LinkedIn posts to extract writing style patterns.
 
-Your job is to answer specific questions about who they are, what they do, who they help, and what they offer — based ONLY on the provided content.
+Your job is to analyze the provided posts and identify:
+1. Tone (professional, casual, inspirational, educational, etc.)
+2. Format (storytelling, list-based, question-driven, etc.)
+3. Average length (character count range)
+4. Hooks (how they start posts - questions, statements, stories, etc.)
+5. CTAs (call-to-action patterns - if any)
+6. Emoji usage (frequency, placement, types)
+7. Structure (paragraph breaks, bullet points, line breaks, etc.)
+8. Common patterns (recurring themes in how they write)
 
-IMPORTANT RULES (FOLLOW STRICTLY):
-
-1. Only answer a question if there is clear, explicit evidence in the provided profile or posts.
-2. If the answer is unclear, indirect, or speculative, return null.
-3. Prefer returning null over guessing or extrapolating.
-4. Do NOT fabricate facts, achievements, titles, metrics, timelines, or recognition.
-5. Do NOT claim authorship, first-ever status, guarantees, or external recognition
-   (e.g. "I coined…", "I pioneered…", "featured by…", revenue numbers, view counts)
-   unless it appears verbatim in the content.
-6. When evidence is indirect, use grounded phrasing such as:
-   - "I often talk about…"
-   - "My posts focus heavily on…"
-   - "I share ideas around…"
-7. Write answers in the first person, as if the person is describing themselves.
-8. Limit each answer to a maximum of 1–2 short sentences.
-9. Avoid marketing language, hype, or sales copy.
-10. For EVERY non-null answer, you MUST attach supporting evidence.
-11. Evidence must be 1–3 specific LinkedIn post URLs or "PROFILE" that directly support the answer.
-12. If you cannot attach at least one specific piece of evidence, return null for that answer.
-13. Do NOT invent URLs. Use only the [Evidence ID: ...] values from the provided content.
-14. Do NOT reuse the same post as evidence for more than 3 answers unless it clearly supports multiple distinct claims.
+IMPORTANT RULES:
+1. Base your analysis ONLY on the provided posts.
+2. Be specific and concrete in your observations.
+3. If a pattern is unclear, note it as "varies" or "not consistent".
+4. For average length, provide a range (e.g., "300-800 characters").
+5. For emoji usage, specify frequency and placement (e.g., "1-2 emojis per post, usually at the end").
+6. After analyzing the style, generate 3-5 sample posts written in the EXACT same style, tone, format, and patterns you identified.
+7. The sample posts should be on topics relevant to the user's profile/headline but be original content (not copied from their actual posts).
+8. Each sample post should be a complete, realistic LinkedIn post that matches their writing style.
 
 You must respond with a valid JSON object matching this EXACT structure:
 
 {
-  "aboutYou": {
-    "whatYouDo": { "answer": "string or null", "evidence": ["string"] },
-    "topicsYouTalkAbout": { "answer": "string or null", "evidence": ["string"] },
-    "whatMakesYouStandOut": { "answer": "string or null", "evidence": ["string"] }
-  },
-  "myStory": {
-    "howYouStarted": { "answer": "string or null", "evidence": ["string"] },
-    "pivotalMoment": { "answer": "string or null", "evidence": ["string"] },
-    "earlyLessons": { "answer": "string or null", "evidence": ["string"] },
-    "whatKeepsYouExcited": { "answer": "string or null", "evidence": ["string"] }
-  },
-  "targetAudience": {
-    "audienceName": { "answer": "string or null", "evidence": ["string"] },
-    "idealPerson": { "answer": "string or null", "evidence": ["string"] },
-    "theirSituation": { "answer": "string or null", "evidence": ["string"] },
-    "theirProblems": { "answer": "string or null", "evidence": ["string"] },
-    "desiredOutcome": { "answer": "string or null", "evidence": ["string"] },
-    "howYouHelp": { "answer": "string or null", "evidence": ["string"] }
-  },
-  "myOffer": {
-    "offerName": { "answer": "string or null", "evidence": ["string"] },
-    "whatYouOffer": { "answer": "string or null", "evidence": ["string"] },
-    "clientExperience": { "answer": "string or null", "evidence": ["string"] },
-    "websiteUrl": { "answer": "string or null", "evidence": ["string"] }
-  }
+  "tone": "string describing the tone (or null if unclear)",
+  "format": "string describing the format/style (or null if unclear)",
+  "averageLength": "string describing length range (e.g., '400-900 characters')",
+  "hooks": "string describing how posts typically start (or null if unclear)",
+  "ctas": "string describing call-to-action patterns (or null if none found)",
+  "emojiUsage": "string describing emoji usage patterns (or null if none)",
+  "structure": "string describing structural patterns (paragraphs, breaks, etc.)",
+  "commonPatterns": "string describing recurring writing patterns",
+  "samplePosts": [
+    "First sample post written in their style",
+    "Second sample post written in their style",
+    "Third sample post written in their style",
+    "Fourth sample post (optional)",
+    "Fifth sample post (optional)"
+  ]
 }
 
 Return ONLY the JSON object.
@@ -317,30 +241,30 @@ export async function GET(request: NextRequest) {
         username,
         postCount: 0,
         hasProfile: false,
-        message: `No profile or posts data found for "${username}". Please fetch the profile and posts first using the /api/profile and /api/posts endpoints before extracting identity.`,
+        message: `No profile or posts data found for "${username}". Please fetch the profile and posts first using the /api/profile and /api/posts endpoints before analyzing writing style.`,
         guidelines: {
           step1: 'Fetch profile: GET /api/profile?urls=linkedin.com/in/username',
           step2: 'Fetch posts: GET /api/posts?urls=linkedin.com/in/username',
-          step3: 'Then retry this endpoint: GET /api/identity?username=username'
+          step3: 'Then retry this endpoint: GET /api/writing-style?username=username'
         }
       }, { status: 404 });
     }
 
     // Check threshold (unless force is true)
-    if (!force && postCount < 20) {
+    if (!force && postCount < 10) {
       return NextResponse.json({
         success: false,
-        error: 'Insufficient posts for accurate identity extraction',
+        error: 'Insufficient posts for accurate writing style analysis',
         username,
         postCount,
         hasProfile,
         meetsThreshold: false,
-        threshold: 20,
-        message: `Found only ${postCount} posts. At least 20 posts are recommended for accurate results. Use force=true to generate anyway.`,
+        threshold: 10,
+        message: `Found only ${postCount} posts. At least 10 posts are recommended for accurate style analysis. Use force=true to generate anyway.`,
         guidelines: {
           note: 'This endpoint works from stored data. If you need more posts, fetch them first:',
           fetchPosts: 'GET /api/posts?urls=linkedin.com/in/username',
-          thenRetry: 'Then retry this endpoint: GET /api/identity?username=username'
+          thenRetry: 'Then retry this endpoint: GET /api/writing-style?username=username'
         }
       }, { status: 400 });
     }
@@ -362,16 +286,29 @@ export async function GET(request: NextRequest) {
     const { text: responseText } = await generateText({
       model: anthropic('claude-sonnet-4-20250514'),
       system: SYSTEM_PROMPT,
-      prompt: `Analyze the following LinkedIn profile and posts to extract identity insights:\n\n${context}`,
+      prompt: `Analyze the following LinkedIn profile and posts to extract writing style patterns:\n\n${context}`,
     });
 
     // Parse Claude's response
-    let identity: IdentityResponse;
+    let writingStyle: WritingStyleResponse;
     try {
       // Try to extract JSON from the response
       const jsonMatch = responseText.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
-        identity = JSON.parse(jsonMatch[0]);
+        writingStyle = JSON.parse(jsonMatch[0]);
+        // Ensure samplePosts is an array with 3-5 items
+        if (!Array.isArray(writingStyle.samplePosts)) {
+          writingStyle.samplePosts = [];
+        }
+        // Trim to max 5 posts
+        if (writingStyle.samplePosts.length > 5) {
+          writingStyle.samplePosts = writingStyle.samplePosts.slice(0, 5);
+        }
+        // Ensure at least 3 posts (if we have data)
+        if (writingStyle.samplePosts.length < 3 && postCount > 0) {
+          // If Claude didn't generate enough, we'll note it but still return what we have
+          console.warn('Claude generated fewer than 3 sample posts');
+        }
       } else {
         throw new Error('No JSON found in response');
       }
@@ -390,16 +327,17 @@ export async function GET(request: NextRequest) {
       postCount,
       hasProfile,
       profileName: userProfile?.basic_info?.fullname || null,
-      identity,
+      writingStyle,
       generatedAt: new Date().toISOString()
     });
 
   } catch (error: unknown) {
-    console.error('Error generating identity:', error);
+    console.error('Error generating writing style:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: 'Failed to generate identity', message: errorMessage },
+      { error: 'Failed to generate writing style', message: errorMessage },
       { status: 500 }
     );
   }
 }
+

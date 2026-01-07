@@ -472,7 +472,7 @@ export default function TopPostsPage() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [activePost]);
 
-  const handleFetchTopPosts = async (forceRefresh = false) => {
+  const handleFetchTopPosts = async () => {
     if (!profileUrl.trim()) {
       setError('Please enter a LinkedIn URL');
       return;
@@ -483,22 +483,36 @@ export default function TopPostsPage() {
     setTopPostsData(null);
 
     try {
-      let url = `/api/top-posts?url=${encodeURIComponent(profileUrl)}&limit=5`;
-      if (forceRefresh) {
-        url += '&force=true';
-      }
+      const url = `/api/top-posts?url=${encodeURIComponent(profileUrl)}&limit=5`;
       const response = await fetch(url);
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to fetch top posts');
+        // Store the full error response for better error handling
+        const errorData = {
+          error: result.error || 'Failed to fetch top posts',
+          message: result.message || result.error,
+          guidelines: result.guidelines
+        };
+        throw new Error(JSON.stringify(errorData));
       }
 
       setTopPostsData(result.data);
       console.log('Top Posts Data:', result.data);
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
-      setError(errorMessage);
+      try {
+        // Try to parse as JSON error with guidelines
+        const errorData = JSON.parse(err instanceof Error ? err.message : '{}');
+        if (errorData.guidelines || errorData.message) {
+          // Store error data for display
+          setError(JSON.stringify(errorData));
+        } else {
+          setError(err instanceof Error ? err.message : 'An error occurred');
+        }
+      } catch {
+        // If not JSON, use the error message as is
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      }
       console.error('Error fetching top posts:', err);
     } finally {
       setLoading(false);
@@ -573,16 +587,16 @@ export default function TopPostsPage() {
                   placeholder="https://www.linkedin.com/in/username"
                   value={profileUrl}
                   onChange={(e) => setProfileUrl(e.target.value)}
-              onKeyDown={(e) => {
+                  onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  handleFetchTopPosts(false);
+                  handleFetchTopPosts();
                 }
               }}
                   className="flex-1 h-12 text-base border-zinc-200 dark:border-zinc-700 focus:ring-amber-500"
                   disabled={loading}
                 />
                 <Button
-                  onClick={() => handleFetchTopPosts(false)}
+                  onClick={handleFetchTopPosts}
                   disabled={loading || !profileUrl.trim()}
                   className="h-12 px-6 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-medium shadow-lg shadow-amber-500/25"
                 >
@@ -603,32 +617,72 @@ export default function TopPostsPage() {
                     </span>
                   )}
                 </Button>
-                <Button
-                  onClick={() => handleFetchTopPosts(true)}
-                  disabled={loading || !profileUrl.trim()}
-                  variant="outline"
-                  className="h-12 px-4 border-amber-300 dark:border-amber-700 text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20"
-                  title="Force re-fetch posts from LinkedIn"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-                  </svg>
-                </Button>
               </div>
             </div>
           </div>
           
           <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-4">
-            If posts aren&apos;t cached, we&apos;ll fetch the latest 100 posts automatically. Click the refresh icon to force re-fetch.
+            This feature works from stored data. Please fetch posts first using the Posts page.
           </p>
         </div>
 
         {/* Error */}
-        {error && (
-          <div className="p-4 mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl max-w-2xl mx-auto">
-            <p className="text-red-700 dark:text-red-300 text-sm font-medium">{error}</p>
-          </div>
-        )}
+        {error && (() => {
+          let errorObj: { error?: string; message?: string; guidelines?: any } = {};
+          try {
+            errorObj = JSON.parse(error);
+          } catch {
+            errorObj = { error, message: error };
+          }
+          
+          const isNoDataError = errorObj.error?.includes('No posts') || 
+                                errorObj.message?.includes('No posts') ||
+                                errorObj.message?.includes('No data') ||
+                                errorObj.message?.includes('fetch posts first');
+          
+          return (
+            <div className="p-4 mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl max-w-2xl mx-auto">
+              <div className="flex items-start gap-2 mb-3">
+                <svg className="w-5 h-5 flex-shrink-0 mt-0.5 text-red-700 dark:text-red-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div className="flex-1">
+                  <p className="text-red-700 dark:text-red-300 text-sm font-medium mb-1">
+                    {isNoDataError ? 'No Posts Found' : (errorObj.error || 'Error')}
+                  </p>
+                  {isNoDataError ? (
+                    <p className="text-red-600 dark:text-red-400 text-sm">
+                      No posts data found for this user. Please fetch the profile and posts first.
+                    </p>
+                  ) : errorObj.message ? (
+                    <p className="text-red-600 dark:text-red-400 text-sm">
+                      {errorObj.message}
+                    </p>
+                  ) : null}
+                </div>
+              </div>
+              {isNoDataError && (
+                <div className="mt-3 pt-3 border-t border-red-200 dark:border-red-800">
+                  <p className="text-xs text-red-600 dark:text-red-400 mb-3 font-medium">
+                    This feature works from stored data. Please fetch the data first:
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <Link href="/">
+                      <Button variant="outline" size="sm" className="text-xs">
+                        Fetch Profile
+                      </Button>
+                    </Link>
+                    <Link href="/posts">
+                      <Button variant="outline" size="sm" className="text-xs">
+                        Fetch Posts
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })()}
 
         {/* Results */}
         {topPostsData && topPostsData.totalPosts > 0 && (
@@ -755,7 +809,27 @@ export default function TopPostsPage() {
             <svg className="w-12 h-12 mx-auto text-zinc-300 dark:text-zinc-600 mb-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
             </svg>
-            <p className="text-zinc-500 dark:text-zinc-400">No posts found for this user</p>
+            <p className="text-zinc-500 dark:text-zinc-400 mb-4">No posts found for this user</p>
+            <div className="max-w-md mx-auto p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900 rounded-lg">
+              <p className="text-sm text-blue-800 dark:text-blue-300 font-medium mb-2">
+                This feature works from stored data
+              </p>
+              <p className="text-xs text-blue-700 dark:text-blue-400 mb-3">
+                Please fetch the profile and posts first using the links below:
+              </p>
+              <div className="flex flex-wrap gap-2 justify-center">
+                <Link href="/">
+                  <Button variant="outline" size="sm" className="text-xs">
+                    Fetch Profile
+                  </Button>
+                </Link>
+                <Link href="/posts">
+                  <Button variant="outline" size="sm" className="text-xs">
+                    Fetch Posts
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </div>
         )}
 
@@ -765,7 +839,22 @@ export default function TopPostsPage() {
             <svg className="w-16 h-16 mx-auto text-zinc-300 dark:text-zinc-600 mb-4" fill="none" stroke="currentColor" strokeWidth="1" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0" />
             </svg>
-            <p className="text-zinc-500 dark:text-zinc-400 mb-2">Enter a LinkedIn profile URL to find their top posts</p>
+            <p className="text-zinc-500 dark:text-zinc-400 mb-4">Enter a LinkedIn profile URL to find their top posts</p>
+            
+            {/* Info Note */}
+            <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900 rounded-lg">
+              <p className="text-sm text-blue-800 dark:text-blue-300 font-medium mb-1">
+                📝 Note: This feature works from stored data
+              </p>
+              <p className="text-xs text-blue-700 dark:text-blue-400">
+                Top posts are determined from posts data that have already been fetched and stored. 
+                If you haven't fetched posts yet, please do so first using the{' '}
+                <Link href="/posts" className="underline font-medium hover:text-blue-900 dark:hover:text-blue-200">
+                  Posts
+                </Link>{' '}
+                page.
+              </p>
+            </div>
             <p className="text-sm text-zinc-400 dark:text-zinc-500">We&apos;ll analyze their posts and show the best performers</p>
           </div>
         )}

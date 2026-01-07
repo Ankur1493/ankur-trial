@@ -241,8 +241,14 @@ export default function IdentityPage() {
 
       setCheckData(data);
 
+      // If no data at all (0 posts and no profile), show error directly
+      if (data.postCount === 0 && !data.hasProfile) {
+        setError(`No data found for @${username}. Please fetch the profile and posts first using the Profile and Posts pages.`);
+        return;
+      }
+
       if (!data.meetsThreshold) {
-        // Show warning modal
+        // Show warning modal for insufficient data
         setShowWarningModal(true);
       } else {
         // Proceed directly to generate
@@ -326,9 +332,28 @@ export default function IdentityPage() {
         {/* Input Section */}
         <div className="bg-white dark:bg-slate-900 rounded-xl border shadow-sm p-6 mb-8">
           <h2 className="text-xl font-semibold mb-2">Analyze LinkedIn Identity</h2>
-          <p className="text-muted-foreground text-sm mb-6">
+          <p className="text-muted-foreground text-sm mb-4">
             Enter a LinkedIn profile URL or username to extract identity insights using AI analysis of their posts and profile data.
           </p>
+          
+          {/* Info Note */}
+          <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900 rounded-lg">
+            <p className="text-sm text-blue-800 dark:text-blue-300 font-medium mb-1">
+              📝 Note: This feature works from stored data
+            </p>
+            <p className="text-xs text-blue-700 dark:text-blue-400">
+              This analysis uses profile and posts data that have already been fetched and stored. 
+              If you haven't fetched the profile and posts yet, please do so first using the{' '}
+              <Link href="/" className="underline font-medium hover:text-blue-900 dark:hover:text-blue-200">
+                Profile
+              </Link>{' '}
+              and{' '}
+              <Link href="/posts" className="underline font-medium hover:text-blue-900 dark:hover:text-blue-200">
+                Posts
+              </Link>{' '}
+              pages.
+            </p>
+          </div>
 
           <div className="flex gap-3">
             <Input
@@ -359,9 +384,25 @@ export default function IdentityPage() {
           </div>
 
           {error && (
-            <div className="mt-4 p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded-lg text-red-700 dark:text-red-400 text-sm flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-              {error}
+            <div className="mt-4 p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded-lg">
+              <div className="flex items-start gap-2 mb-3">
+                <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5 text-red-700 dark:text-red-400" />
+                <p className="text-red-700 dark:text-red-400 text-sm flex-1">{error}</p>
+              </div>
+              {(error.includes('No data found') || error.includes('not found') || error.includes('No data')) && (
+                <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-red-200 dark:border-red-900">
+                  <Link href="/">
+                    <Button variant="outline" size="sm" className="text-xs">
+                      Fetch Profile
+                    </Button>
+                  </Link>
+                  <Link href="/posts">
+                    <Button variant="outline" size="sm" className="text-xs">
+                      Fetch Posts
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -496,9 +537,16 @@ export default function IdentityPage() {
                     <p className="font-medium text-amber-800 dark:text-amber-300 mb-1">
                       More posts = Better results
                     </p>
-                    <p className="text-amber-700 dark:text-amber-400">
+                    <p className="text-amber-700 dark:text-amber-400 mb-3">
                       With limited posts, some identity questions may not be answerable, and insights may be less accurate.
                     </p>
+                    <div className="flex flex-wrap gap-2">
+                      <Link href="/posts" className="inline-block">
+                        <Button variant="outline" size="sm" className="text-xs w-full">
+                          Fetch More Posts
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               )}
