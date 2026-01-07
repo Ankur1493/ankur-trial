@@ -60,6 +60,45 @@ async function fetchStats(username: string): Promise<{
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
   
+  // Helper function to safely parse JSON responses
+  async function safeJsonParse(response: Response): Promise<any> {
+    if (!response.ok) {
+      const text = await response.text();
+      try {
+        // Try to parse as JSON first
+        return JSON.parse(text);
+      } catch {
+        // If not JSON, return error object
+        return {
+          success: false,
+          error: `HTTP ${response.status}: ${response.statusText}`,
+          message: text.substring(0, 200) // Limit error message length
+        };
+      }
+    }
+
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      const text = await response.text();
+      return {
+        success: false,
+        error: 'Invalid response format',
+        message: text.substring(0, 200)
+      };
+    }
+
+    try {
+      return await response.json();
+    } catch (error) {
+      const text = await response.text();
+      return {
+        success: false,
+        error: 'Failed to parse JSON response',
+        message: text.substring(0, 200)
+      };
+    }
+  }
+  
   // Fetch all 3 routes in parallel using Promise.all
   const [totalsRes, byDateRes, historyRes] = await Promise.all([
     fetch(`${baseUrl}/api/stats/totals?username=${username}`, { cache: 'no-store' }),
@@ -68,9 +107,9 @@ async function fetchStats(username: string): Promise<{
   ]);
 
   const [totals, byDate, history] = await Promise.all([
-    totalsRes.json(),
-    byDateRes.json(),
-    historyRes.json(),
+    safeJsonParse(totalsRes),
+    safeJsonParse(byDateRes),
+    safeJsonParse(historyRes),
   ]);
 
   return { totals, byDate, history };

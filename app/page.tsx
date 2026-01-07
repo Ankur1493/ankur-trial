@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -787,6 +787,17 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [profileData, setProfileData] = useState<LinkedInProfile[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to results when loading starts
+  useEffect(() => {
+    if (loading && resultsRef.current) {
+      // Small delay to ensure the loading state is rendered
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }, [loading]);
 
   const handleFetchProfile = async () => {
     if (!profileUrl.trim()) {
@@ -800,10 +811,26 @@ export default function Home() {
 
     try {
       const response = await fetch(`/api/profile?urls=${encodeURIComponent(profileUrl)}`);
-      const result = await response.json();
+      
+      // Check content type before parsing
+      const contentType = response.headers.get('content-type');
+      const isJson = contentType && contentType.includes('application/json');
+      
+      let result;
+      if (isJson) {
+        try {
+          result = await response.json();
+        } catch (parseError) {
+          const text = await response.text();
+          throw new Error(`Invalid response format: ${text.substring(0, 100)}`);
+        }
+      } else {
+        const text = await response.text();
+        throw new Error(`Server returned non-JSON response: ${text.substring(0, 100)}`);
+      }
 
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to fetch data');
+        throw new Error(result.error || result.message || 'Failed to fetch data');
       }
 
       // Normalize data to always be an array
@@ -1024,14 +1051,30 @@ export default function Home() {
           </div>
         )}
 
-        {/* Results */}
-        {profileData && profileData.length > 0 && (
-          <div className="space-y-6">
-            {profileData.map((profile, index) => (
-              <ProfileCard key={profile.basic_info?.urn || index} profile={profile} />
-            ))}
-          </div>
-        )}
+        {/* Results Container - scrolls here when loading starts */}
+        <div ref={resultsRef}>
+          {/* Loading Indicator */}
+          {loading && (
+            <div className="p-8 mb-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800">
+              <div className="flex flex-col items-center justify-center gap-4">
+                <svg className="w-8 h-8 animate-spin text-blue-600" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                </svg>
+                <p className="text-zinc-600 dark:text-zinc-400 font-medium">Scraping profile data...</p>
+              </div>
+            </div>
+          )}
+
+          {/* Results */}
+          {profileData && profileData.length > 0 && (
+            <div className="space-y-6">
+              {profileData.map((profile, index) => (
+                <ProfileCard key={profile.basic_info?.urn || index} profile={profile} />
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Empty State */}
         {profileData && profileData.length === 0 && (

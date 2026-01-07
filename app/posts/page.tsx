@@ -465,10 +465,26 @@ export default function PostsPage() {
       }
 
       const response = await fetch(url);
-      const result = await response.json();
+      
+      // Check content type before parsing
+      const contentType = response.headers.get('content-type');
+      const isJson = contentType && contentType.includes('application/json');
+      
+      let result;
+      if (isJson) {
+        try {
+          result = await response.json();
+        } catch (parseError) {
+          const text = await response.text();
+          throw new Error(`Invalid response format: ${text.substring(0, 100)}`);
+        }
+      } else {
+        const text = await response.text();
+        throw new Error(`Server returned non-JSON response: ${text.substring(0, 100)}`);
+      }
 
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to fetch posts');
+        throw new Error(result.error || result.message || 'Failed to fetch posts');
       }
 
       const posts = Array.isArray(result.data) ? result.data : [result.data];

@@ -78,6 +78,32 @@ export default function UserInsightsPage() {
     return match ? match[1].toLowerCase() : trimmed.toLowerCase();
   };
 
+  // Helper function to safely parse JSON responses
+  const safeJsonParse = async (response: Response): Promise<any> => {
+    const contentType = response.headers.get('content-type');
+    const isJson = contentType && contentType.includes('application/json');
+    
+    if (!isJson) {
+      const text = await response.text();
+      return {
+        success: false,
+        error: 'Invalid response format',
+        message: text.substring(0, 200)
+      };
+    }
+
+    try {
+      return await response.json();
+    } catch (parseError) {
+      const text = await response.text();
+      return {
+        success: false,
+        error: 'Failed to parse JSON response',
+        message: text.substring(0, 200)
+      };
+    }
+  };
+
   // Check data availability
   const handleCheck = async () => {
     const username = extractUsername(linkedinUrl);
@@ -92,10 +118,10 @@ export default function UserInsightsPage() {
 
     try {
       const response = await fetch(`/api/identity/check?username=${encodeURIComponent(username)}`);
-      const data: CheckResponse = await response.json();
+      const data: CheckResponse = await safeJsonParse(response);
 
       if (!response.ok) {
-        throw new Error(data.profileName || 'Failed to check data');
+        throw new Error(data.profileName || data.error || data.message || 'Failed to check data');
       }
 
       setCheckData(data);
@@ -130,7 +156,7 @@ export default function UserInsightsPage() {
     try {
       const url = `/api/user-insights?username=${encodeURIComponent(username)}${force ? '&force=true' : ''}`;
       const response = await fetch(url);
-      const data: UserInsightsResponse = await response.json();
+      const data: UserInsightsResponse = await safeJsonParse(response);
 
       if (!response.ok) {
         throw new Error(data.message || data.error || 'Failed to generate user insights');
