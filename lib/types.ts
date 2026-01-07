@@ -1,47 +1,103 @@
 // Centralized types for LinkedIn data structures
 
-// Post interface - used across multiple routes
+// Post interface - supports both old and new Apify response formats
 export interface Post {
-  // Identifiers
-  postUrl?: string;
-  url?: string;
+  // Identifiers (new format)
   urn?: string;
-  
-  // Author info
-  authorProfileUrl?: string;
-  authorUsername?: string;
-  authorProfileId?: string;
-  authorName?: string;
+  full_urn?: string;
+  url?: string;
+  postUrl?: string; // Legacy
   
   // Content
   text?: string;
-  images?: string[];
-  type?: string;
+  post_type?: string;
+  type?: string; // Legacy
   
-  // Timing
+  // Timing (new format)
+  posted_at?: {
+    date?: string;
+    relative?: string;
+    timestamp?: number;
+  };
+  // Legacy timing fields
   postedAtTimestamp?: number;
   postedAt?: string;
   postedAtISO?: string;
   timeSincePosted?: string;
   
-  // Engagement stats
+  // Author (new format)
+  author?: {
+    first_name?: string;
+    lastName?: string; // Legacy
+    firstName?: string; // Legacy
+    last_name?: string;
+    headline?: string;
+    username?: string;
+    profile_url?: string;
+    profile_picture?: string;
+    occupation?: string; // Legacy
+    publicId?: string; // Legacy
+    public_id?: string;
+    picture?: string; // Legacy
+    id?: string;
+    trackingId?: string; // Legacy
+    profileId?: string; // Legacy
+  };
+  // Legacy author fields
+  authorProfileUrl?: string;
+  authorUsername?: string;
+  authorProfileId?: string;
+  authorName?: string;
+  
+  // Stats (new format)
+  stats?: {
+    total_reactions?: number;
+    like?: number;
+    support?: number;
+    love?: number;
+    insight?: number;
+    celebrate?: number;
+    comments?: number;
+    reposts?: number;
+  };
+  // Legacy stats
   numLikes?: number;
   numComments?: number;
   numShares?: number;
   
-  // Author nested object
-  author?: {
-    firstName?: string;
-    lastName?: string;
-    occupation?: string;
-    publicId?: string;
-    picture?: string;
-    id?: string;
-    trackingId?: string;
-    profileId?: string;
+  // Media (new format)
+  media?: {
+    type?: string;
+    url?: string;
+    thumbnail?: string;
+    images?: Array<{
+      url?: string;
+      width?: number;
+      height?: number;
+    }>;
+  };
+  images?: string[]; // Legacy
+  
+  // Reshared post (new format)
+  reshared_post?: Post;
+  
+  // Article (new format)
+  article?: {
+    url?: string;
+    title?: string;
+    subtitle?: string;
+    thumbnail?: string;
   };
   
-  // Post settings
+  // Document (new format)
+  document?: {
+    title?: string;
+    page_count?: number;
+    url?: string;
+    thumbnail?: string;
+  };
+  
+  // Post settings (legacy)
   canReact?: boolean;
   canPostComments?: boolean;
   canShare?: boolean;
@@ -122,6 +178,14 @@ export function extractUsername(input: string): string {
 
 // Helper function to get post author username
 export function getPostAuthor(post: Post): string {
+  // New format
+  if (post.author?.username) {
+    return post.author.username.toLowerCase();
+  }
+  if (post.author?.profile_url) {
+    return extractUsername(post.author.profile_url);
+  }
+  // Legacy format
   return post.authorUsername?.toLowerCase() || 
     post.authorProfileId?.toLowerCase() || 
     (post.authorProfileUrl ? extractUsername(post.authorProfileUrl) : '');
@@ -129,6 +193,14 @@ export function getPostAuthor(post: Post): string {
 
 // Helper function to get post timestamp
 export function getPostTimestamp(post: Post): number {
+  // New format
+  if (post.posted_at?.timestamp) {
+    return post.posted_at.timestamp;
+  }
+  if (post.posted_at?.date) {
+    return new Date(post.posted_at.date).getTime();
+  }
+  // Legacy format
   if (post.postedAtTimestamp) return post.postedAtTimestamp;
   if (post.postedAtISO) return new Date(post.postedAtISO).getTime();
   if (post.postedAt) return new Date(post.postedAt).getTime();
@@ -137,6 +209,14 @@ export function getPostTimestamp(post: Post): number {
 
 // Helper function to get post date as string
 export function getPostDate(post: Post): string | null {
+  // New format
+  if (post.posted_at?.date) {
+    return post.posted_at.date.split(' ')[0]; // Extract date part from "YYYY-MM-DD HH:MM:SS"
+  }
+  if (post.posted_at?.timestamp) {
+    return new Date(post.posted_at.timestamp).toISOString().split('T')[0];
+  }
+  // Legacy format
   if (post.postedAtTimestamp) {
     return new Date(post.postedAtTimestamp).toISOString().split('T')[0];
   }

@@ -12,13 +12,21 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import { useOutsideClick } from '@/hooks/use-outside-click';
 
-// Post interfaces matching actual Apify response
+// Post interfaces matching new Apify response structure
 interface PostAuthor {
+  first_name?: string;
+  last_name?: string;
+  headline?: string;
+  username?: string;
+  profile_url?: string;
+  profile_picture?: string;
+  // Legacy fields
   firstName?: string;
   lastName?: string;
   occupation?: string;
   id?: string;
   publicId?: string;
+  public_id?: string;
   trackingId?: string;
   profileId?: string;
   picture?: string;
@@ -27,21 +35,30 @@ interface PostAuthor {
 interface LinkedInPost {
   // Post identifiers
   urn?: string;
-  shareUrn?: string;
+  full_urn?: string;
   url?: string;
-  inputUrl?: string;
+  shareUrn?: string; // Legacy
+  inputUrl?: string; // Legacy
   
   // Post content
-  type?: string;
+  post_type?: string;
+  type?: string; // Legacy
   text?: string;
-  images?: string[];
   
-  // Timing
+  // Timing (new format)
+  posted_at?: {
+    date?: string;
+    relative?: string;
+    timestamp?: number;
+  };
+  // Legacy timing
   timeSincePosted?: string;
   postedAtTimestamp?: number;
   postedAtISO?: string;
   
-  // Author info (flat)
+  // Author info (new format - nested)
+  author?: PostAuthor;
+  // Legacy author info (flat)
   authorName?: string;
   authorProfileId?: string;
   authorProfilePicture?: string;
@@ -49,15 +66,36 @@ interface LinkedInPost {
   authorUrn?: string;
   authorType?: string;
   
-  // Author info (nested)
-  author?: PostAuthor;
-  
-  // Engagement stats
+  // Stats (new format)
+  stats?: {
+    total_reactions?: number;
+    like?: number;
+    support?: number;
+    love?: number;
+    insight?: number;
+    celebrate?: number;
+    comments?: number;
+    reposts?: number;
+  };
+  // Legacy stats
   numLikes?: number;
   numComments?: number;
   numShares?: number;
   
-  // Post settings/permissions
+  // Media (new format)
+  media?: {
+    type?: string;
+    url?: string;
+    thumbnail?: string;
+    images?: Array<{
+      url?: string;
+      width?: number;
+      height?: number;
+    }>;
+  };
+  images?: string[]; // Legacy
+  
+  // Post settings/permissions (legacy)
   canReact?: boolean;
   canPostComments?: boolean;
   canShare?: boolean;
@@ -90,27 +128,62 @@ const CloseIcon = () => {
   );
 };
 
-// Helper function to get post data
+// Helper function to get post data (supports both old and new formats)
 function getPostData(post: LinkedInPost) {
-  const authorName = post.authorName || 
-    (post.author?.firstName && post.author?.lastName 
-      ? `${post.author.firstName} ${post.author.lastName}` 
-      : 'Unknown Author');
-  const authorOccupation = post.author?.occupation || '';
-  const authorProfileUrl = post.authorProfileUrl;
-  const authorProfilePicture = post.authorProfilePicture || post.author?.picture;
+  // New format: nested author object
+  const authorName = post.author?.first_name && post.author?.last_name
+    ? `${post.author.first_name} ${post.author.last_name}`
+    : (post.author?.firstName && post.author?.lastName
+      ? `${post.author.firstName} ${post.author.lastName}`
+      : post.authorName || 'Unknown Author');
+  
+  const authorOccupation = post.author?.headline || post.author?.occupation || '';
+  const authorProfileUrl = post.author?.profile_url || post.authorProfileUrl;
+  const authorProfilePicture = post.author?.profile_picture || post.author?.picture || post.authorProfilePicture;
   const authorType = post.authorType || 'Person';
-  const authorProfileId = post.authorProfileId || post.author?.publicId;
+  const authorProfileId = post.author?.username || post.author?.public_id || post.author?.publicId || post.authorProfileId;
   const postUrl = post.url;
-  const likes = post.numLikes ?? 0;
-  const comments = post.numComments ?? 0;
-  const shares = post.numShares ?? 0;
+  
+  // New format: nested stats object
+  const likes = post.stats?.like ?? post.stats?.total_reactions ?? post.numLikes ?? 0;
+  const comments = post.stats?.comments ?? post.numComments ?? 0;
+  const shares = post.stats?.reposts ?? post.numShares ?? 0;
+  
   const postText = post.text || '';
-  const images = post.images || [];
-  const postType = post.type || 'text';
-  const timeSincePosted = post.timeSincePosted;
-  const postedDate = post.postedAtISO ? new Date(post.postedAtISO) : 
-    (post.postedAtTimestamp ? new Date(post.postedAtTimestamp) : null);
+  
+  // New format: nested media object
+  const images: string[] = [];
+  const videoUrl = post.media?.type === 'video' ? post.media.url : null;
+  const videoThumbnail = post.media?.type === 'video' ? post.media.thumbnail : null;
+  
+  if (post.media?.type === 'images' && post.media?.images && Array.isArray(post.media.images)) {
+    // Multiple images in images array
+    images.push(...post.media.images.map(img => img.url || '').filter(Boolean));
+  } else if (post.media?.images && Array.isArray(post.media.images)) {
+    // Images array without explicit type
+    images.push(...post.media.images.map(img => img.url || '').filter(Boolean));
+  } else if (post.media?.url && post.media?.type === 'image') {
+    // Single image
+    images.push(post.media.url);
+  } else if (post.images) {
+    // Legacy images array
+    images.push(...post.images);
+  }
+  
+  const postType = post.post_type || post.type || 'text';
+  
+  // New format: nested posted_at object
+  const timeSincePosted = post.posted_at?.relative || post.timeSincePosted;
+  const postedDate = post.posted_at?.timestamp 
+    ? new Date(post.posted_at.timestamp)
+    : (post.posted_at?.date
+      ? new Date(post.posted_at.date)
+      : (post.postedAtISO 
+        ? new Date(post.postedAtISO) 
+        : (post.postedAtTimestamp 
+          ? new Date(post.postedAtTimestamp) 
+          : null)));
+  
   const shareAudience = post.shareAudience;
 
   return {
@@ -126,11 +199,51 @@ function getPostData(post: LinkedInPost) {
     shares,
     postText,
     images,
+    videoUrl,
+    videoThumbnail,
     postType,
     timeSincePosted,
     postedDate,
     shareAudience,
   };
+}
+
+// Helper function to generate unique key for posts
+function getPostKey(post: LinkedInPost, index: number): string {
+  // Helper to safely convert value to string
+  const toString = (value: any): string => {
+    if (typeof value === 'string') return value;
+    if (typeof value === 'number') return String(value);
+    if (value && typeof value === 'object') {
+      // Try to extract a meaningful string from object
+      if (value.urn) return String(value.urn);
+      if (value.id) return String(value.id);
+      // Fallback: use JSON string (but limit length)
+      return JSON.stringify(value).substring(0, 50);
+    }
+    return String(value || '');
+  };
+
+  // Try multiple identifiers to ensure uniqueness
+  if (post.urn) {
+    const urnStr = toString(post.urn);
+    if (urnStr) return `urn-${urnStr}`;
+  }
+  if (post.full_urn) {
+    const fullUrnStr = toString(post.full_urn);
+    if (fullUrnStr) return `full_urn-${fullUrnStr}`;
+  }
+  if (post.url) {
+    const urlStr = toString(post.url);
+    if (urlStr) return `url-${urlStr}`;
+  }
+  if (post.shareUrn) {
+    const shareUrnStr = toString(post.shareUrn);
+    if (shareUrnStr) return `shareUrn-${shareUrnStr}`;
+  }
+  // Fallback to index with text hash for uniqueness
+  const textHash = post.text ? post.text.substring(0, 20).replace(/\s/g, '') : '';
+  return `post-${index}-${textHash || 'unknown'}`;
 }
 
 // Post Card Grid Item (Compact view)
@@ -139,24 +252,70 @@ function PostCardCompact({ post, onClick }: { post: LinkedInPost; onClick: () =>
   const data = getPostData(post);
   const truncatedText = data.postText.length > 120 ? `${data.postText.substring(0, 120)}...` : data.postText;
 
+  // Helper to safely get string identifier
+  const getStringId = (value: any): string | null => {
+    if (typeof value === 'string') return value;
+    if (typeof value === 'number') return String(value);
+    if (value && typeof value === 'object') {
+      if (value.urn) return String(value.urn);
+      if (value.id) return String(value.id);
+    }
+    return null;
+  };
+  
+  const postKey = getStringId(post.urn) || getStringId(post.full_urn) || getStringId(post.url) || `post-${id}`;
+  
   return (
     <motion.div
-      layoutId={`card-${post.urn}-${id}`}
+      layoutId={`card-${postKey}-${id}`}
       onClick={onClick}
       className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden hover:shadow-lg hover:border-emerald-300 dark:hover:border-emerald-700 transition-all cursor-pointer group"
     >
-      {/* Image */}
-      {data.images.length > 0 && (
-        <motion.div layoutId={`image-${post.urn}-${id}`} className="relative">
-          <img
-            src={data.images[0]}
-            alt="Post"
-            className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-          {data.images.length > 1 && (
-            <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">
-              +{data.images.length - 1}
+      {/* Media (Image or Video) */}
+      {(data.images.length > 0 || data.videoUrl) && (
+        <motion.div layoutId={`media-${postKey}-${id}`} className="relative">
+          {data.videoUrl ? (
+            <div className="relative w-full h-40 bg-zinc-900">
+              {data.videoThumbnail ? (
+                <img
+                  src={data.videoThumbnail}
+                  alt="Video thumbnail"
+                  className="w-full h-40 object-cover"
+                />
+              ) : (
+                <div className="w-full h-40 bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center">
+                  <svg className="w-12 h-12 text-white/50" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                </div>
+              )}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-12 h-12 bg-black/60 rounded-full flex items-center justify-center backdrop-blur-sm">
+                  <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                </div>
+              </div>
+              <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
+                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+                Video
+              </div>
             </div>
+          ) : (
+            <>
+              <img
+                src={data.images[0]}
+                alt="Post"
+                className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              {data.images.length > 1 && (
+                <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">
+                  +{data.images.length - 1}
+                </div>
+              )}
+            </>
           )}
         </motion.div>
       )}
@@ -177,13 +336,13 @@ function PostCardCompact({ post, onClick }: { post: LinkedInPost; onClick: () =>
           )}
           <div className="flex-1 min-w-0">
             <motion.h3
-              layoutId={`title-${post.urn}-${id}`}
+              layoutId={`title-${postKey}-${id}`}
               className="font-semibold text-zinc-900 dark:text-white text-sm truncate"
             >
               {data.authorName}
             </motion.h3>
             <motion.p
-              layoutId={`time-${post.urn}-${id}`}
+              layoutId={`time-${postKey}-${id}`}
               className="text-zinc-400 dark:text-zinc-500 text-xs"
             >
               {data.timeSincePosted || (data.postedDate ? format(data.postedDate, 'MMM d') : '')}
@@ -229,13 +388,25 @@ function ExpandedPostModal({ post, onClose }: { post: LinkedInPost; onClose: () 
   const id = useId();
   const ref = useRef<HTMLDivElement>(null);
   const data = getPostData(post);
+  // Helper to safely get string identifier
+  const getStringId = (value: any): string | null => {
+    if (typeof value === 'string') return value;
+    if (typeof value === 'number') return String(value);
+    if (value && typeof value === 'object') {
+      if (value.urn) return String(value.urn);
+      if (value.id) return String(value.id);
+    }
+    return null;
+  };
+  
+  const postKey = getStringId(post.urn) || getStringId(post.full_urn) || getStringId(post.url) || `post-${id}`;
 
   useOutsideClick(ref, onClose);
 
   return (
     <div className="fixed inset-0 grid place-items-center z-[100] p-4">
       <motion.button
-        key={`button-${post.urn}-${id}`}
+        key={`button-${postKey}-${id}`}
         layout
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -247,37 +418,52 @@ function ExpandedPostModal({ post, onClose }: { post: LinkedInPost; onClose: () 
       </motion.button>
       
       <motion.div
-        layoutId={`card-${post.urn}-${id}`}
+        layoutId={`card-${postKey}-${id}`}
         ref={ref}
         className="w-full max-w-2xl max-h-[90vh] flex flex-col bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-2xl"
       >
-        {/* Images */}
-        {data.images.length > 0 && (
-          <motion.div layoutId={`image-${post.urn}-${id}`} className="relative">
-            <img
-              src={data.images[0]}
-              alt="Post"
-              className="w-full h-64 md:h-80 object-cover"
-            />
-            {data.images.length > 1 && (
-              <div className="absolute bottom-3 right-3 flex gap-2">
-                {data.images.slice(1, 4).map((img, idx) => (
-                  <a
-                    key={idx}
-                    href={img}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 rounded-lg overflow-hidden border-2 border-white dark:border-zinc-800 shadow-lg hover:scale-110 transition-transform"
-                  >
-                    <img src={img} alt={`Image ${idx + 2}`} className="w-full h-full object-cover" />
-                  </a>
-                ))}
-                {data.images.length > 4 && (
-                  <div className="w-12 h-12 rounded-lg bg-black/70 flex items-center justify-center text-white text-sm font-semibold">
-                    +{data.images.length - 4}
+        {/* Media (Images or Video) */}
+        {(data.images.length > 0 || data.videoUrl) && (
+          <motion.div layoutId={`media-${postKey}-${id}`} className="relative">
+            {data.videoUrl ? (
+              <div className="relative w-full h-64 md:h-80 bg-zinc-900">
+                <video
+                  src={data.videoUrl}
+                  controls
+                  className="w-full h-full object-contain"
+                  poster={data.videoThumbnail || undefined}
+                >
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            ) : (
+              <>
+                <img
+                  src={data.images[0]}
+                  alt="Post"
+                  className="w-full h-64 md:h-80 object-cover"
+                />
+                {data.images.length > 1 && (
+                  <div className="absolute bottom-3 right-3 flex gap-2">
+                    {data.images.slice(1, 4).map((img, idx) => (
+                      <a
+                        key={idx}
+                        href={img}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-12 h-12 rounded-lg overflow-hidden border-2 border-white dark:border-zinc-800 shadow-lg hover:scale-110 transition-transform"
+                      >
+                        <img src={img} alt={`Image ${idx + 2}`} className="w-full h-full object-cover" />
+                      </a>
+                    ))}
+                    {data.images.length > 4 && (
+                      <div className="w-12 h-12 rounded-lg bg-black/70 flex items-center justify-center text-white text-sm font-semibold">
+                        +{data.images.length - 4}
+                      </div>
+                    )}
                   </div>
                 )}
-              </div>
+              </>
             )}
           </motion.div>
         )}
@@ -300,7 +486,7 @@ function ExpandedPostModal({ post, onClose }: { post: LinkedInPost; onClose: () 
               )}
               <div>
                 <motion.h3
-                  layoutId={`title-${post.urn}-${id}`}
+                  layoutId={`title-${postKey}-${id}`}
                   className="font-semibold text-zinc-900 dark:text-white"
                 >
                   {data.authorName}
@@ -309,7 +495,7 @@ function ExpandedPostModal({ post, onClose }: { post: LinkedInPost; onClose: () 
                   <p className="text-zinc-500 dark:text-zinc-400 text-sm">{data.authorOccupation}</p>
                 )}
                 <motion.p
-                  layoutId={`time-${post.urn}-${id}`}
+                  layoutId={`time-${postKey}-${id}`}
                   className="text-zinc-400 dark:text-zinc-500 text-xs mt-0.5 flex items-center gap-2"
                 >
                   {data.timeSincePosted && <span>{data.timeSincePosted}</span>}
@@ -414,11 +600,12 @@ export default function PostsPage() {
   const [loading, setLoading] = useState(false);
   const [postsData, setPostsData] = useState<LinkedInPost[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [scrapeUntil, setScrapeUntil] = useState<Date | undefined>(undefined);
+  const [filterUntilDate, setFilterUntilDate] = useState<Date | undefined>(undefined);
   const [activePost, setActivePost] = useState<LinkedInPost | null>(null);
   const [sortBy, setSortBy] = useState<'likes' | 'comments' | 'shares' | null>(null);
+  const [stats, setStats] = useState<{ needsMorePages?: boolean; maxPagesReached?: boolean; message?: string; pagesFetched?: number } | null>(null);
 
-  // Sorted posts based on selected criteria
+  // Sorted posts based on selected criteria (no frontend filtering - backend handles it)
   const sortedPosts = postsData ? [...postsData].sort((a, b) => {
     if (!sortBy) return 0;
     const aData = getPostData(a);
@@ -456,12 +643,14 @@ export default function PostsPage() {
     setLoading(true);
     setError(null);
     setPostsData(null);
+    setStats(null);
 
     try {
+      // Build URL with optional date filter
       let url = `/api/posts?urls=${encodeURIComponent(profileUrl)}`;
-      
-      if (scrapeUntil) {
-        url += `&scrapeUntil=${scrapeUntil.toISOString()}`;
+      if (filterUntilDate) {
+        const dateStr = filterUntilDate.toISOString().split('T')[0];
+        url += `&filterUntil=${dateStr}`;
       }
 
       const response = await fetch(url);
@@ -489,6 +678,7 @@ export default function PostsPage() {
 
       const posts = Array.isArray(result.data) ? result.data : [result.data];
       setPostsData(posts);
+      setStats(result.stats || null);
       console.log('LinkedIn Posts:', posts);
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred';
@@ -578,10 +768,10 @@ export default function PostsPage() {
 
             {/* Date Picker and Button Row */}
             <div className="flex flex-wrap gap-3 items-end">
-              {/* Scrape Until Date Picker */}
+              {/* Filter Until Date Picker */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                  Scrape Until Date (optional)
+                  Filter Until Date (optional)
                 </label>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -589,27 +779,27 @@ export default function PostsPage() {
                       variant="outline"
                       className={cn(
                         "w-[200px] h-10 justify-start text-left font-normal",
-                        !scrapeUntil && "text-muted-foreground"
+                        !filterUntilDate && "text-muted-foreground"
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {scrapeUntil ? format(scrapeUntil, "MMM dd, yyyy") : "How far back?"}
+                      {filterUntilDate ? format(filterUntilDate, "MMM dd, yyyy") : "Show posts from..."}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
-                      selected={scrapeUntil}
-                      onSelect={setScrapeUntil}
+                      selected={filterUntilDate}
+                      onSelect={setFilterUntilDate}
                       disabled={(date) => date > new Date()}
                     />
-                    {scrapeUntil && (
+                    {filterUntilDate && (
                       <div className="p-2 border-t">
                         <Button
                           variant="ghost"
                           size="sm"
                           className="w-full text-xs"
-                          onClick={() => setScrapeUntil(undefined)}
+                          onClick={() => setFilterUntilDate(undefined)}
                         >
                           Clear
                         </Button>
@@ -638,7 +828,7 @@ export default function PostsPage() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                     </svg>
-                    Fetch Posts (100)
+                    Fetch Posts
                   </span>
                 )}
               </Button>
@@ -646,7 +836,7 @@ export default function PostsPage() {
           </div>
           
           <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-4">
-            Leave date empty to fetch the most recent 100 posts. Select a date to scrape posts back to that date.
+            Fetches up to 5 pages (500 posts) per request using pagination. If you select a date, it automatically fetches pages until it reaches posts from that date. Maximum limit is 5 pages to control costs.
           </p>
         </div>
 
@@ -654,6 +844,38 @@ export default function PostsPage() {
         {error && (
           <div className="p-4 mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl max-w-2xl mx-auto">
             <p className="text-red-700 dark:text-red-300 text-sm font-medium">{error}</p>
+          </div>
+        )}
+
+        {/* Warning about max pages reached */}
+        {stats?.maxPagesReached && (
+          <div className="p-4 mb-6 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-xl max-w-2xl mx-auto">
+            <div className="flex items-start gap-3">
+              <svg className="w-5 h-5 text-orange-600 dark:text-orange-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-2.385 2.98H4.662c-2.172 0-3.135-1.646-2.385-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              <div className="flex-1">
+                <p className="text-orange-800 dark:text-orange-200 text-sm font-medium mb-1">Maximum Pages Reached</p>
+                <p className="text-orange-700 dark:text-orange-300 text-xs">
+                  Reached the maximum page limit (5 pages = 500 posts). Some posts may be missing. {stats.message || 'If you need older posts, try requesting with a more recent date.'}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Warning about needing more pages */}
+        {stats?.needsMorePages && !stats?.maxPagesReached && (
+          <div className="p-4 mb-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl max-w-2xl mx-auto">
+            <div className="flex items-start gap-3">
+              <svg className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-2.385 2.98H4.662c-2.172 0-3.135-1.646-2.385-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              <div className="flex-1">
+                <p className="text-amber-800 dark:text-amber-200 text-sm font-medium mb-1">May Need More Posts</p>
+                <p className="text-amber-700 dark:text-amber-300 text-xs">{stats.message || 'We fetch up to 5 pages (500 posts) per request. If your selected date isn\'t reached, try calling the API again to fetch more pages.'}</p>
+              </div>
+            </div>
           </div>
         )}
 
@@ -669,7 +891,7 @@ export default function PostsPage() {
                   Posts
                 </h2>
                 <span className="text-sm text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-3 py-1 rounded-full">
-                  {postsData.length} posts
+                  {postsData.length} {filterUntilDate ? 'posts from ' + format(filterUntilDate, 'MMM dd, yyyy') + ' onwards' : 'posts'}
                 </span>
               </div>
               
@@ -731,7 +953,7 @@ export default function PostsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {sortedPosts?.map((post, index) => (
                 <PostCardCompact
-                  key={post.urn || post.shareUrn || index}
+                  key={getPostKey(post, index)}
                   post={post}
                   onClick={() => setActivePost(post)}
                 />
@@ -749,6 +971,7 @@ export default function PostsPage() {
             <p className="text-zinc-500 dark:text-zinc-400">No posts found</p>
           </div>
         )}
+
 
         {/* Initial State */}
         {!postsData && !loading && !error && (
