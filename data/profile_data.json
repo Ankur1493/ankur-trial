@@ -1192,5 +1192,611 @@
         }
       ]
     }
+  },
+  {
+    "profileUrl": "https://linkedin.com/in/laraacostar",
+    "basic_info": {
+      "fullname": "Lara Acosta",
+      "first_name": "Lara",
+      "last_name": "Acosta",
+      "headline": "Entrepreneur and investor building businesses online | Featured on Forbes, Kajabi + Semrush | Helped 3,000+ people build their personal brand.",
+      "public_identifier": "laraacostar",
+      "profile_url": "https://linkedin.com/in/laraacostar",
+      "profile_picture_url": "https://media.licdn.com/dms/image/v2/D4E03AQEfwO2tv6ef4A/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1686093441109?e=1769644800&v=beta&t=TWMSMcjBJW2N4b9e1-_UCTdvg2ZU9kTJr3CgQ5e-D5k",
+      "about": "Everyone wants to build a personal brand, and I figured out how.\n\nWith over 20M+ impressions, 300,000 followers across socials, and multiple 6 figures made, I can show you how you can build one too (without spending years figuring out how)\n\nIn 2022: I was unemployed and trying to get into a master's degree - downloaded LinkedIn\nIn 2023: I became #1 female creator on LinkedIn by building my personal brand and agency\nIn 2024: I'm building the best education platform to teach people exactly how to do it\n\nHelped, coached and worked with 500+ build contents systems, increase engagement, improve their writing and beyond using proven strategies that worked for me. \n\nHere's how I can help you:\n\n1. Subscribe to my YouTube (It's free, and better than people's paid courses!)\n2. Join 15,100+ amazing people and subscribe to my newsletter. \n3. Join 500+ members inside Literallyacademy.com\n\nAnd if you're not ready for either! Welcome to my profile anyway, I talk about writing, storytelling,  personal branding and tell a lot of stories.\n\nSee you on the feed 💖\n\nSponsorships + booking : mary@ladigitalmx.com",
+      "location": {
+        "country": "United Kingdom",
+        "city": "London, England",
+        "full": "London, England, United Kingdom",
+        "country_code": "GB"
+      },
+      "creator_hashtags": [
+        "copywriting",
+        "entrepreneurship",
+        "linkedin",
+        "personalbranding"
+      ],
+      "is_creator": true,
+      "is_influencer": false,
+      "is_premium": true,
+      "open_to_work": false,
+      "created_timestamp": 1633111304352,
+      "show_follower_count": true,
+      "background_picture_url": "https://media.licdn.com/dms/image/v2/D4E16AQGNglsi38DfNg/profile-displaybackgroundimage-shrink_350_1400/B4EZuOxszXHoAY-/0/1767626953483?e=1769644800&v=beta&t=6bOvkxFwU9L48ut2ShjaqriIbxaA8WCqjA_EEtPGLpY",
+      "urn": "ACoAADf4bgUB_SYYxrCCxXN6bqAhLp0S6YOWpWU",
+      "follower_count": 304454,
+      "connection_count": 7091,
+      "current_company": "Literally Academy",
+      "current_company_urn": "105260514",
+      "current_company_url": "https://www.linkedin.com/company/literally-academy",
+      "top_skills": [
+        "Personal Branding",
+        "Content Marketing",
+        "Copywriting"
+      ],
+      "email": "mary@ladigitalmx.com"
+    },
+    "experience": [
+      {
+        "title": "Founder",
+        "company": "Literally Academy",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/D4E0BAQHBa1x7pKJPyA/company-logo_400_400/company-logo_400_400/0/1728852657528?e=1769644800&v=beta&t=POwgff0js46ZQ8hBZvuOv_TMOs7_75Q0SCO6lMKB6vY",
+        "duration": "Sep 2024 - Present · 1 yr 5 mos",
+        "location": "",
+        "employment_type": "Full-time",
+        "company_linkedin_url": "https://www.linkedin.com/company/105260514/",
+        "description": "Changing the education system one step at a time. \n\nAn academy for entrepreneurs and CEO's giving you every blueprint necessary to build, scale and grow your business through content on LinkedIn (and beyond).\n\n- Full a-z curriculim with netflix quality videos \n- Monthly Live calls to answer any questions\n- Monthly challenges and prizes for members\n- A community to hold you accountable weekly \n\nIncluding Masterclasses by the 0.01% of creators and entrepreneurs. \n\nFeaturing: Richard Moore, Dakota Robertson, JK Molina + others. \n\n3,000+ members and counting.\n\nIt's time to build your brand.",
+        "start_date": {
+          "month": "Sep",
+          "year": 2024
+        },
+        "end_date": {
+          "year": null,
+          "month": null
+        },
+        "is_current": true,
+        "skills": [
+          "LinkedIn",
+          "Personal Branding",
+          "Content Marketing",
+          "Content Strategy"
+        ]
+      },
+      {
+        "title": "Founder",
+        "company": "LA Digital",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/D4E0BAQFhsO7dTzeu7Q/company-logo_400_400/company-logo_400_400/0/1686086024164/digital_la_logo?e=1769644800&v=beta&t=fiZu0rdq4QuE1vtraX7b1Jk-CWN40QSH1ealx9b86M0",
+        "duration": "Apr 2022 - Present · 3 yrs 10 mos",
+        "location": "Remote",
+        "employment_type": "Full-time",
+        "company_linkedin_url": "https://www.linkedin.com/company/80430194/",
+        "description": "Ghostwriting agency building viral personal brands on LinkedIn.",
+        "start_date": {
+          "month": "Apr",
+          "year": 2022
+        },
+        "end_date": {
+          "year": null,
+          "month": null
+        },
+        "is_current": true,
+        "skills": [
+          "Copywriting",
+          "Marketing Strategy",
+          "Personal Branding",
+          "Positioning (Marketing)",
+          "Entrepreneurship"
+        ]
+      },
+      {
+        "title": "Angel Investor",
+        "company": "Neutonic",
+        "company_logo_url": "https://media.licdn.com/dms/image/v2/D560BAQE_e5lniFIHRg/company-logo_400_400/B56ZZeqNVhHsAY-/0/1745344846058/drinkneutonic_logo?e=1769644800&v=beta&t=sTdQ6VY1uLdA1eN2bYcZjF7GQRa4j347v5BWjrY-ujU",
+        "duration": "Jun 2025 - Present · 8 mos",
+        "location": "",
+        "employment_type": "",
+        "company_linkedin_url": "https://www.linkedin.com/company/103459286/",
+        "description": "",
+        "start_date": {
+          "month": "Jun",
+          "year": 2025
+        },
+        "end_date": {
+          "year": null,
+          "month": null
+        },
+        "is_current": true,
+        "skills": []
+      }
+    ],
+    "education": [
+      {
+        "school": "University of Exeter",
+        "degree": "Master of Science - MS, Digital Marketing",
+        "degree_name": "Master of Science - MS",
+        "field_of_study": "Digital Marketing",
+        "duration": "Sep 2022 - Sep 2023",
+        "school_linkedin_url": "https://www.linkedin.com/company/11826/",
+        "description": "Grade: Merit",
+        "activities": "",
+        "skills": [],
+        "school_logo_url": "https://media.licdn.com/dms/image/v2/D4E0BAQFaqA3xUyurLQ/company-logo_400_400/company-logo_400_400/0/1719821579475/university_of_exeter_logo?e=1769644800&v=beta&t=Lg-YFjBQ8U3Saza_v0qTszrmsSdxhX3Ob_HTlnBhdmE",
+        "start_date": {
+          "year": 2022,
+          "month": "Sep"
+        },
+        "end_date": {
+          "year": 2023,
+          "month": "Sep"
+        }
+      },
+      {
+        "school": "Coventry University",
+        "degree": "Bachelor's degree, International Business Management ",
+        "degree_name": "Bachelor's degree",
+        "field_of_study": "International Business Management",
+        "duration": "Aug 2016 - Aug 2019",
+        "school_linkedin_url": "https://www.linkedin.com/company/15492/",
+        "description": "",
+        "activities": "",
+        "skills": [],
+        "school_logo_url": "https://media.licdn.com/dms/image/v2/D4E0BAQFpumhep48D1A/company-logo_400_400/company-logo_400_400/0/1688197183058/coventry_university_logo?e=1769644800&v=beta&t=xWXtQh6LSAl7OxozxOPe_H-zkrdkraojDW1kQYsmEog",
+        "start_date": {
+          "year": 2016,
+          "month": "Aug"
+        },
+        "end_date": {
+          "year": 2019,
+          "month": "Aug"
+        }
+      },
+      {
+        "school": "Wellington School",
+        "degree": "A-Levels",
+        "degree_name": "A-Levels",
+        "field_of_study": "",
+        "duration": "2014 - 2016",
+        "school_linkedin_url": "https://www.linkedin.com/company/7050038/",
+        "description": "",
+        "activities": "",
+        "skills": [],
+        "school_logo_url": "https://media.licdn.com/dms/image/v2/C4D0BAQE1NwDUfyiZQg/company-logo_400_400/company-logo_400_400/0/1630516324668/wellington_school_logo?e=1769644800&v=beta&t=UIOdy90VXKkICJaI8npTMYJ6ZIPBxP9tP5P-SVerMZ0",
+        "start_date": {
+          "year": 2014,
+          "month": null
+        },
+        "end_date": {
+          "year": 2016,
+          "month": null
+        }
+      }
+    ],
+    "featured": [
+      {
+        "type": "link",
+        "title": "Free 7-Day Course",
+        "description": "literallyacademy.com",
+        "url": "https://www.literallyacademy.com/join-free-training-organic",
+        "image_url": "https://media.licdn.com/dms/image/v2/D4E2DAQGwvVr7tATv_w/profile-treasury-image-shrink_800_800/B4EZqgsVj6IwAY-/0/1763632568938?e=1768424400&v=beta&t=JGIzrBUv0PVcCGK6H8IT1o8xwzTq1sVGVX-Y6zWz5UA"
+      }
+    ],
+    "skills": [
+      {
+        "name": "LinkedIn",
+        "endorsement_count": 8,
+        "related_experiences": [
+          "Founder at Literally Academy"
+        ]
+      },
+      {
+        "name": "Personal Branding",
+        "endorsement_count": 47,
+        "related_experiences": [
+          "2 experiences across Literally Academy and 1 other company"
+        ]
+      },
+      {
+        "name": "Entrepreneurship",
+        "endorsement_count": 0,
+        "related_experiences": [
+          "Founder at LA Digital",
+          "Endorsed by Lisa Winning and 1 other who is highly skilled at this"
+        ]
+      },
+      {
+        "name": "Marketing Strategy",
+        "endorsement_count": 84,
+        "related_experiences": [
+          "Founder at LA Digital"
+        ]
+      },
+      {
+        "name": "Positioning (Marketing)",
+        "endorsement_count": 29,
+        "related_experiences": [
+          "Founder at LA Digital"
+        ]
+      },
+      {
+        "name": "Public Speaking",
+        "endorsement_count": 31,
+        "related_experiences": []
+      },
+      {
+        "name": "Copywriting",
+        "endorsement_count": 44,
+        "related_experiences": [
+          "Founder at LA Digital"
+        ]
+      },
+      {
+        "name": "Content Marketing",
+        "endorsement_count": 13,
+        "related_experiences": [
+          "Founder at Literally Academy"
+        ]
+      },
+      {
+        "name": "Marketing",
+        "endorsement_count": 93,
+        "related_experiences": []
+      },
+      {
+        "name": "Social Media",
+        "endorsement_count": 90,
+        "related_experiences": []
+      },
+      {
+        "name": "Market Research",
+        "endorsement_count": 27,
+        "related_experiences": []
+      },
+      {
+        "name": "Teamwork",
+        "endorsement_count": 24,
+        "related_experiences": []
+      },
+      {
+        "name": "Digital Marketing",
+        "endorsement_count": 28,
+        "related_experiences": []
+      },
+      {
+        "name": "Brand Strategy",
+        "endorsement_count": 28,
+        "related_experiences": []
+      },
+      {
+        "name": "Content Strategy",
+        "endorsement_count": 29,
+        "related_experiences": [
+          "Founder at Literally Academy"
+        ]
+      },
+      {
+        "name": "Graphic Design",
+        "endorsement_count": 21,
+        "related_experiences": []
+      },
+      {
+        "name": "Creative Consultation",
+        "endorsement_count": 24,
+        "related_experiences": []
+      },
+      {
+        "name": "Branding & Identity",
+        "endorsement_count": 27,
+        "related_experiences": []
+      },
+      {
+        "name": "Negotiation",
+        "endorsement_count": 23,
+        "related_experiences": []
+      },
+      {
+        "name": "Facebook Marketing",
+        "endorsement_count": 22,
+        "related_experiences": []
+      },
+      {
+        "name": "Strategic Partnerships",
+        "endorsement_count": 26,
+        "related_experiences": []
+      }
+    ],
+    "recommendations": {
+      "received_recommendations": [
+        {
+          "recommender_name": "Charlotte Lloyd",
+          "recommender_title": "Helping high performing solos, coaches, consultants and SMBs win premium B2B/B2C clients with buyer-led selling and AI | Top 100 Sales Demandbase Top 5 Sales Favikon | Social Selling for Teams",
+          "recommender_profile_id": "ACoAAADOPJQB7l-8QzlLLakyzwniGVVVhvruunk",
+          "recommendation_date": "November 24, 2024",
+          "relationship": "Charlotte and Lara studied together",
+          "recommendation_text": "Lara is LITERALLY the best.\n\nI have accompanied her journey for the last 1.5 years and in October I had the pleasure of hosting a LinkedIn Audio with her. We brought the house down! She brings the magic, the fire, the queen of slay.\n\nShe really knows on a deeper level not just what makes people tick here, but how to nail \"beyond nailing\" psychology, content, branding, marketing. Most of all, building a loyal community in which people can learn from her every day. \n\nI am excited to see what you do next and proud to call you a bestie."
+        },
+        {
+          "recommender_name": "Hugh Meyer, MBA",
+          "recommender_title": "Real Estate's Financial Planner | Creator of the Wealth Edge Blueprint™ | Wealth Strategy Aligned With Your Greater Purpose| 25 Years Demystifying Retirement|",
+          "recommender_profile_id": "ACoAAA_FCF8BR-LvNCBqzygivvsKVMmVSNpFGQY",
+          "recommendation_date": "November 19, 2024",
+          "relationship": "Hugh was Lara’s client",
+          "recommendation_text": "Lara Acosta is an exceptional human being and coach. \n\nLara is easily the most giving individual on the platform. Her process, consistency and dedication to teach others how to build brands and be successful is of the highest order.Lara has an incredible library of knowledge and experience to build a brand here or anywhere!\n\nLara continues to be an amazing supporter of my work. I would recommend Lara to anyone,  no matter the stage they are in on the platform.\n\nHappy to call Lara a great friend!"
+        },
+        {
+          "recommender_name": "Tasleem Ahmad Fateh",
+          "recommender_title": "I supply words to the rich and busy. Part Owner of the “MEME team” and responsible for bringing fun back to LinkedIn, one meme at a time.",
+          "recommender_profile_id": "ACoAACrPvFwByhKNdXwBppmONYxgnw7_8ltX05k",
+          "recommendation_date": "January 22, 2024",
+          "relationship": "Tasleem Ahmad and Lara studied together",
+          "recommendation_text": "Lara is one of the few people on LinkedIn that deeply understand what it takes to succeed here.  \n\nWe have known each other since her first post which means I have had a front row seat to the journey.\n \nMany folks have come and gone since, but Lara has been one of the few people who stick around. Why? \n\nBecause: \n\n- She is an expert at content creation. \n- She is an expert at community.\n- She is an expert at positioning.\n- She is an expert at branding.\n\nYou don't really need to read my recommendation to find that out. You can just check out her content. \n\nThe community she has built is second to none and it is a testament to her abilities. \n\nIf you are looking to learn content creation or figure out LinkedIn you should get in touch with Lara."
+        },
+        {
+          "recommender_name": "Alex Kottoor",
+          "recommender_title": "3x Founder | 3 Exits | The ‘Startup GTM’ Guy | Sharing bumps + breakthroughs with fellow founders",
+          "recommender_profile_id": "ACoAAAD0R8UBW2uYA_4D15HMYk4KpMskpMLfICw",
+          "recommendation_date": "January 20, 2024",
+          "relationship": "Alex was Lara’s client",
+          "recommendation_text": "Im a firm believer that those that move with a growth mindset, will not only win more, but will live a more fulfilling life.  Lara is clearly winning, and when you couple that with the knowledge she’s continually acquiring and applying, it puts her in a position to create impact for her clients quickly.  I unequivocally recommend Lara for anybody trying to step their social game up.\n\nI appreciate the relationship we are building too.  \nKeep shining your light bright, Lara."
+        },
+        {
+          "recommender_name": "Jonathan Maharaj FCPA",
+          "recommender_title": "Founder | Fractional CFO increasing profits for businesses + developing future finance leaders | NZ’s #1 LinkedIn Creator | Featured in Forbes and The New York Times",
+          "recommender_profile_id": "ACoAAAIxIsMBCEoN28vlGadVjlCXhd9hcHUaU_s",
+          "recommendation_date": "January 4, 2024",
+          "relationship": "Jonathan was Lara’s client",
+          "recommendation_text": "I had a 1:1 coaching session with Lara on my LinkedIn strategy.\n\nLara truly stood out for her approach.\n\nShe was authentic, helpful, and had a great story.\n\nShe’s passionate about personal branding and creating quality content.\n\nAnd the best insight I got was knowing that I was on the right track.\n\nNot only did I learn a lot from our session, I made a friend.\n\n¡Muchísima gracias Lara! \n\nKeep shining your light."
+        },
+        {
+          "recommender_name": "Anthony Carlton",
+          "recommender_title": "Founder @ CRE Digital | Helping commercial real estate funds raise capital with premium branding and investor acquisition systems",
+          "recommender_profile_id": "ACoAABEbQHsB0XY709PX4oal2ObJFOncjPF-gTo",
+          "recommendation_date": "December 21, 2023",
+          "relationship": "Anthony worked with Lara but they were at different companies",
+          "recommendation_text": "Lara is a fantastic writer, personal brand consultant, and entrepreneur. I've learned a TON from her daily LinkedIn content. I highly recommend joining her cohort if you want to build an influential personal brand. She is the real deal!"
+        },
+        {
+          "recommender_name": "Qamar Anwar",
+          "recommender_title": "MD at First4Lawyers – supplying the UK’s leading law firms with high-quality legal enquiries since 2008. Get in touch to see how we can help your law firm grow in 2025.",
+          "recommender_profile_id": "ACoAAAxqFxkBp8inHqqaDVgSbfU2knq1JAa4QwU",
+          "recommendation_date": "October 9, 2023",
+          "relationship": "Qamar was Lara’s client",
+          "recommendation_text": "Lara is a genius! She knows everything there is to know about LinkedIn. She has taught me so much in such a short space of time. Shared so much valuable advice. She has this unique skill which she recently spoke about and I have seen first hand, of being able to reverse engineer a post to make it go viral. I highly recommend Lara for her knowledge, skill and expertise all things LinkedIn and beyond:)"
+        },
+        {
+          "recommender_name": "Charlotte Schulz",
+          "recommender_title": "People Professional ",
+          "recommender_profile_id": "ACoAABEshDcBYVtcrDGz0f-eZNlTAjAkWBRS8u4",
+          "recommendation_date": "September 26, 2023",
+          "relationship": "Charlotte was Lara’s client",
+          "recommendation_text": "Lara held a workshop for us at Plumm on how to create our personal brand on LinkedIn as individuals. The content, skills and tips that she shared with us were simple and made it easy for us to understand. She shared practical examples and made the workshop engaging for everyone. I would highly recommend using her to up your personal brand game!"
+        },
+        {
+          "recommender_name": "Dakota Robertson",
+          "recommender_title": "Posts on Writing, AI, and Ghostwriting. Training The Top 1% of Ghostwriters at Growth Ghost.",
+          "recommender_profile_id": "ACoAACC_eCABPXMpzYECnNa9svm40_db3wfdQYI",
+          "recommendation_date": "September 20, 2023",
+          "relationship": "Dakota worked with Lara but they were at different companies",
+          "recommendation_text": "Lara knows LinkedIn inside and out. She taught me a ton on best practices and how to navigate it. She also roasts my content on the daily :("
+        },
+        {
+          "recommender_name": "Jasmin Alić",
+          "recommender_title": "Award-winning LinkedIn coach | Founder of Link Up Community, where you’ll build a trusted brand and profitable business",
+          "recommender_profile_id": "ACoAABqlyuoBgq5YAcRF4vz33Y_TOPnD6ASmXZs",
+          "recommendation_date": "August 22, 2023",
+          "relationship": "Jasmin worked with Lara on the same team",
+          "recommendation_text": "When I think \"Lara Acosta\", I think \"inspiring\". Every time I read her stuff, I leave with a new idea."
+        },
+        {
+          "recommender_name": "Sam Szuchan",
+          "recommender_title": "Founder, Soleo. Creating influence.",
+          "recommender_profile_id": "ACoAADJxmOcB9ewkNVvLueDDab0UxS19_vB0-H0",
+          "recommendation_date": "June 1, 2023",
+          "relationship": "Sam worked with Lara but they were at different companies",
+          "recommendation_text": "It's incredible how naturally that story-rich, engagement-driven content comes to Lara. She seemingly effortlessly crafts all her content to perfection, and any client fortunate enough to work with her ought to count their blessings."
+        },
+        {
+          "recommender_name": "John Harrison",
+          "recommender_title": "Copywriting Consultant",
+          "recommender_profile_id": "ACoAAAbdk5QBZec1wYxeNjyNMvgDg8Gwqfr8I7I",
+          "recommendation_date": "May 22, 2023",
+          "relationship": "John worked with Lara but they were at different companies",
+          "recommendation_text": "People stay up until 2am in the morning just to speak to Lara. Oh and they pay to do that too. \n\nThat's how good she is. \n\nI've been lucky enough to have some of her time. What I admire the most is how genuine and down to earth she is. Marketing can be an opaque and fluffy world sometimes. Lara demystifies it. \n\nLara's work has become part of my daily routine now. I won't miss what she writes. I genuinely enjoy reading it and I actually learn things. \n\nWhat could be better than that?"
+        },
+        {
+          "recommender_name": "Adam Judeh",
+          "recommender_title": "COO / Fractional CTO | opsfx | Building Better Systems for Smarter Companies",
+          "recommender_profile_id": "ACoAACX30joB5azP8pme8UA32fI0KDLh-erGcr0",
+          "recommendation_date": "May 22, 2023",
+          "relationship": "Adam was Lara’s client",
+          "recommendation_text": "Best word to describe Lara - EPIC 🤟\n\nI took the leap and booked my 1:1 Power Hour.\n\nLara took the time to pinpoint my obstacles, actually get to know me (not just another lead to check off the list), and gave me clarity on how I’m approaching my personal brand.\n\nWith all the noise of self-starters and people trying to help build LinkedIn brands, I’ve found the most value partnering with Lara. She’s invested in people and their success.\n\nTo me, that’s the most valuable thing on 🌍 \n\nNo matter the niche, I know she’s got your back.\n\nAnd better yet, our whole strategy for my next steps is laid out in a Notion workspace with EVERYTHING we discussed. Gold.\n\nFrom,\n\nA Future Repeat Coaching Client 😊"
+        },
+        {
+          "recommender_name": "Melina Panetta",
+          "recommender_title": "Operator → Modern Founder | I help Directors & VPs extract their “invisible genius” into a premium advisory business | Zero to validated in 10 weeks | Ex-Oracle, Workday, HP | 115+ Clients served",
+          "recommender_profile_id": "ACoAAAE9OYABY7Gg2Unzm7RFuvI-aUMLg3Va7uQ",
+          "recommendation_date": "May 22, 2023",
+          "relationship": "Melina was Lara’s client",
+          "recommendation_text": "I booked a 1:1 with Lara to nail down my content strategy on LinkedIn.  She's the REAL deal -- authentic and knows marketing!  She listened, educated, and gave me a game plan.  I highly recommend working with her, she knows her stuff and you will see results!  The best is that I've made a lovely friend who continues to support me. 😊. No matter where you are in your journey, working with her will elevate your business."
+        },
+        {
+          "recommender_name": "Sonia Hunt",
+          "recommender_title": "Co-Founder & CEO at Zentāra Ventures | #1 Best-Selling Author | Global Wellness Speaker | Watch my TEDx Talk (1M+ views) 👇🏽",
+          "recommender_profile_id": "ACoAAAAAfioBZ9Sc_-P9Ib4GOMlSuYFbV6Afko4",
+          "recommendation_date": "May 16, 2023",
+          "relationship": "Sonia was Lara’s client",
+          "recommendation_text": "I've been a fan of Lara's content from day one - it's authentic, poignant, and valuable to the end consumer. I jumped at the chance to be able to work with her on elevating my personal brand's messaging, as sometimes you're just too close to your own brand. Lara has been instrumental in helping me think through strategy, discover areas for improvement, and work with the needs of my business to be able to craft the right messaging that reaches my target audience. I highly recommend working with Lara whether you're just starting out or whether you're a seasoned brand/leader and looking to elevate. It's a rare combo to have someone who understands the changed landscape of marketing and can deliver results early on, and that's Lara!"
+        },
+        {
+          "recommender_name": "Jen Corcoran",
+          "recommender_title": "LinkedIn Lead Jen 😉 for driven women Coaches & Consultants ✨ LinkedIn Glow-up & Process to get clients without endless posts and DMs that go nowhere 👑 5 qualified leads a week + freedom in your biz in 30 minutes a day!",
+          "recommender_profile_id": "ACoAAAawJi4BnUhFMCYKJiVJw3LT9YlnSjIoi7w",
+          "recommendation_date": "May 7, 2023",
+          "relationship": "Jen was Lara’s client",
+          "recommendation_text": "I recently had a power hour session with Lara and it was great! I'm a LinkedIn Consultant who specialises in profile optimisation and warm organic reach through DMs - content on the home feed has never been my bag.  I love learning and thought that Lara could be a great fit for my clients and why not brush up my own content at the same time - win/win! If you need help with your content to start / continue the social selling process you should chat with Lara as she's got it nailed.  Her follow up was great too."
+        }
+      ],
+      "given_recommendations": [
+        {
+          "recommender_name": "Anjali Chawla",
+          "recommender_title": "Turning CEOs & Coaches into Creators | Helping you Become a Trusted Authority on LinkedIn and Get Clients using LinkedIn | LinkedIn Ghostwriter, Coach & AI Marketing Strategist | Scaled 25+ Clients to 6–7 Figures",
+          "recommender_profile_id": "ACoAABcKUfgBmXBEF2BqdjAsezRw0bI0eM235oc",
+          "recommendation_date": "September 29, 2025",
+          "relationship": "Lara was Anjali’s client",
+          "recommendation_text": "Anjali is one of the best ghostwriters on Linkedin right now, could not recommend her more. Incredibly impressed by her talent! She is your person to go to if you want to build authority on LinkedIn!"
+        },
+        {
+          "recommender_name": "Subhan Ahmad Shahid",
+          "recommender_title": "Positioning you as the go-to choice for your ideal customers | Subzins Brand Core™",
+          "recommender_profile_id": "ACoAAEvQ3DMBEXXpHtxalse9xXhxFiXn1lpABDk",
+          "recommendation_date": "May 25, 2025",
+          "relationship": "Lara was Subhan’s client",
+          "recommendation_text": "worked with subhan on a few graphics delivery was so quick I could not not level a 10/10 recommendation. Most designers need so much guidance but subhan killed it for me so quick.\n\nShort brief insane result. Looking forward to working together again x"
+        },
+        {
+          "recommender_name": "Beatrice Vladut",
+          "recommender_title": "Grow your founder brand and win clients. Done-for-you LinkedIn content that doesn’t sound like AI. | Entrepreneur | Creator | Speaker",
+          "recommender_profile_id": "ACoAAB6oJEwBj7W_htHp0wgidlU9jUSU3D6em0I",
+          "recommendation_date": "July 25, 2024",
+          "relationship": "Lara was Beatrice’s mentor",
+          "recommendation_text": "Beatrice wins at storytelling not only for herself but for clients. \n\nI love how she is helping founders and ceos actually tell their stories and make an impact daily. There’s where true growth happens. \n\nOne of the most awesome and skilled entrepreneurs on the platform 👏🏽👏🏽\n\n"
+        },
+        {
+          "recommender_name": "April Little",
+          "recommender_title": "Ex-HR Exec Helping Women Leaders Break the Mid-Level Ceiling Into Executive Leadership ($200k+) | 2025 Time 100 Creator | Find me on TikTok: @iamaprillittle",
+          "recommender_profile_id": "ACoAABXzaxsBDBHJR4pTLm0rd0d45qnyVPj-SQA",
+          "recommendation_date": "July 25, 2024",
+          "relationship": "Lara was April’s client",
+          "recommendation_text": "When it comes to teaching about careers, April is the best person to go to my community with over 150 members had been begging me to have a speak to them because they know the values you can provide. \n\nI’ve been following April for the last two years and she and her continent has been pivotal and crucial for me to understand how to best present my skill set online. \n\nApril is amazing and couldn’t recommend her more!"
+        },
+        {
+          "recommender_name": "Daniel Korenblum",
+          "recommender_title": "Growing your brand & business with LinkedIn content",
+          "recommender_profile_id": "ACoAADiPgH0BiOO5C2dN2GImGcw-ojHTXkFrbKQ",
+          "recommendation_date": "June 9, 2024",
+          "relationship": "Lara was Daniel’s client",
+          "recommendation_text": "One thing about most designers on LinkedIn is that they don't get LinkedIn. Daniel does.\n\nIt's not just about the content but also the context and Daniel understands this. A carousel doesn't pop off because of JUST the design but HOW it is presented and how it is relevant to the profile.\n\nDaniel is growing at the speed of light here because he gets the whole thing (personal branding) and has design skillset to show it!\n\nIf you're looking to level up your branding I'd talk to this guy!"
+        },
+        {
+          "recommender_name": "Ubaid Ur Rehman",
+          "recommender_title": "Design Guy Loved By the Top 1%",
+          "recommender_profile_id": "ACoAACoMEBkBtNqjNrXijopDuhurxCNzeRPEjFI",
+          "recommendation_date": "April 29, 2024",
+          "relationship": "Lara was Ubaid’s client",
+          "recommendation_text": "Ubaid's designs are everywhere - and for a reason. His work is 10/10 and EXACTLY what anyone who wants to positions themselves as a leader on LinkedIn needs.\n\nHe knows WHAT performs well on LinkedIn specifically with visuals.\nHe's worked with 100s of clients in diverse industries\nI've referred him many too, and ALL of them have a positive review\n\nHe's also done work for me from my featured section to templaters for my LinkedIn community.\n\nUbaid is your best shot when it comes to design, don't just take it from me literally just look at his case studies.\n\nThank you Ubaid!"
+        },
+        {
+          "recommender_name": "Umar Abid",
+          "recommender_title": "SEO Specialist | Helping Website Owners To Get More Traffic, More Sales & More Leads From Their Website | 3+ Years Of Expertise | Worked With Lara Acosta",
+          "recommender_profile_id": "ACoAAD3-Uu8BQOHZSTBlYQ6AjlzWpaLM_H2F6vw",
+          "recommendation_date": "April 4, 2024",
+          "relationship": "Lara was Umar’s client",
+          "recommendation_text": "I had an SEO problem. Umar fixed it within 12hrs.\n\nThere is nothing better as an entrepreneur than this. No questions, no \"recommendations\" he just did what I needed. Quick and WELL.\n\nI am looking forward to working with umar on future projects soon, couldn't recommend more.\n\nThank you SO much umar."
+        },
+        {
+          "recommender_name": "Awais Hameed",
+          "recommender_title": "I design and grow your LinkedIn & business. Get your standout designs for: Profile Optimization, Carousels, Cheat Sheets, Banners, Covers and Lead Magnets.",
+          "recommender_profile_id": "ACoAAEQw3yIBWOsR8F62RKRMblTiPaoYpBqEqmk",
+          "recommendation_date": "March 8, 2024",
+          "relationship": "Lara was Awais’ client",
+          "recommendation_text": "Awais is by far one of the best designers I know. From insane banners to covers for my cohort to seeing him revamp 10+ profiles in my community in under 24hrs…. Awais is the real deal 👏🏽\n\nA gem in the making, couldn’t recommend more 💖"
+        },
+        {
+          "recommender_name": "Diwas Basnet",
+          "recommender_title": "I edit videos for a living",
+          "recommender_profile_id": "ACoAAC10EsoBhxJQoa80-DxKXuWxWCg0fcJIOYE",
+          "recommendation_date": "January 18, 2024",
+          "relationship": "Lara was Diwas’ client",
+          "recommendation_text": "Diwas is hands off the best video editor I've ever worked with. I've been creating content since 2015 and worked with many editors and wasted hundreds of hours doing it myself.\n\nLast year, I launched my first digital product. It nearly did 6-figures in 4 days. Most of the people bought because they'd seen me on video.\n\n“78% of our customers had consumed 2 pieces of long form content before buying”.\n\nThe quality of Unchained's work speaks for itself. I have a ridiculously high standard when it comes to content and Diwas blew my expectations out of the water and set a NEW standard for me.\n\nHis team are WIZARDS. 10000/10."
+        },
+        {
+          "recommender_name": "Geraldine Spurway",
+          "recommender_title": "CEO | Strategic Advisor | Growth Partner | Speaker ",
+          "recommender_profile_id": "ACoAAANSc6QBCBA4o9emo1sE9JOC_XcZ20m4uOM",
+          "recommendation_date": "November 23, 2023",
+          "relationship": "Lara was Geraldine’s client",
+          "recommendation_text": "I had one session with Geraldine... the result? 2 international paid speaking opportunities, podcast offers and in person panels in the UK. Launched my first cohort which went beyond expectations and allowed myself to grow. Geraldine's work with Human Design helped me identify my key strengths and know how to leverage them immediately! \n\nalways grateful for geraldine and could not recommend her more!"
+        },
+        {
+          "recommender_name": "Jasmin Alić",
+          "recommender_title": "Award-winning LinkedIn coach | Founder of Link Up Community, where you’ll build a trusted brand and profitable business",
+          "recommender_profile_id": "ACoAABqlyuoBgq5YAcRF4vz33Y_TOPnD6ASmXZs",
+          "recommendation_date": "October 2, 2023",
+          "relationship": "Lara was Jasmin’s client",
+          "recommendation_text": "My literal profile is a case study for what Jasmin can do.\n\n- From 20k to (almost) 100k\n- From 5 figz to 6 figures\n- From top 200 creator to #1 woman in the UK.\n\nJasmin doesn't miss!"
+        },
+        {
+          "recommender_name": "Dakota Robertson",
+          "recommender_title": "Posts on Writing, AI, and Ghostwriting. Training The Top 1% of Ghostwriters at Growth Ghost.",
+          "recommender_profile_id": "ACoAACC_eCABPXMpzYECnNa9svm40_db3wfdQYI",
+          "recommendation_date": "September 21, 2023",
+          "relationship": "Lara worked with Dakota but they were at different companies",
+          "recommendation_text": "From writing clear, generating attention, maintaining and monetizing it... Dakota has taught it all to me through his content. He kills in on every platform he steps in... This year, I've gotten 11M impressions on LinkedIn, and following his lessons have been a massive part of it.\n\nThough his online trolling and memes are kinda average, there's a lot to learn from Dakota."
+        },
+        {
+          "recommender_name": "Ryan T Williams",
+          "recommender_title": "Exited Agency Founder | Social Media Consultant | Brand Growth Specialist | Facebook Monetisation Expert | Motivational Speaker",
+          "recommender_profile_id": "ACoAAAYKDwsBrZZ4Rf3_AKFLsqVUQb02rEbjtdo",
+          "recommendation_date": "September 12, 2023",
+          "relationship": "Lara worked with Ryan T but they were at different companies",
+          "recommendation_text": "Listening to Ryan's story, I felt so inspired. He's an unreal speaker with so much wisdom to share. As a new entrepreneur in the biz, Ryans's knowledge is everything. \n\nI'd recommend him anytime!"
+        },
+        {
+          "recommender_name": "Lewis Ellis",
+          "recommender_title": "HUSSEL - THE DISRUPTIVE MARKETING AGENCY | Nudge Me For Awesome Experiential Campaigns, Attention Grabbing PR Stunts, Standout Advertising, Viral Social Content and Creative Consulting.",
+          "recommender_profile_id": "ACoAABMNl3sBED0OlFRpv4PCzfTQl1Vh4ozXmsw",
+          "recommendation_date": "September 10, 2023",
+          "relationship": "Lara was Lewis’ client",
+          "recommendation_text": "I hated Lewis' latest networking event...\nHated how GOOD it was. A day prior I'd promised to never go to a networking event ever again. They're boring, fake and filled with booze. I felt like I didn't belong in them... but then:\n\nI went to a Lewis event. It was fun, I felt great and met a bunch of cool people who had no agenda.\nAnd for that, I cheers. This game is lonely, nice to not feel like it for a day!\n\nAppreciate your work and purpose lewis!"
+        },
+        {
+          "recommender_name": "Adarsh D",
+          "recommender_title": "Twitter- LinkedIn ghostwriter| Helping 6-Figure marketers, coaches and creators expand their brand on LinkedIn & Twitter",
+          "recommender_profile_id": "ACoAADUlbN4BbUAEiUbNE9-3H9tyILGGKTV7TE8",
+          "recommendation_date": "July 31, 2023",
+          "relationship": "Lara was Adarsh’s client",
+          "recommendation_text": "Adarsh's knowledge on content and landing pages has been EYE opening for me. He was so resourceful and quick to my inquiries, nut most importantly he took the time to get to know me and my brand. Made time immediately as I requested help and was so KIND which means the world to me.\n\nCouldn't recommend him more :)"
+        },
+        {
+          "recommender_name": "Nausheen I. Chen",
+          "recommender_title": "The CEO’s Public Speaking Coach • ex-Fortune 100 communications trainer • 3-time TEDx speaker • Public Speaking Professor at CEU • LinkedIn Learning Instructor • Founder, The Confidence Accelerator •  Keynote Speaker",
+          "recommender_profile_id": "ACoAAAII5fIBliBV2d5ptUuru8IEtfj3hGy5L4g",
+          "recommendation_date": "July 21, 2023",
+          "relationship": "Lara was Nausheen’s client",
+          "recommendation_text": "I literally could not recommend Nausheen more. She LITERALLY exceeded every single expectation I had. I had low expectations, hoping she'd fix my filler words but she did WAY more than that.\nShe did so much research on me, she was super attentive, she targeted my main concerns immediately (and FIXED THEM). I am in AWE at her work ethic, professionalism and dedication me. Meant the world. \n\nWe worked on:\n\n- my filler words\n- my origin story\n- my core values\n- my brand (???) I LOVED IT!!!\n\nSince working with Nausheen I've been in 3 podcasts, 1 keynote and invited to two international conferences. She is a magical force.\n\nIconic wow"
+        },
+        {
+          "recommender_name": "Ian Lopez",
+          "recommender_title": "Long Island SEO Strategist | Digital Marketing",
+          "recommender_profile_id": "ACoAAClSlxkBlgbUEbywX9A2yr72RLUW0HN2aDo",
+          "recommendation_date": "July 20, 2023",
+          "relationship": "Lara was Ian’s client",
+          "recommendation_text": "Ian helped me with some SEO and Google Ads work for my website earlier this year - he was quick, clear and simple with his work which is exactly what I needed. Couldn't recommend Ian more:)"
+        },
+        {
+          "recommender_name": "Sam Szuchan",
+          "recommender_title": "Founder, Soleo. Creating influence.",
+          "recommender_profile_id": "ACoAADJxmOcB9ewkNVvLueDDab0UxS19_vB0-H0",
+          "recommendation_date": "June 1, 2023",
+          "relationship": "Lara worked with Sam but they were at different companies",
+          "recommendation_text": "Whenever someone asks me for top ghostwriters on LinkedIn, I ALWAYS think of Sam. He knows the platform incredibly well, he understands how to hack the algorithm and generate more attention and his attention to detail is incredible. \n\nHe's my go-to every single time - learned so much from him too!"
+        },
+        {
+          "recommender_name": "John Harrison",
+          "recommender_title": "Copywriting Consultant",
+          "recommender_profile_id": "ACoAAAbdk5QBZec1wYxeNjyNMvgDg8Gwqfr8I7I",
+          "recommendation_date": "May 22, 2023",
+          "relationship": "Lara worked with John but they were at different companies",
+          "recommendation_text": "John is one of the best copywriters I know. He truly stands out online in a sea of excellent writing. \nThe amount of dedication he puts into his craft is extraordinary. I take so much value from his content and couldn’t recommend him more to anyone. \n\nHis free advice is better than anyone’s paid 👏🏽"
+        },
+        {
+          "recommender_name": "Jasmin Alić",
+          "recommender_title": "Award-winning LinkedIn coach | Founder of Link Up Community, where you’ll build a trusted brand and profitable business",
+          "recommender_profile_id": "ACoAABqlyuoBgq5YAcRF4vz33Y_TOPnD6ASmXZs",
+          "recommendation_date": "April 20, 2023",
+          "relationship": "Lara was Jasmin’s client",
+          "recommendation_text": "I booked a call with Jasmin as I wanted to get more insight on his copywriting experience. It was value packed and he gave me so much actionable advice to level up in every way possible. I think calls like these are a no brainer, getting to sit down and have access to one of the best copywriters there are for an hour to ask any questions is insane. Jasmin not only answered my questions but gave me the answers to questions I would’ve asked in 2/3 months. AND not only that but he gave me his expert opinion on things I didn’t necessarily think about - which is why he’s an expert. He heard my struggles and found an answer for all of them and OVERDELIVERED?! \n\n10000/10 couldn’t recommend Jasmin more - his free content is insane but… his paid content? Pffffff even better. "
+        }
+      ]
+    }
   }
 ]
