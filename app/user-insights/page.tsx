@@ -54,13 +54,15 @@ interface UserInsightsResponse {
 }
 
 interface CheckResponse {
-  success: boolean;
-  username: string;
-  postCount: number;
-  hasProfile: boolean;
-  profileName: string | null;
-  meetsThreshold: boolean;
-  threshold: number;
+  success?: boolean;
+  username?: string;
+  postCount?: number;
+  hasProfile?: boolean;
+  profileName?: string | null;
+  meetsThreshold?: boolean;
+  threshold?: number;
+  error?: string;
+  message?: string;
 }
 
 export default function UserInsightsPage() {
@@ -120,14 +122,14 @@ export default function UserInsightsPage() {
       const response = await fetch(`/api/identity/check?username=${encodeURIComponent(username)}`);
       const data: CheckResponse = await safeJsonParse(response);
 
-      if (!response.ok) {
+      if (!response.ok || !data.success) {
         throw new Error(data.profileName || data.error || data.message || 'Failed to check data');
       }
 
       setCheckData(data);
 
       // If no data at all (0 posts and no profile), show error directly
-      if (data.postCount === 0 && !data.hasProfile) {
+      if ((data.postCount ?? 0) === 0 && !data.hasProfile) {
         setError(`No data found for @${username}. Please fetch the profile and posts first using the Profile and Posts pages.`);
         return;
       }
