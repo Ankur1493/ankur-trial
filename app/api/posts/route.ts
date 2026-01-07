@@ -103,19 +103,36 @@ export async function GET(request: NextRequest) {
     const lastFetchDateStr = userMetadata?.lastFetchDate;
     const fetchedToday = lastFetchDateStr === todayDateStr;
 
+    // Check if we need more posts (when no scrapeUntil, we should have 100 posts)
+    const needMorePosts = !scrapeUntilDate && userExistingPosts.length < 100;
+
     if (userExistingPosts.length === 0) {
       // No existing posts - fetch everything requested
       console.log('No existing posts for user, fetching all...');
     } else if (fetchedToday) {
-      // Already fetched today - no need to call API again
-      console.log(`Already fetched posts today (${todayDateStr}), returning cached data`);
+      // Already fetched today - but check if we still need to fetch
+      console.log(`Already fetched posts today (${todayDateStr}), checking if additional fetch needed...`);
       
       // Check if user wants older posts than what we have
       if (requestedUntilTimestamp && oldestExistingDate && requestedUntilTimestamp < oldestExistingDate) {
         fetchOlderPosts = true;
         console.log(`But user wants older posts: requested ${scrapeUntilDate}, oldest we have is ${new Date(oldestExistingDate).toISOString().split('T')[0]}`);
       }
-      // If not requesting older posts, just return cached data (no API call)
+      
+      // Check if we need more posts (when no scrapeUntil provided, should have 100)
+      if (!fetchOlderPosts && needMorePosts) {
+        fetchNewerPosts = true; // Fetch more posts to reach 100
+        console.log(`Only have ${userExistingPosts.length} posts, need to fetch more to reach 100`);
+      }
+      
+      // If requesting a specific date, check if that date is actually covered
+      if (!fetchOlderPosts && !fetchNewerPosts && requestedUntilTimestamp && oldestExistingDate) {
+        // If requested date is earlier than oldest cached post, we need to fetch older posts
+        if (requestedUntilTimestamp < oldestExistingDate) {
+          fetchOlderPosts = true;
+          console.log(`Requested date ${scrapeUntilDate} is earlier than cached oldest date ${new Date(oldestExistingDate).toISOString().split('T')[0]}, need to fetch older posts`);
+        }
+      }
     } else {
       // Haven't fetched today - check what we need to fetch
       
@@ -125,14 +142,20 @@ export async function GET(request: NextRequest) {
         console.log(`Need older posts: requested ${scrapeUntilDate}, oldest we have is ${new Date(oldestExistingDate).toISOString().split('T')[0]}`);
       }
 
+      // Check if we need more posts (when no scrapeUntil provided, should have 100)
+      if (!fetchOlderPosts && needMorePosts) {
+        fetchNewerPosts = true;
+        console.log(`Only have ${userExistingPosts.length} posts, need to fetch more to reach 100`);
+      }
+
       // Check if we need to fetch newer posts based on LAST FETCH DATE
-      if (lastFetchTimestamp) {
+      if (!fetchNewerPosts && lastFetchTimestamp) {
         const timeSinceLastFetch = todayTimestamp - lastFetchTimestamp;
         if (timeSinceLastFetch > 24 * 60 * 60 * 1000) { // More than 1 day since last fetch
           fetchNewerPosts = true;
           console.log(`Last fetch was ${lastFetchDateStr}, checking for newer posts...`);
         }
-      } else if (newestExistingDate) {
+      } else if (!fetchNewerPosts && newestExistingDate) {
         // No lastFetchDate in metadata, fall back to newest post date
         const timeSinceNewestPost = todayTimestamp - newestExistingDate;
         if (timeSinceNewestPost > 24 * 60 * 60 * 1000) {
@@ -204,9 +227,13 @@ export async function GET(request: NextRequest) {
       // This fetches from user's date to today (will include duplicates, we dedupe later)
       input.scrapeUntil = effectiveScrapeUntil;
     } else if (fetchNewerPosts && !fetchOlderPosts) {
-      // Only checking for newer posts - use LAST FETCH DATE (not newest post date)
-      // This is more efficient: if we fetched on Jan 6 and today is Jan 10, only fetch Jan 6 → today
-      if (lastFetchTimestamp) {
+      // Fetching newer posts or more posts to reach 100
+      if (effectiveScrapeUntil) {
+        // If user provided a date, use it
+        input.scrapeUntil = effectiveScrapeUntil;
+      } else if (lastFetchTimestamp) {
+        // Only checking for newer posts - use LAST FETCH DATE (not newest post date)
+        // This is more efficient: if we fetched on Jan 6 and today is Jan 10, only fetch Jan 6 → today
         const startFromDate = new Date(lastFetchTimestamp);
         startFromDate.setDate(startFromDate.getDate() - 1); // 1 day overlap for safety
         input.scrapeUntil = startFromDate.toISOString().split('T')[0];
@@ -218,6 +245,7 @@ export async function GET(request: NextRequest) {
         input.scrapeUntil = startFromDate.toISOString().split('T')[0];
         console.log(`Fallback to newestPostDate: fetching from ${input.scrapeUntil}`);
       }
+      // If no scrapeUntil set and no existing posts, actor will use its default behavior (fetch recent posts)
     } else if (effectiveScrapeUntil) {
       // Default: use user's requested start date
       input.scrapeUntil = effectiveScrapeUntil;
