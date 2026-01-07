@@ -3,7 +3,7 @@ import { readFile } from 'fs/promises';
 import path from 'path';
 import { generateText } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
-import { Post, PostsDataFile, ProfileData, extractUsername, getPostAuthor } from '@/lib/types';
+import { Post, PostsDataFile, ProfileData, extractUsername, getPostAuthor, getPostLikes, getPostComments } from '@/lib/types';
 
 // Answer with evidence structure
 interface AnswerWithEvidence {
@@ -100,8 +100,8 @@ function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
     context += '\n\n=== LINKEDIN POSTS ===\n';
     // Sort by engagement and take most relevant posts
     const sortedPosts = [...posts].sort((a, b) => {
-      const engagementA = (a.numLikes || 0) + (a.numComments || 0) * 2;
-      const engagementB = (b.numLikes || 0) + (b.numComments || 0) * 2;
+      const engagementA = getPostLikes(a) + getPostComments(a) * 2;
+      const engagementB = getPostLikes(b) + getPostComments(b) * 2;
       return engagementB - engagementA;
     });
 
@@ -114,7 +114,7 @@ function buildPrompt(profile: ProfileData | null, posts: Post[]): string {
         const postUrl = post.url || `POST_${i + 1}`;
         context += `\n--- Post ${i + 1} ---\n`;
         context += `[Evidence ID: ${postUrl}]\n`;
-        context += `Engagement: ${post.numLikes || 0} likes, ${post.numComments || 0} comments\n`;
+        context += `Engagement: ${getPostLikes(post)} likes, ${getPostComments(post)} comments\n`;
         context += post.text.substring(0, 1500);
         if (post.text.length > 1500) context += '...';
         context += '\n';

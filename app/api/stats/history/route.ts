@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
 import path from 'path';
-import { Post, PostsDataFile, extractUsername, getPostAuthor, getPostTimestamp } from '@/lib/types';
+import { Post, PostsDataFile, extractUsername, getPostAuthor, getPostTimestamp, getPostLikes, getPostComments, getPostShares } from '@/lib/types';
 
 function getMonthKey(timestamp: number): string {
   const date = new Date(timestamp);
@@ -66,9 +66,9 @@ export async function GET(request: NextRequest) {
       if (!timestamp) return;
 
       const monthKey = getMonthKey(timestamp);
-      const likes = post.numLikes || 0;
-      const comments = post.numComments || 0;
-      const reposts = post.numShares || 0;
+      const likes = getPostLikes(post);
+      const comments = getPostComments(post);
+      const reposts = getPostShares(post);
 
       cumulativeLikes += likes;
       cumulativeComments += comments;

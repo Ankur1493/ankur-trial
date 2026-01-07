@@ -1,16 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
 import path from 'path';
-import { Post, PostsDataFile, UserMetadata, extractUsername, getPostAuthor } from '@/lib/types';
-
-// Get engagement score for ranking
-function getEngagementScore(post: Post): number {
-  const likes = post.numLikes ?? 0;
-  const comments = post.numComments ?? 0;
-  const shares = post.numShares ?? 0;
-  // Weighted score: shares are most valuable, then comments, then likes
-  return (shares * 3) + (comments * 2) + likes;
-}
+import { Post, PostsDataFile, UserMetadata, extractUsername, getPostAuthor, getPostLikes, getPostComments, getPostShares, getPostEngagementScore } from '@/lib/types';
 
 export async function GET(request: NextRequest) {
   try {
@@ -74,26 +65,26 @@ export async function GET(request: NextRequest) {
 
     // Sort and get top posts by different metrics
     const topByLikes = [...userPosts]
-      .sort((a, b) => (b.numLikes ?? 0) - (a.numLikes ?? 0))
+      .sort((a, b) => getPostLikes(b) - getPostLikes(a))
       .slice(0, limit);
 
     const topByComments = [...userPosts]
-      .sort((a, b) => (b.numComments ?? 0) - (a.numComments ?? 0))
+      .sort((a, b) => getPostComments(b) - getPostComments(a))
       .slice(0, limit);
 
     const topByShares = [...userPosts]
-      .sort((a, b) => (b.numShares ?? 0) - (a.numShares ?? 0))
+      .sort((a, b) => getPostShares(b) - getPostShares(a))
       .slice(0, limit);
 
     // Top by overall engagement (weighted score)
     const topByEngagement = [...userPosts]
-      .sort((a, b) => getEngagementScore(b) - getEngagementScore(a))
+      .sort((a, b) => getPostEngagementScore(b) - getPostEngagementScore(a))
       .slice(0, limit);
 
     // Calculate aggregate stats
-    const totalLikes = userPosts.reduce((sum, p) => sum + (p.numLikes ?? 0), 0);
-    const totalComments = userPosts.reduce((sum, p) => sum + (p.numComments ?? 0), 0);
-    const totalShares = userPosts.reduce((sum, p) => sum + (p.numShares ?? 0), 0);
+    const totalLikes = userPosts.reduce((sum, p) => sum + getPostLikes(p), 0);
+    const totalComments = userPosts.reduce((sum, p) => sum + getPostComments(p), 0);
+    const totalShares = userPosts.reduce((sum, p) => sum + getPostShares(p), 0);
 
     return NextResponse.json({
       success: true,

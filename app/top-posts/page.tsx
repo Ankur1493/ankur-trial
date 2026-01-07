@@ -9,8 +9,17 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useOutsideClick } from '@/hooks/use-outside-click';
 
-// Post interfaces matching actual Apify response
+// Post interfaces matching actual Apify response (supports both new and legacy formats)
 interface PostAuthor {
+  // New format
+  first_name?: string;
+  last_name?: string;
+  headline?: string;
+  username?: string;
+  profile_url?: string;
+  profile_picture?: string;
+  public_id?: string;
+  // Legacy format
   firstName?: string;
   lastName?: string;
   occupation?: string;
@@ -22,26 +31,70 @@ interface PostAuthor {
 }
 
 interface LinkedInPost {
-  urn?: string;
-  shareUrn?: string;
+  // Identifiers
+  urn?: string | { activity_urn?: string; share_urn?: string; ugcPost_urn?: string | null };
+  full_urn?: string;
+  shareUrn?: string; // Legacy
   url?: string;
-  inputUrl?: string;
-  type?: string;
+  inputUrl?: string; // Legacy
+  
+  // Content
   text?: string;
-  images?: string[];
+  post_type?: string; // New format
+  type?: string; // Legacy format
+  
+  // Timing (new format)
+  posted_at?: {
+    date?: string;
+    relative?: string;
+    timestamp?: number;
+  };
+  // Legacy timing
   timeSincePosted?: string;
   postedAtTimestamp?: number;
   postedAtISO?: string;
+  
+  // Author (new format - nested)
+  author?: PostAuthor;
+  // Legacy author (flat)
   authorName?: string;
   authorProfileId?: string;
   authorProfilePicture?: string;
   authorProfileUrl?: string;
   authorUrn?: string;
   authorType?: string;
-  author?: PostAuthor;
+  
+  // Stats (new format)
+  stats?: {
+    total_reactions?: number;
+    like?: number;
+    support?: number;
+    love?: number;
+    insight?: number;
+    celebrate?: number;
+    comments?: number;
+    reposts?: number;
+  };
+  // Legacy stats
   numLikes?: number;
   numComments?: number;
   numShares?: number;
+  
+  // Media (new format)
+  media?: {
+    type?: string;
+    url?: string;
+    thumbnail?: string;
+    images?: Array<{
+      url?: string;
+      width?: number;
+      height?: number;
+    }>;
+  };
+  // Legacy media
+  images?: string[];
+  
+  // Post settings (legacy)
   canReact?: boolean;
   canPostComments?: boolean;
   canShare?: boolean;
@@ -93,27 +146,84 @@ const CloseIcon = () => {
   );
 };
 
-// Helper function to get post data
+// Helper function to get a unique post identifier for keys
+function getPostId(post: LinkedInPost): string {
+  if (typeof post.urn === 'string') {
+    return post.urn;
+  }
+  if (typeof post.urn === 'object' && post.urn !== null) {
+    return post.urn.activity_urn || post.urn.share_urn || post.urn.ugcPost_urn || '';
+  }
+  return post.full_urn || post.shareUrn || post.url || '';
+}
+
+// Helper function to get post data (handles both new and legacy formats)
 function getPostData(post: LinkedInPost) {
+  // Author name - handle both new and legacy formats
   const authorName = post.authorName || 
-    (post.author?.firstName && post.author?.lastName 
-      ? `${post.author.firstName} ${post.author.lastName}` 
-      : 'Unknown Author');
-  const authorOccupation = post.author?.occupation || '';
-  const authorProfileUrl = post.authorProfileUrl;
-  const authorProfilePicture = post.authorProfilePicture || post.author?.picture;
+    (post.author?.first_name && post.author?.last_name 
+      ? `${post.author.first_name} ${post.author.last_name}`
+      : (post.author?.firstName && post.author?.lastName 
+        ? `${post.author.firstName} ${post.author.lastName}` 
+        : 'Unknown Author'));
+  
+  // Author occupation/headline - new format uses headline, legacy uses occupation
+  const authorOccupation = post.author?.headline || post.author?.occupation || '';
+  
+  // Author profile URL - new format uses profile_url, legacy uses authorProfileUrl
+  const authorProfileUrl = post.author?.profile_url || post.authorProfileUrl;
+  
+  // Author profile picture - new format uses profile_picture, legacy uses picture or authorProfilePicture
+  const authorProfilePicture = post.author?.profile_picture || post.author?.picture || post.authorProfilePicture;
+  
   const authorType = post.authorType || 'Person';
-  const authorProfileId = post.authorProfileId || post.author?.publicId;
+  
+  // Author profile ID - new format uses username or public_id, legacy uses publicId or authorProfileId
+  const authorProfileId = post.author?.username || post.author?.public_id || post.author?.publicId || post.authorProfileId;
+  
   const postUrl = post.url;
-  const likes = post.numLikes ?? 0;
-  const comments = post.numComments ?? 0;
-  const shares = post.numShares ?? 0;
-  const postText = post.text || '';
-  const images = post.images || [];
-  const postType = post.type || 'text';
-  const timeSincePosted = post.timeSincePosted;
-  const postedDate = post.postedAtISO ? new Date(post.postedAtISO) : 
-    (post.postedAtTimestamp ? new Date(post.postedAtTimestamp) : null);
+  
+  // Stats - handle both new and legacy formats
+  const likes = post.stats?.like ?? post.stats?.total_reactions ?? post.numLikes ?? 0;
+  const comments = post.stats?.comments ?? post.numComments ?? 0;
+  const shares = post.stats?.reposts ?? post.numShares ?? 0;
+  
+  // Post text - handle both new and legacy formats, including reshared posts
+  let postText = post.text || '';
+  
+  // If this is a reshared post and text is empty, try to get text from reshared_post
+  if (!postText && (post as any).reshared_post?.text) {
+    postText = (post as any).reshared_post.text;
+  }
+  
+  // Images - new format has media.images array, legacy has images array
+  const images: string[] = [];
+  if (post.media?.images && Array.isArray(post.media.images)) {
+    // New format: extract URLs from media.images array
+    images.push(...post.media.images.map(img => img.url || '').filter(Boolean));
+  } else if (Array.isArray(post.images)) {
+    // Legacy format: direct images array
+    images.push(...post.images);
+  }
+  
+  // Post type - new format uses post_type, legacy uses type
+  const postType = post.post_type || post.type || 'text';
+  
+  // Time since posted - new format uses posted_at.relative, legacy uses timeSincePosted
+  const timeSincePosted = post.posted_at?.relative || post.timeSincePosted;
+  
+  // Posted date - new format uses posted_at.date or posted_at.timestamp, legacy uses postedAtISO or postedAtTimestamp
+  let postedDate: Date | null = null;
+  if (post.posted_at?.timestamp) {
+    postedDate = new Date(post.posted_at.timestamp);
+  } else if (post.posted_at?.date) {
+    postedDate = new Date(post.posted_at.date);
+  } else if (post.postedAtISO) {
+    postedDate = new Date(post.postedAtISO);
+  } else if (post.postedAtTimestamp) {
+    postedDate = new Date(post.postedAtTimestamp);
+  }
+  
   const shareAudience = post.shareAudience;
 
   return {
@@ -166,9 +276,11 @@ function TopPostCard({
     engagement: 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800',
   };
 
+  const postId = getPostId(post);
+  
   return (
     <motion.div
-      layoutId={`card-${post.urn}-${highlight}-${id}`}
+      layoutId={`card-${postId}-${highlight}-${id}`}
       onClick={onClick}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -188,7 +300,7 @@ function TopPostCard({
 
       {/* Image */}
       {data.images.length > 0 && (
-        <motion.div layoutId={`image-${post.urn}-${highlight}-${id}`} className="relative">
+        <motion.div layoutId={`image-${postId}-${highlight}-${id}`} className="relative">
           <img
             src={data.images[0]}
             alt="Post"
@@ -250,13 +362,14 @@ function ExpandedPostModal({ post, onClose }: { post: LinkedInPost; onClose: () 
   const id = useId();
   const ref = useRef<HTMLDivElement>(null);
   const data = getPostData(post);
+  const postId = getPostId(post);
 
   useOutsideClick(ref, onClose);
 
   return (
     <div className="fixed inset-0 grid place-items-center z-[100] p-4">
       <motion.button
-        key={`button-${post.urn}-${id}`}
+        key={`button-${postId}-${id}`}
         layout
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -433,15 +546,19 @@ function TopPostsSection({
         {title}
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        {posts.map((post, index) => (
-          <TopPostCard
-            key={post.urn || post.shareUrn || index}
-            post={post}
-            onClick={() => onPostClick(post)}
-            rank={index + 1}
-            highlight={highlight}
-          />
-        ))}
+        {posts.map((post, index) => {
+          const postKey = getPostId(post) || `post-${index}`;
+          
+          return (
+            <TopPostCard
+              key={postKey}
+              post={post}
+              onClick={() => onPostClick(post)}
+              rank={index + 1}
+              highlight={highlight}
+            />
+          );
+        })}
       </div>
     </div>
   );

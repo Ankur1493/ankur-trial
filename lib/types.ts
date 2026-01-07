@@ -229,3 +229,44 @@ export function getPostDate(post: Post): string | null {
   return null;
 }
 
+// Helper function to get post likes count (handles both new and legacy formats)
+export function getPostLikes(post: Post): number {
+  // New format: stats.like or stats.total_reactions as fallback
+  if (post.stats?.like !== undefined) {
+    return post.stats.like;
+  }
+  if (post.stats?.total_reactions !== undefined) {
+    return post.stats.total_reactions;
+  }
+  // Legacy format
+  return post.numLikes ?? 0;
+}
+
+// Helper function to get post comments count (handles both new and legacy formats)
+export function getPostComments(post: Post): number {
+  // New format: stats.comments
+  if (post.stats?.comments !== undefined) {
+    return post.stats.comments;
+  }
+  // Legacy format
+  return post.numComments ?? 0;
+}
+
+// Helper function to get post shares/reposts count (handles both new and legacy formats)
+export function getPostShares(post: Post): number {
+  // New format: stats.reposts
+  if (post.stats?.reposts !== undefined) {
+    return post.stats.reposts;
+  }
+  // Legacy format
+  return post.numShares ?? 0;
+}
+
+// Helper function to get post engagement score (weighted: shares*3 + comments*2 + likes)
+export function getPostEngagementScore(post: Post): number {
+  const likes = getPostLikes(post);
+  const comments = getPostComments(post);
+  const shares = getPostShares(post);
+  return (shares * 3) + (comments * 2) + likes;
+}
+

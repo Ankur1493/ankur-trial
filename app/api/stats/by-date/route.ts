@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
 import path from 'path';
-import { Post, PostsDataFile, extractUsername, getPostAuthor, getPostDate } from '@/lib/types';
+import { Post, PostsDataFile, extractUsername, getPostAuthor, getPostDate, getPostLikes, getPostComments, getPostShares } from '@/lib/types';
 
 export async function GET(request: NextRequest) {
   try {
@@ -48,9 +48,9 @@ export async function GET(request: NextRequest) {
       if (!byDate[date]) {
         byDate[date] = { likes: 0, comments: 0, reposts: 0, posts: 0 };
       }
-      byDate[date].likes += post.numLikes || 0;
-      byDate[date].comments += post.numComments || 0;
-      byDate[date].reposts += post.numShares || 0;
+      byDate[date].likes += getPostLikes(post);
+      byDate[date].comments += getPostComments(post);
+      byDate[date].reposts += getPostShares(post);
       byDate[date].posts += 1;
     });
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
 import path from 'path';
-import { Post, PostsDataFile, extractUsername, getPostAuthor } from '@/lib/types';
+import { Post, PostsDataFile, extractUsername, getPostAuthor, getPostLikes, getPostComments, getPostShares } from '@/lib/types';
 
 export async function GET(request: NextRequest) {
   try {
@@ -42,9 +42,9 @@ export async function GET(request: NextRequest) {
 
     // Calculate totals
     const totals = userPosts.reduce((acc: { totalLikes: number; totalComments: number; totalReposts: number }, post) => ({
-      totalLikes: acc.totalLikes + (post.numLikes || 0),
-      totalComments: acc.totalComments + (post.numComments || 0),
-      totalReposts: acc.totalReposts + (post.numShares || 0),
+      totalLikes: acc.totalLikes + getPostLikes(post),
+      totalComments: acc.totalComments + getPostComments(post),
+      totalReposts: acc.totalReposts + getPostShares(post),
     }), { totalLikes: 0, totalComments: 0, totalReposts: 0 });
 
     const totalEngagement = totals.totalLikes + totals.totalComments + totals.totalReposts;
