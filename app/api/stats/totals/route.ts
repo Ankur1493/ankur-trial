@@ -12,7 +12,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Username is required' }, { status: 400 });
     }
 
-    const normalizedUsername = username.toLowerCase();
+    // Normalize username - handle both direct username and LinkedIn URLs
+    const normalizedUsername = extractUsername(username).toLowerCase();
     const postsFilePath = path.join(process.cwd(), 'data', 'posts_data.json');
 
     let postsData: PostsDataFile;
@@ -38,7 +39,16 @@ export async function GET(request: NextRequest) {
     }
 
     // Filter posts for this user
-    const userPosts = postsData.posts.filter(post => getPostAuthor(post) === normalizedUsername);
+    const userPosts = postsData.posts.filter(post => {
+      const postAuthor = getPostAuthor(post);
+      return postAuthor === normalizedUsername;
+    });
+
+    // If metadata exists but no posts found, log for debugging
+    if (userPosts.length === 0 && postsData.metadata[normalizedUsername]?.postCount > 0) {
+      console.warn(`Warning: Metadata shows ${postsData.metadata[normalizedUsername].postCount} posts for ${normalizedUsername}, but filtering returned 0 posts.`);
+      console.warn(`Sample post authors found:`, postsData.posts.slice(0, 5).map(p => getPostAuthor(p)).filter(Boolean));
+    }
 
     // Calculate totals
     const totals = userPosts.reduce((acc: { totalLikes: number; totalComments: number; totalReposts: number }, post) => ({

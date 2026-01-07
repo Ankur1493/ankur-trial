@@ -333,6 +333,53 @@ function StatsPageContent() {
     );
   }
 
+  // Check if we have data but postCount is 0 (data inconsistency)
+  if (totals && totals.success && totals.postCount === 0 && !totals.userNotFound) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
+        <div className="container mx-auto px-6 py-12">
+          <Link 
+            href="/stats" 
+            className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-8"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Stats
+          </Link>
+          <div className="max-w-2xl mx-auto text-center py-24">
+            <div className="w-20 h-20 rounded-full bg-amber-500/20 flex items-center justify-center mx-auto mb-6 border border-amber-500/30">
+              <svg className="w-10 h-10 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <h1 className="text-3xl font-bold mb-4">No Posts Found</h1>
+            <p className="text-slate-400 text-lg mb-4">
+              Metadata exists for user <span className="text-white font-semibold">&quot;{username}&quot;</span>, but no posts were found when filtering.
+            </p>
+            <p className="text-slate-500 mb-4">
+              This might indicate a data inconsistency. Please try refreshing the posts data.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Link
+                href="/posts"
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-semibold transition-all shadow-lg shadow-amber-500/25"
+              >
+                Refresh Posts Data
+              </Link>
+              <Link
+                href="/stats"
+                className="px-6 py-3 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-semibold transition-colors"
+              >
+                Try Another User
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!totals || !byDate || !history) {
     return null;
   }

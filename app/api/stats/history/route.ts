@@ -17,7 +17,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Username is required' }, { status: 400 });
     }
 
-    const normalizedUsername = username.toLowerCase();
+    // Normalize username - handle both direct username and LinkedIn URLs
+    const normalizedUsername = extractUsername(username).toLowerCase();
     const postsFilePath = path.join(process.cwd(), 'data', 'posts_data.json');
 
     let postsData: PostsDataFile;
