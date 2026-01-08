@@ -124,14 +124,14 @@ export function StatsClient({
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 text-slate-900">
       <div className="container mx-auto px-6 py-12">
         {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <div>
             <Link 
               href="/stats" 
-              className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-4"
+              className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors mb-4"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -139,23 +139,23 @@ export function StatsClient({
               Back to Stats
             </Link>
             <h1 className="text-4xl font-bold">
-              Analytics for <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">@{username}</span>
+              Analytics for <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">@{username}</span>
             </h1>
-            <p className="text-slate-400 mt-2">
+            <p className="text-slate-600 mt-2">
               {totals.postCount} posts analyzed
             </p>
           </div>
         </div>
 
         {/* Disclaimer Note */}
-        <div className="mb-8 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30">
+        <div className="mb-8 p-4 rounded-xl bg-amber-50 border border-amber-200">
           <div className="flex items-start gap-3">
-            <svg className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div>
-              <p className="text-amber-200 font-medium text-sm">Note about data</p>
-              <p className="text-amber-200/70 text-sm mt-1">
+              <p className="text-amber-800 font-medium text-sm">Note about data</p>
+              <p className="text-amber-700 text-sm mt-1">
                 These metrics show engagement totals grouped by <strong>when posts were published</strong>, not when the engagement occurred. 
                 Real-time daily engagement tracking requires periodic data snapshots (not yet implemented).
               </p>
@@ -168,13 +168,13 @@ export function StatsClient({
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="relative overflow-hidden rounded-2xl bg-slate-800/50 border border-slate-700/50 p-6 backdrop-blur-sm"
+              className="relative overflow-hidden rounded-2xl bg-white border border-slate-200 p-6 shadow-sm"
             >
-              <div className={`absolute inset-0 opacity-10 bg-gradient-to-br ${stat.gradient}`} />
+              <div className={`absolute inset-0 opacity-5 bg-gradient-to-br ${stat.gradient}`} />
               <div className="relative">
                 <span className="text-3xl mb-2 block">{stat.icon}</span>
-                <p className="text-slate-400 text-sm mb-1">{stat.label}</p>
-                <p className="text-3xl font-bold font-mono tracking-tight">
+                <p className="text-slate-500 text-sm mb-1">{stat.label}</p>
+                <p className="text-3xl font-bold font-mono tracking-tight text-slate-900">
                   {formatNumber(stat.value)}
                 </p>
               </div>
@@ -187,10 +187,10 @@ export function StatsClient({
           {averages.map((avg) => (
             <div
               key={avg.label}
-              className="rounded-xl bg-slate-800/30 border border-slate-700/30 p-4 text-center backdrop-blur-sm"
+              className="rounded-xl bg-white border border-slate-200 p-4 text-center shadow-sm"
             >
               <p className="text-slate-500 text-xs mb-1">{avg.label}</p>
-              <p className="text-xl font-semibold font-mono">
+              <p className="text-xl font-semibold font-mono text-slate-900">
                 {formatNumber(avg.value)}
               </p>
             </div>
@@ -201,22 +201,22 @@ export function StatsClient({
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Engagement by Post Date - Area Chart */}
           {byDate.data && byDate.data.length > 0 && (
-            <div className="rounded-2xl bg-slate-800/50 border border-slate-700/50 p-6 backdrop-blur-sm">
-              <h3 className="text-lg font-semibold mb-1">Engagement by Post Date</h3>
+            <div className="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
+              <h3 className="text-lg font-semibold mb-1 text-slate-900">Engagement by Post Date</h3>
               <p className="text-slate-500 text-sm mb-4">Total engagement for posts published on each date</p>
               <ChartContainer config={chartConfig} className="h-[300px] w-full">
                 <AreaChart data={byDate.data} margin={{ left: 0, right: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(215, 14%, 25%)" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(215, 14%, 85%)" />
                   <XAxis 
                     dataKey="date" 
-                    tick={{ fill: 'hsl(215, 14%, 55%)', fontSize: 11 }}
+                    tick={{ fill: 'hsl(215, 14%, 45%)', fontSize: 11 }}
                     tickFormatter={(value) => {
                       const date = new Date(value);
                       return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
                     }}
                   />
                   <YAxis 
-                    tick={{ fill: 'hsl(215, 14%, 55%)', fontSize: 11 }}
+                    tick={{ fill: 'hsl(215, 14%, 45%)', fontSize: 11 }}
                     tickFormatter={formatNumber}
                   />
                   <ChartTooltip content={<ChartTooltipContent />} />
@@ -252,18 +252,18 @@ export function StatsClient({
 
           {/* Monthly Engagement - Bar Chart */}
           {history.data && history.data.length > 0 && (
-            <div className="rounded-2xl bg-slate-800/50 border border-slate-700/50 p-6 backdrop-blur-sm">
-              <h3 className="text-lg font-semibold mb-1">Monthly Engagement</h3>
+            <div className="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
+              <h3 className="text-lg font-semibold mb-1 text-slate-900">Monthly Engagement</h3>
               <p className="text-slate-500 text-sm mb-4">Engagement breakdown by month of publication</p>
               <ChartContainer config={chartConfig} className="h-[300px] w-full">
                 <BarChart data={history.data} margin={{ left: 0, right: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(215, 14%, 25%)" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(215, 14%, 85%)" />
                   <XAxis 
                     dataKey="monthName" 
-                    tick={{ fill: 'hsl(215, 14%, 55%)', fontSize: 11 }}
+                    tick={{ fill: 'hsl(215, 14%, 45%)', fontSize: 11 }}
                   />
                   <YAxis 
-                    tick={{ fill: 'hsl(215, 14%, 55%)', fontSize: 11 }}
+                    tick={{ fill: 'hsl(215, 14%, 45%)', fontSize: 11 }}
                     tickFormatter={formatNumber}
                   />
                   <ChartTooltip content={<ChartTooltipContent />} />
@@ -278,18 +278,18 @@ export function StatsClient({
 
           {/* Posting Frequency */}
           {history.data && history.data.length > 0 && (
-            <div className="rounded-2xl bg-slate-800/50 border border-slate-700/50 p-6 backdrop-blur-sm">
-              <h3 className="text-lg font-semibold mb-1">Posting Frequency</h3>
+            <div className="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
+              <h3 className="text-lg font-semibold mb-1 text-slate-900">Posting Frequency</h3>
               <p className="text-slate-500 text-sm mb-4">Number of posts published per month</p>
               <ChartContainer config={chartConfig} className="h-[300px] w-full">
                 <BarChart data={history.data} margin={{ left: 0, right: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(215, 14%, 25%)" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(215, 14%, 85%)" />
                   <XAxis 
                     dataKey="monthName" 
-                    tick={{ fill: 'hsl(215, 14%, 55%)', fontSize: 11 }}
+                    tick={{ fill: 'hsl(215, 14%, 45%)', fontSize: 11 }}
                   />
                   <YAxis 
-                    tick={{ fill: 'hsl(215, 14%, 55%)', fontSize: 11 }}
+                    tick={{ fill: 'hsl(215, 14%, 45%)', fontSize: 11 }}
                   />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Bar dataKey="posts" fill="var(--color-posts)" radius={[4, 4, 0, 0]} />
@@ -300,18 +300,18 @@ export function StatsClient({
 
           {/* Cumulative Engagement Growth - Line Chart */}
           {history.data && history.data.length > 0 && (
-            <div className="rounded-2xl bg-slate-800/50 border border-slate-700/50 p-6 backdrop-blur-sm">
-              <h3 className="text-lg font-semibold mb-1">Cumulative Engagement</h3>
+            <div className="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
+              <h3 className="text-lg font-semibold mb-1 text-slate-900">Cumulative Engagement</h3>
               <p className="text-slate-500 text-sm mb-4">Running total of all engagement over time</p>
               <ChartContainer config={chartConfig} className="h-[300px] w-full">
                 <LineChart data={history.data} margin={{ left: 0, right: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(215, 14%, 25%)" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(215, 14%, 85%)" />
                   <XAxis 
                     dataKey="monthName" 
-                    tick={{ fill: 'hsl(215, 14%, 55%)', fontSize: 11 }}
+                    tick={{ fill: 'hsl(215, 14%, 45%)', fontSize: 11 }}
                   />
                   <YAxis 
-                    tick={{ fill: 'hsl(215, 14%, 55%)', fontSize: 11 }}
+                    tick={{ fill: 'hsl(215, 14%, 45%)', fontSize: 11 }}
                     tickFormatter={formatNumber}
                   />
                   <ChartTooltip content={<ChartTooltipContent />} />
