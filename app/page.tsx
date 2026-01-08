@@ -4,6 +4,18 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { z } from 'zod';
+
+// LinkedIn URL validation schema
+const linkedInUrlSchema = z.string()
+  .min(1, 'LinkedIn URL is required')
+  .refine(
+    (val) => {
+      const linkedinPattern = /^(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/([^\/\?\s]+)\/?$/i;
+      return linkedinPattern.test(val.trim());
+    },
+    { message: 'Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/username)' }
+  );
 
 // Interfaces matching Apify data structure
 interface Location {
@@ -787,6 +799,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [profileData, setProfileData] = useState<LinkedInProfile[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
 
   // Scroll to results when loading starts
@@ -800,11 +813,14 @@ export default function Home() {
   }, [loading]);
 
   const handleFetchProfile = async () => {
-    if (!profileUrl.trim()) {
-      setError('Please enter a LinkedIn URL');
+    // Validate using Zod
+    const result = linkedInUrlSchema.safeParse(profileUrl);
+    if (!result.success) {
+      setValidationError(result.error.issues[0]?.message || 'Invalid LinkedIn URL');
       return;
     }
-
+    
+    setValidationError(null);
     setLoading(true);
     setError(null);
     setProfileData(null);
@@ -874,16 +890,19 @@ export default function Home() {
         <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm p-4 mb-4">
           <div className="flex gap-3">
             <Input
-              type="text"
-              placeholder="Enter LinkedIn profile URL..."
+              type="url"
+              placeholder="https://linkedin.com/in/username"
               value={profileUrl}
-              onChange={(e) => setProfileUrl(e.target.value)}
+              onChange={(e) => {
+                setProfileUrl(e.target.value);
+                if (validationError) setValidationError(null);
+              }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   handleFetchProfile();
                 }
               }}
-              className="flex-1 h-12 text-base border-zinc-200 dark:border-zinc-700 focus:ring-blue-500"
+              className={`flex-1 h-12 text-base border-zinc-200 dark:border-zinc-700 focus:ring-blue-500 ${validationError ? 'border-red-500 focus:ring-red-500' : ''}`}
               disabled={loading}
             />
             <Button
@@ -904,6 +923,9 @@ export default function Home() {
               )}
             </Button>
           </div>
+          {validationError && (
+            <p className="text-red-500 text-sm mt-2">{validationError}</p>
+          )}
         </div>
 
         {/* Link to Posts Page */}
@@ -1093,7 +1115,7 @@ export default function Home() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
             </svg>
             <p className="text-zinc-500 dark:text-zinc-400 mb-2">Enter a LinkedIn profile URL to get started</p>
-            <p className="text-sm text-zinc-400 dark:text-zinc-500">Example: linkedin.com/in/username</p>
+            <p className="text-sm text-zinc-400 dark:text-zinc-500">Example: https://linkedin.com/in/username</p>
           </div>
         )}
       </div>

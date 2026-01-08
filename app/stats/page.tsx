@@ -3,7 +3,25 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { z } from 'zod';
 import { StatsClient } from './stats-client';
+
+// Zod schema for LinkedIn URL validation
+const linkedInUrlSchema = z.string()
+  .min(1, 'LinkedIn URL is required')
+  .refine(
+    (val) => {
+      const linkedinPattern = /^(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/([^\/\?\s]+)\/?$/i;
+      return linkedinPattern.test(val.trim());
+    },
+    { message: 'Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/username)' }
+  );
+
+// Helper to extract username from validated LinkedIn URL
+function extractUsernameFromUrl(url: string): string {
+  const match = url.trim().match(/(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/([^\/\?\s]+)/i);
+  return match ? match[1].toLowerCase() : '';
+}
 
 interface TotalsData {
   success?: boolean;
@@ -128,6 +146,7 @@ function StatsPageContent() {
   const [byDate, setByDate] = useState<ByDateData | null>(null);
   const [history, setHistory] = useState<HistoryData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   useEffect(() => {
     if (username) {
@@ -150,10 +169,23 @@ function StatsPageContent() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setValidationError(null);
+    
     const formData = new FormData(e.currentTarget);
-    const usernameValue = formData.get('username') as string;
-    if (usernameValue) {
-      router.push(`/stats?username=${encodeURIComponent(usernameValue)}`);
+    const urlValue = formData.get('linkedinUrl') as string;
+    
+    // Validate using Zod
+    const result = linkedInUrlSchema.safeParse(urlValue);
+    
+    if (!result.success) {
+      setValidationError(result.error.issues[0]?.message || 'Invalid LinkedIn URL');
+      return;
+    }
+    
+    // Extract username from validated URL
+    const extractedUsername = extractUsernameFromUrl(urlValue);
+    if (extractedUsername) {
+      router.push(`/stats?username=${encodeURIComponent(extractedUsername)}`);
     }
   };
 
@@ -180,7 +212,7 @@ function StatsPageContent() {
               Analytics & Aggregations
             </h1>
             <p className="text-slate-600 text-lg mb-4">
-              Enter a LinkedIn username to view their engagement analytics
+              Enter a LinkedIn profile URL to view engagement analytics
             </p>
             <div className="max-w-md mx-auto mb-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <p className="text-sm text-blue-700 font-medium mb-1">
@@ -188,29 +220,34 @@ function StatsPageContent() {
               </p>
               <p className="text-xs text-blue-600">
                 These analytics use posts data that have already been fetched and stored. 
-                If you haven't fetched posts yet, please do so first using the{' '}
+                If you haven&apos;t fetched posts yet, please do so first using the{' '}
                 <Link href="/posts" className="underline font-medium hover:text-blue-800">
                   Posts
                 </Link>{' '}
                 page.
               </p>
             </div>
-            <form onSubmit={handleSubmit} className="flex gap-3 max-w-md mx-auto">
-              <input
-                type="text"
-                name="username"
-                placeholder="e.g. jakezward"
-                className="flex-1 px-4 py-3 rounded-xl bg-white border border-slate-300 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-slate-900 placeholder:text-slate-400 transition-all shadow-sm"
-              />
-              <button
-                type="submit"
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-semibold transition-all shadow-lg shadow-amber-500/25"
-              >
-                View Stats
-              </button>
+            <form onSubmit={handleSubmit} className="max-w-lg mx-auto">
+              <div className="flex gap-3">
+                <input
+                  type="url"
+                  name="linkedinUrl"
+                  placeholder="https://linkedin.com/in/username"
+                  className={`flex-1 px-4 py-3 rounded-xl bg-white border ${validationError ? 'border-red-400' : 'border-slate-300'} focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-slate-900 placeholder:text-slate-400 transition-all shadow-sm`}
+                />
+                <button
+                  type="submit"
+                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-semibold transition-all shadow-lg shadow-amber-500/25"
+                >
+                  View Stats
+                </button>
+              </div>
+              {validationError && (
+                <p className="text-red-500 text-sm mt-2 text-left">{validationError}</p>
+              )}
             </form>
             <p className="text-sm text-slate-500 mt-6">
-              Available users: <span className="text-slate-700">jakezward</span>, <span className="text-slate-700">ankursharma14</span>, <span className="text-slate-700">rob-hoffman-ceo</span>
+              Example: <span className="text-slate-700">https://linkedin.com/in/jakezward</span>
             </p>
           </div>
         </div>
@@ -239,7 +276,7 @@ function StatsPageContent() {
               </svg>
             </div>
             <h1 className="text-3xl font-bold mb-4">Loading Stats...</h1>
-            <p className="text-slate-600">Fetching analytics for @{username}</p>
+            <p className="text-slate-600">Fetching analytics for {username}</p>
           </div>
         </div>
       </div>
@@ -299,18 +336,18 @@ function StatsPageContent() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
             </div>
-            <h1 className="text-3xl font-bold mb-4">User Not Found</h1>
+            <h1 className="text-3xl font-bold mb-4">Profile Not Found</h1>
             <p className="text-slate-600 text-lg mb-4">
-              No data found for user <span className="text-slate-900 font-semibold">&quot;{username}&quot;</span>
+              No data found for <span className="text-slate-900 font-semibold">{username}</span>
             </p>
             <p className="text-slate-500 mb-4">
-              This endpoint works from stored data. You need to fetch posts for this user first.
+              This endpoint works from stored data. You need to fetch posts for this profile first.
             </p>
             <div className="max-w-md mx-auto mb-8 p-4 bg-blue-50 border border-blue-200 rounded-lg text-left">
               <p className="text-sm text-blue-700 font-medium mb-2">Guidelines:</p>
               <ol className="text-xs text-blue-600 space-y-1 list-decimal list-inside">
                 <li>Fetch posts: Use the <Link href="/posts" className="underline font-medium hover:text-blue-800">Posts page</Link> or API endpoint <code className="bg-slate-200 px-1 rounded">GET /api/posts?urls=linkedin.com/in/{username}</code></li>
-                <li>Then retry: Return to this stats page with the username</li>
+                <li>Then retry: Return to this stats page with the LinkedIn URL</li>
               </ol>
             </div>
             <div className="flex gap-4 justify-center">
@@ -324,7 +361,7 @@ function StatsPageContent() {
                 href="/stats"
                 className="px-6 py-3 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold transition-colors"
               >
-                Try Another User
+                Try Another Profile
               </Link>
             </div>
           </div>
@@ -355,7 +392,7 @@ function StatsPageContent() {
             </div>
             <h1 className="text-3xl font-bold mb-4">No Posts Found</h1>
             <p className="text-slate-600 text-lg mb-4">
-              Metadata exists for user <span className="text-slate-900 font-semibold">&quot;{username}&quot;</span>, but no posts were found when filtering.
+              Metadata exists for <span className="text-slate-900 font-semibold">{username}</span>, but no posts were found when filtering.
             </p>
             <p className="text-slate-500 mb-4">
               This might indicate a data inconsistency. Please try refreshing the posts data.
@@ -371,7 +408,7 @@ function StatsPageContent() {
                 href="/stats"
                 className="px-6 py-3 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold transition-colors"
               >
-                Try Another User
+                Try Another Profile
               </Link>
             </div>
           </div>

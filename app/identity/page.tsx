@@ -2,8 +2,20 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { z } from 'zod';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+
+// Zod schema for LinkedIn URL validation
+const linkedInUrlSchema = z.string()
+  .min(1, 'LinkedIn URL is required')
+  .refine(
+    (val) => {
+      const linkedinPattern = /^(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/([^\/\?\s]+)\/?$/i;
+      return linkedinPattern.test(val.trim());
+    },
+    { message: 'Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/username)' }
+  );
 import {
   Dialog,
   DialogContent,
@@ -211,19 +223,29 @@ export default function IdentityPage() {
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [identityData, setIdentityData] = useState<IdentityResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
-  // Extract username from input
+  // Extract username from LinkedIn URL
   const extractUsername = (input: string): string => {
     const trimmed = input.trim();
     const match = trimmed.match(/linkedin\.com\/in\/([^/?]+)/);
-    return match ? match[1].toLowerCase() : trimmed.toLowerCase();
+    return match ? match[1].toLowerCase() : '';
   };
 
   // Check data availability
   const handleCheck = async () => {
+    setValidationError(null);
+    
+    // Validate using Zod
+    const result = linkedInUrlSchema.safeParse(linkedinUrl);
+    if (!result.success) {
+      setValidationError(result.error.issues[0]?.message || 'Invalid LinkedIn URL');
+      return;
+    }
+    
     const username = extractUsername(linkedinUrl);
     if (!username) {
-      setError('Please enter a LinkedIn URL or username');
+      setValidationError('Could not extract username from URL');
       return;
     }
 
@@ -333,7 +355,7 @@ export default function IdentityPage() {
         <div className="bg-white dark:bg-slate-900 rounded-xl border shadow-sm p-6 mb-8">
           <h2 className="text-xl font-semibold mb-2">Analyze LinkedIn Identity</h2>
           <p className="text-muted-foreground text-sm mb-4">
-            Enter a LinkedIn profile URL or username to extract identity insights using AI analysis of their posts and profile data.
+            Enter a LinkedIn profile URL to extract identity insights using AI analysis of their posts and profile data.
           </p>
           
           {/* Info Note */}
@@ -343,7 +365,7 @@ export default function IdentityPage() {
             </p>
             <p className="text-xs text-blue-700 dark:text-blue-400">
               This analysis uses profile and posts data that have already been fetched and stored. 
-              If you haven't fetched the profile and posts yet, please do so first using the{' '}
+              If you haven&apos;t fetched the profile and posts yet, please do so first using the{' '}
               <Link href="/" className="underline font-medium hover:text-blue-900 dark:hover:text-blue-200">
                 Profile
               </Link>{' '}
@@ -357,11 +379,11 @@ export default function IdentityPage() {
 
           <div className="flex gap-3">
             <Input
-              type="text"
-              placeholder="linkedin.com/in/username or just username"
+              type="url"
+              placeholder="https://linkedin.com/in/username"
               value={linkedinUrl}
               onChange={(e) => setLinkedinUrl(e.target.value)}
-              className="flex-1"
+              className={`flex-1 ${validationError ? 'border-red-400' : ''}`}
               onKeyDown={(e) => e.key === 'Enter' && !loading && handleCheck()}
             />
             <Button 
@@ -382,6 +404,9 @@ export default function IdentityPage() {
               )}
             </Button>
           </div>
+          {validationError && (
+            <p className="text-red-500 text-sm mt-2">{validationError}</p>
+          )}
 
           {error && (
             <div className="mt-4 p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded-lg">
@@ -504,7 +529,7 @@ export default function IdentityPage() {
             </div>
             <h3 className="text-lg font-medium mb-2">No identity data yet</h3>
             <p className="text-muted-foreground text-sm max-w-md mx-auto">
-              Enter a LinkedIn username above to analyze their posts and profile, 
+              Enter a LinkedIn profile URL above to analyze their posts and profile, 
               and extract identity insights using AI.
             </p>
           </div>

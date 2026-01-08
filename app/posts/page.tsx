@@ -5,12 +5,24 @@ import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'motion/react';
+import { z } from 'zod';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { useOutsideClick } from '@/hooks/use-outside-click';
+
+// Zod schema for LinkedIn URL validation
+const linkedInUrlSchema = z.string()
+  .min(1, 'LinkedIn URL is required')
+  .refine(
+    (val) => {
+      const linkedinPattern = /^(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/([^\/\?\s]+)\/?$/i;
+      return linkedinPattern.test(val.trim());
+    },
+    { message: 'Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/username)' }
+  );
 
 // Post interfaces matching new Apify response structure
 interface PostAuthor {
@@ -600,6 +612,7 @@ export default function PostsPage() {
   const [loading, setLoading] = useState(false);
   const [postsData, setPostsData] = useState<LinkedInPost[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
   const [filterUntilDate, setFilterUntilDate] = useState<Date | undefined>(undefined);
   const [activePost, setActivePost] = useState<LinkedInPost | null>(null);
   const [sortBy, setSortBy] = useState<'likes' | 'comments' | 'shares' | null>(null);
@@ -635,8 +648,12 @@ export default function PostsPage() {
   }, [activePost]);
 
   const handleFetchPosts = async () => {
-    if (!profileUrl.trim()) {
-      setError('Please enter a LinkedIn URL');
+    setValidationError(null);
+    
+    // Validate using Zod
+    const result = linkedInUrlSchema.safeParse(profileUrl);
+    if (!result.success) {
+      setValidationError(result.error.issues[0]?.message || 'Invalid LinkedIn URL');
       return;
     }
 
@@ -752,8 +769,8 @@ export default function PostsPage() {
                 LinkedIn Profile URL
               </label>
               <Input
-                type="text"
-                placeholder="https://www.linkedin.com/in/username"
+                type="url"
+                placeholder="https://linkedin.com/in/username"
                 value={profileUrl}
                 onChange={(e) => setProfileUrl(e.target.value)}
                 onKeyDown={(e) => {
@@ -761,9 +778,12 @@ export default function PostsPage() {
                     handleFetchPosts();
                   }
                 }}
-                className="h-12 text-base border-zinc-200 dark:border-zinc-700 focus:ring-emerald-500"
+                className={`h-12 text-base border-zinc-200 dark:border-zinc-700 focus:ring-emerald-500 ${validationError ? 'border-red-400' : ''}`}
                 disabled={loading}
               />
+              {validationError && (
+                <p className="text-red-500 text-sm mt-2">{validationError}</p>
+              )}
             </div>
 
             {/* Date Picker and Button Row */}
@@ -980,7 +1000,7 @@ export default function PostsPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
             </svg>
             <p className="text-zinc-500 dark:text-zinc-400 mb-2">Enter a LinkedIn profile URL to fetch posts</p>
-            <p className="text-sm text-zinc-400 dark:text-zinc-500">Example: linkedin.com/in/username</p>
+            <p className="text-sm text-zinc-400 dark:text-zinc-500">Example: https://linkedin.com/in/username</p>
           </div>
         )}
       </div>
